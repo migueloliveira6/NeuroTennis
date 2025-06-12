@@ -102,6 +102,8 @@ def show_player_stats(player_name, matches):
     surfaces = ['Clay', 'Hard', 'Grass']
     stats = []
 
+    print(f"\nEstatísticas de {player_name} por superfície:")
+
     for surface in surfaces:
         surface_matches = matches[matches['surface'] == surface]
 
@@ -119,8 +121,37 @@ def show_player_stats(player_name, matches):
         })
 
     df_stats = pd.DataFrame(stats)
-    print(f"\n📈 Estatísticas de {player_name} por superfície:")
     print(df_stats.to_string(index=False))
+
+    # Taxa de vitória geral
+    total_wins = matches[matches['winner_name'] == player_name].shape[0]
+    total_losses = matches[matches['loser_name'] == player_name].shape[0]
+    total_games = total_wins + total_losses
+    total_win_rate = (total_wins / total_games * 100) if total_games > 0 else 0
+
+    print(f"\n🏁 Total de jogos: {total_games} | Vitórias: {total_wins} | Derrotas: {total_losses} | Taxa de vitória: {total_win_rate:.2f}%")
+
+    # Últimos 5 jogos
+    print("\n🕒 Últimos 5 jogos:")
+    recent_matches = matches[
+        (matches['winner_name'] == player_name) | (matches['loser_name'] == player_name)
+    ].sort_values(by='tourney_date', ascending=False).head(5)
+
+    for _, row in recent_matches.iterrows():
+        opponent = row['loser_name'] if row['winner_name'] == player_name else row['winner_name']
+        result = 'Vitória' if row['winner_name'] == player_name else 'Derrota'
+        surface = row['surface']
+        date = row['tourney_date'].date() if pd.notnull(row['tourney_date']) else '??'
+        print(f"{date} - {result} contra {opponent} em {surface}")
+
+    # (Opcional) Títulos ganhos (finais vencidas)
+    if 'round' in matches.columns:
+        finals = matches[(matches['round'] == 'F') & (matches['winner_name'] == player_name)]
+        print(f"\n🏆 Títulos ganhos (finais vencidas): {len(finals)}")
+        finals_per_year = finals['tourney_date'].dt.year.value_counts().sort_index()
+        for year, count in finals_per_year.items():
+            print(f"  {year}: {count} título(s)")
+
     
 # Menu principal
 def main_menu():
