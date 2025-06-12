@@ -96,8 +96,32 @@ def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data):
     winner = p1 if prob[1] > 0.5 else p2
     confidence = max(prob[1], prob[0])
 
-    print(f"🏆 Previsão: {winner} com {confidence*100:.2f}% de confiança.")
+    print(f"Previsão: {winner} com {confidence*100:.2f}% de confiança.")
 
+def show_player_stats(player_name, matches):
+    surfaces = ['Clay', 'Hard', 'Grass']
+    stats = []
+
+    for surface in surfaces:
+        surface_matches = matches[matches['surface'] == surface]
+
+        wins = surface_matches[surface_matches['winner_name'] == player_name].shape[0]
+        losses = surface_matches[surface_matches['loser_name'] == player_name].shape[0]
+        total = wins + losses
+        win_rate = (wins / total * 100) if total > 0 else 0
+
+        stats.append({
+            'Superfície': surface,
+            'Jogos': total,
+            'Vitórias': wins,
+            'Derrotas': losses,
+            'Taxa de Vitória (%)': round(win_rate, 2)
+        })
+
+    df_stats = pd.DataFrame(stats)
+    print(f"\n📈 Estatísticas de {player_name} por superfície:")
+    print(df_stats.to_string(index=False))
+    
 # Menu principal
 def main_menu():
 
@@ -109,7 +133,7 @@ def main_menu():
     rank_df = pd.read_csv(rank_file)
     rank_df = rank_df.rename(columns={"player": "player_name", "rank": "rank"})
 
-    # Filtrar e preparar dados base
+    # Filtrar e preparar dados
     base_df = matches[['surface', 'winner_name', 'loser_name', 'winner_rank', 'loser_rank']].dropna()
 
     # Criar duas versões dos dados (p1 vence e p1 perde)
@@ -130,8 +154,8 @@ def main_menu():
     df_combined = pd.concat([df1, df2], ignore_index=True)
     df_combined = df_combined[['surface', 'player1', 'player2', 'player1_rank', 'player2_rank', 'target']]
 
-    # Gerar H2H
-    print("📊 A gerar histórico H2H...")
+    # H2H
+    print("A gerar histórico H2H...")
     players = pd.concat([matches['winner_name'], matches['loser_name']]).dropna().unique()
     h2h_data = {name: geth2hforplayer(matches, name) for name in players}
 
@@ -159,13 +183,14 @@ def main_menu():
     model = LogisticRegression()
     model.fit(X_train, y_train)
 
-    print("✅ Modelo treinado com acuccary:", accuracy_score(y_test, model.predict(X_test)))
+    print("Modelo treinado com acuccary:", accuracy_score(y_test, model.predict(X_test)))
 
     # Menu de previsão
     while True:
-        print("\n========= MENU =========")
         print("1. Fazer previsão de partida")
-        print("2. Sair")
+        print("2. Ver exemplos de previsão")
+        print("3. Ver estatísticas de jogador")
+        print("4. Sair")
         choice = input("Escolha: ")
 
         if choice == '1':
@@ -173,8 +198,30 @@ def main_menu():
             p2 = input("Nome do jogador 2: ").strip()
             surface = input("Superfície (Clay, Hard, Grass): ").strip().capitalize()
             predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data)
+
         elif choice == '2':
-            print("👋 Saindo...")
+            print("A gerar exemplos de previsão...")
+            example_matches = df_encoded.sample(5, random_state=1)  # 5 exemplos aleatórios
+            for i, row in example_matches.iterrows():
+                p1 = row['player1']
+                p2 = row['player2']
+                if 'surface_Clay' in row and row['surface_Clay'] == 1:
+                    surface = 'Clay'
+                elif 'surface_Hard' in row and row['surface_Hard'] == 1:
+                    surface = 'Hard'
+                elif 'surface_Grass' in row and row['surface_Grass'] == 1:
+                    surface = 'Grass'
+                else:
+                    surface = 'Hard' # Default to Hard if not specified
+
+                print(f"\nExemplo {i + 1}: {p1} vs {p2} em {surface}")
+                predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data)
+        elif choice == '3':
+            p = input("Nome do jogador: ").strip()
+            show_player_stats(p, matches)
+
+        elif choice == '4':
+            print("Saindo...")
             break
         else:
             print("❌ Opção inválida.")
