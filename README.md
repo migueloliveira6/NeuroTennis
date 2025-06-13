@@ -52,22 +52,6 @@
 <li class="my-0">
 <p><strong>Install the dependencies:</strong></p>
 </li>
-</ol>
-<p><strong>Using <a href="https://docs.conda.io/">conda</a>:</strong></p>
-<pre><code class="language-sh">❯ conda env create -f conda.yml
-</code></pre>
-<h3>Usage</h3>
-<p>Run the project with:</p>
-<p><strong>Using <a href="https://docs.conda.io/">conda</a>:</strong></p>
-<pre><code class="language-sh">conda activate {venv}
-python {entrypoint}
-</code></pre>
-<h3>Testing</h3>
-<p>Tennis-ml-ai uses the {<strong>test_framework</strong>} test framework. Run the test suite with:</p>
-<p><strong>Using <a href="https://docs.conda.io/">conda</a>:</strong></p>
-<pre><code class="language-sh">conda activate {venv}
-pytest
-</code></pre>
 <hr>
 <div align="left" class=""><a href="#top">⬆ Return</a></div>
 <hr></div>
