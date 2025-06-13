@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import glob
 import numpy as np
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -180,57 +181,67 @@ def main_menu():
     dirname = 'D:/projetos/Tenis ML-AI/data/tennis_atp'
     rank_file = dirname + '/atp_rankings_current.csv'
 
-    print("🔄 A carregar dados...")
-    matches = readATPMatchesParseTime(dirname)
-    rank_df = pd.read_csv(rank_file)
-    rank_df = rank_df.rename(columns={"player": "player_name"})
+    if os.path.exists('D:/projetos/Tenis ML-AI/models/modelo_treinado.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/dados_preparados.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/scaler_treinado.pkl'):
+        print("📂 A carregar modelo e dados do disco...")
+        model = joblib.load('D:/projetos/Tenis ML-AI/models/modelo_treinado.pkl')
+        scaler = joblib.load('D:/projetos/Tenis ML-AI/models/scaler_treinado.pkl')
+        matches, df_encoded, rank_df, h2h_data, surface_stats = joblib.load('D:/projetos/Tenis ML-AI/models/dados_preparados.pkl')
+    else:
+        print("🔄 A preparar dados e treinar modelo (primeira vez)...")
+        matches = readATPMatchesParseTime(dirname)
+        rank_df = pd.read_csv(rank_file)
+        rank_df = rank_df.rename(columns={"player": "player_name"})
 
-    base_df = matches[['surface', 'winner_name', 'loser_name', 'winner_rank', 'loser_rank']].dropna()
+        base_df = matches[['surface', 'winner_name', 'loser_name', 'winner_rank', 'loser_rank']].dropna()
 
-    df1 = base_df.copy()
-    df1['player1'] = df1['winner_name']
-    df1['player2'] = df1['loser_name']
-    df1['player1_rank'] = df1['winner_rank']
-    df1['player2_rank'] = df1['loser_rank']
-    df1['target'] = 1
+        df1 = base_df.copy()
+        df1['player1'] = df1['winner_name']
+        df1['player2'] = df1['loser_name']
+        df1['player1_rank'] = df1['winner_rank']
+        df1['player2_rank'] = df1['loser_rank']
+        df1['target'] = 1
 
-    df2 = base_df.copy()
-    df2['player1'] = df2['loser_name']
-    df2['player2'] = df2['winner_name']
-    df2['player1_rank'] = df2['loser_rank']
-    df2['player2_rank'] = df2['winner_rank']
-    df2['target'] = 0
+        df2 = base_df.copy()
+        df2['player1'] = df2['loser_name']
+        df2['player2'] = df2['winner_name']
+        df2['player1_rank'] = df2['loser_rank']
+        df2['player2_rank'] = df2['winner_rank']
+        df2['target'] = 0
 
-    df_combined = pd.concat([df1, df2], ignore_index=True)
-    df_combined = df_combined[['surface', 'player1', 'player2', 'player1_rank', 'player2_rank', 'target']]
+        df_combined = pd.concat([df1, df2], ignore_index=True)
+        df_combined = df_combined[['surface', 'player1', 'player2', 'player1_rank', 'player2_rank', 'target']]
 
-    print("📊 A gerar histórico H2H...")
-    h2h_data = build_h2h_all(matches)
-    surface_stats = build_surface_stats(matches)
+        print("📊 A gerar histórico H2H...")
+        h2h_data = build_h2h_all(matches)
+        surface_stats = build_surface_stats(matches)
 
-    h2h_wins, h2h_losses = get_vectorized_h2h(df_combined, h2h_data)
-    df_combined['h2h_wins'] = h2h_wins
-    df_combined['h2h_losses'] = h2h_losses
+        h2h_wins, h2h_losses = get_vectorized_h2h(df_combined, h2h_data)
+        df_combined['h2h_wins'] = h2h_wins
+        df_combined['h2h_losses'] = h2h_losses
 
-    surface_features = df_combined.apply(lambda row: get_surface_features(row, surface_stats), axis=1)
-    df_combined = pd.concat([df_combined, surface_features], axis=1)
-    df_encoded = pd.get_dummies(df_combined, columns=['surface'])
-    feature_cols = ['player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses',
-                    'p1_surface_wr', 'p2_surface_wr',
-                    'surface_Clay', 'surface_Hard', 'surface_Grass']
-    print("🔄 A preparar dados para treino...")
-    df_encoded = df_encoded[df_encoded[feature_cols].notnull().all(axis=1)]
-    X = df_encoded[feature_cols]
-    y = df_encoded['target']
+        surface_features = df_combined.apply(lambda row: get_surface_features(row, surface_stats), axis=1)
+        df_combined = pd.concat([df_combined, surface_features], axis=1)
+        df_encoded = pd.get_dummies(df_combined, columns=['surface'])
+        feature_cols = ['player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses',
+                        'p1_surface_wr', 'p2_surface_wr',
+                        'surface_Clay', 'surface_Hard', 'surface_Grass']
+        print("🔄 A preparar dados para treino...")
+        df_encoded = df_encoded[df_encoded[feature_cols].notnull().all(axis=1)]
+        X = df_encoded[feature_cols]
+        y = df_encoded['target']
 
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
-    model.fit(X_train, y_train)
+        model = RandomForestClassifier(n_estimators=100, random_state=42)
+        model.fit(X_train, y_train)
 
-    print("✅ Modelo treinado com acuccary:", accuracy_score(y_test, model.predict(X_test)))
+        joblib.dump(model, 'D:/projetos/Tenis ML-AI/models/modelo_treinado.pkl')
+        joblib.dump(scaler, 'D:/projetos/Tenis ML-AI/models/scaler_treinado.pkl')
+        joblib.dump((matches, df_encoded, rank_df, h2h_data, surface_stats), 'D:/projetos/Tenis ML-AI/models/dados_preparados.pkl')
+
+        print("✅ Modelo treinado com acurracy:", accuracy_score(y_test, model.predict(X_test)))
 
     while True:
         print("\n========= MENU =========")
