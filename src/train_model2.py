@@ -1,81 +1,61 @@
 import os
 import pandas as pd
 import glob
-import datetime
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
-from operator import itemgetter
 
-# Função para fazer o parse das datas
-def parse(t):
-    ret = []
-    for ts in t:
-        try:
-            string = str(ts)
-            tsdt = datetime.date(int(string[:4]), int(string[4:6]), int(string[6:]))
-        except:
-            tsdt = datetime.date(1900, 1, 1)
-        ret.append(tsdt)
-    return ret
-
-# Leitura dos dados de partidas ATP
+# Leitura otimizada dos dados ATP
 def readATPMatchesParseTime(dirname):
-    allFiles = glob.glob(dirname + "/atp_matches_" + "????.csv")
+    allFiles = glob.glob(dirname + "/atp_matches_????.csv") + \
+               glob.glob(dirname + "/atp_matches_qual_chall_????.csv")
     container = []
     for filen in allFiles:
-        df = pd.read_csv(filen,
-                         index_col=None,
-                         header=0,
-                         encoding="ISO-8859-1",
-                         parse_dates=[5],
-                         date_parser=lambda t: parse(t))
+        df = pd.read_csv(filen, encoding="ISO-8859-1", parse_dates=['tourney_date'], dayfirst=False)
+        df['tourney_date'] = pd.to_datetime(df['tourney_date'], errors='coerce')
         container.append(df)
     matches = pd.concat(container, ignore_index=True)
     return matches
 
-# Histórico head-to-head
-def geth2hforplayer(matches, name):
-    matches = matches[(matches['winner_name'] == name) | (matches['loser_name'] == name)]
-    h2hs = {}
-    for _, match in matches.iterrows():
-        if match['winner_name'] == name:
-            opponent = match['loser_name']
-            if opponent not in h2hs:
-                h2hs[opponent] = {'w': 1, 'l': 0}
-            else:
-                h2hs[opponent]['w'] += 1
-        elif match['loser_name'] == name:
-            opponent = match['winner_name']
-            if opponent not in h2hs:
-                h2hs[opponent] = {'w': 0, 'l': 1}
-            else:
-                h2hs[opponent]['l'] += 1
-    return h2hs
+# Construção de head-to-head para todos os jogadores
+def build_h2h_all(matches):
+    h2h_data = {}
+    for _, row in matches.iterrows():
+        w = row['winner_name']
+        l = row['loser_name']
+        if w not in h2h_data:
+            h2h_data[w] = {}
+        if l not in h2h_data[w]:
+            h2h_data[w][l] = {'w': 0, 'l': 0}
+        h2h_data[w][l]['w'] += 1
 
-# Criar features de H2H para um par de jogadores
-def extract_h2h_feature(h2h_data, p1, p2):
-    h2h_p1 = h2h_data.get(p1, {})
-    if p2 in h2h_p1:
-        wins = h2h_p1[p2].get('w', 0)
-        losses = h2h_p1[p2].get('l', 0)
-    else:
-        wins = losses = 0
+        if l not in h2h_data:
+            h2h_data[l] = {}
+        if w not in h2h_data[l]:
+            h2h_data[l][w] = {'w': 0, 'l': 0}
+        h2h_data[l][w]['l'] += 1
+    return h2h_data
+
+# Extrair H2H vetorizado
+def get_vectorized_h2h(df, h2h_data):
+    wins, losses = [], []
+    for p1, p2 in zip(df['player1'], df['player2']):
+        data = h2h_data.get(p1, {}).get(p2, {'w': 0, 'l': 0})
+        wins.append(data['w'])
+        losses.append(data['l'])
     return wins, losses
 
 # Codificação da superfície
 def encode_surface(surface):
-    surface_enc = [0, 0, 0]  # Clay, Hard, Grass
-    if surface == 'Clay':
-        surface_enc[0] = 1
-    elif surface == 'Hard':
-        surface_enc[1] = 1
-    elif surface == 'Grass':
-        surface_enc[2] = 1
+    surface_enc = [0, 0, 0]
+    if surface == 'Clay': surface_enc[0] = 1
+    elif surface == 'Hard': surface_enc[1] = 1
+    elif surface == 'Grass': surface_enc[2] = 1
     return surface_enc
 
-# Função de previsão
+# Prever vencedor
 def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data):
     try:
         r1 = rank_df.loc[rank_df['player_name'] == p1, 'rank'].values[0]
@@ -86,32 +66,34 @@ def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data):
     except:
         r2 = 2000
 
-    wins, losses = extract_h2h_feature(h2h_data, p1, p2)
-
+    data = h2h_data.get(p1, {}).get(p2, {'w': 0, 'l': 0})
+    wins, losses = data['w'], data['l']
     surface_enc = encode_surface(surface)
     input_vector = [r1, r2, wins, losses] + surface_enc
-    input_scaled = scaler.transform([input_vector])
+    input_df = pd.DataFrame([input_vector], columns=['player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses', 'surface_Clay', 'surface_Hard', 'surface_Grass'])
+    input_scaled = scaler.transform(input_df)
 
     prob = model.predict_proba(input_scaled)[0]
     winner = p1 if prob[1] > 0.5 else p2
     confidence = max(prob[1], prob[0])
-
     print(f"Previsão: {winner} com {confidence*100:.2f}% de confiança.")
 
+# Estatísticas por jogador
 def show_player_stats(player_name, matches):
     surfaces = ['Clay', 'Hard', 'Grass']
     stats = []
 
-    print(f"\nEstatísticas de {player_name} por superfície:")
+    player_matches = matches[
+        (matches['winner_name'] == player_name) | (matches['loser_name'] == player_name)
+    ]
 
+    print(f"\n📈 Estatísticas de {player_name} por superfície:")
     for surface in surfaces:
-        surface_matches = matches[matches['surface'] == surface]
-
+        surface_matches = player_matches[player_matches['surface'] == surface]
         wins = surface_matches[surface_matches['winner_name'] == player_name].shape[0]
         losses = surface_matches[surface_matches['loser_name'] == player_name].shape[0]
         total = wins + losses
         win_rate = (wins / total * 100) if total > 0 else 0
-
         stats.append({
             'Superfície': surface,
             'Jogos': total,
@@ -123,28 +105,21 @@ def show_player_stats(player_name, matches):
     df_stats = pd.DataFrame(stats)
     print(df_stats.to_string(index=False))
 
-    # Taxa de vitória geral
-    total_wins = matches[matches['winner_name'] == player_name].shape[0]
-    total_losses = matches[matches['loser_name'] == player_name].shape[0]
+    total_wins = player_matches[player_matches['winner_name'] == player_name].shape[0]
+    total_losses = player_matches[player_matches['loser_name'] == player_name].shape[0]
     total_games = total_wins + total_losses
-    total_win_rate = (total_wins / total_games * 100) if total_games > 0 else 0
+    win_rate_total = (total_wins / total_games * 100) if total_games > 0 else 0
+    print(f"\n🏁 Total de jogos: {total_games} | Vitórias: {total_wins} | Derrotas: {total_losses} | Taxa de vitória: {win_rate_total:.2f}%")
 
-    print(f"\n🏁 Total de jogos: {total_games} | Vitórias: {total_wins} | Derrotas: {total_losses} | Taxa de vitória: {total_win_rate:.2f}%")
-
-    # Últimos 5 jogos
     print("\n🕒 Últimos 5 jogos:")
-    recent_matches = matches[
-        (matches['winner_name'] == player_name) | (matches['loser_name'] == player_name)
-    ].sort_values(by='tourney_date', ascending=False).head(5)
-
-    for _, row in recent_matches.iterrows():
+    recent = player_matches.sort_values('tourney_date', ascending=False).head(5)
+    for _, row in recent.iterrows():
         opponent = row['loser_name'] if row['winner_name'] == player_name else row['winner_name']
         result = 'Vitória' if row['winner_name'] == player_name else 'Derrota'
         surface = row['surface']
         date = row['tourney_date'].date() if pd.notnull(row['tourney_date']) else '??'
         print(f"{date} - {result} contra {opponent} em {surface}")
 
-    # (Opcional) Títulos ganhos (finais vencidas)
     if 'round' in matches.columns:
         finals = matches[(matches['round'] == 'F') & (matches['winner_name'] == player_name)]
         print(f"\n🏆 Títulos ganhos (finais vencidas): {len(finals)}")
@@ -152,22 +127,18 @@ def show_player_stats(player_name, matches):
         for year, count in finals_per_year.items():
             print(f"  {year}: {count} título(s)")
 
-    
 # Menu principal
 def main_menu():
-
     dirname = 'D:/projetos/Tenis ML-AI/data/tennis_atp'
     rank_file = dirname + '/atp_rankings_current.csv'
 
     print("🔄 A carregar dados...")
     matches = readATPMatchesParseTime(dirname)
     rank_df = pd.read_csv(rank_file)
-    rank_df = rank_df.rename(columns={"player": "player_name", "rank": "rank"})
+    rank_df = rank_df.rename(columns={"player": "player_name"})
 
-    # Filtrar e preparar dados
     base_df = matches[['surface', 'winner_name', 'loser_name', 'winner_rank', 'loser_rank']].dropna()
 
-    # Criar duas versões dos dados (p1 vence e p1 perde)
     df1 = base_df.copy()
     df1['player1'] = df1['winner_name']
     df1['player2'] = df1['loser_name']
@@ -185,19 +156,12 @@ def main_menu():
     df_combined = pd.concat([df1, df2], ignore_index=True)
     df_combined = df_combined[['surface', 'player1', 'player2', 'player1_rank', 'player2_rank', 'target']]
 
-    # H2H
-    print("A gerar histórico H2H...")
-    players = pd.concat([matches['winner_name'], matches['loser_name']]).dropna().unique()
-    h2h_data = {name: geth2hforplayer(matches, name) for name in players}
+    print("📊 A gerar histórico H2H...") # Mudar icon
+    h2h_data = build_h2h_all(matches)
+    h2h_wins, h2h_losses = get_vectorized_h2h(df_combined, h2h_data)
+    df_combined['h2h_wins'] = h2h_wins
+    df_combined['h2h_losses'] = h2h_losses
 
-    df_combined['h2h_wins'] = df_combined.apply(
-        lambda row: extract_h2h_feature(h2h_data, row['player1'], row['player2'])[0], axis=1
-    )
-    df_combined['h2h_losses'] = df_combined.apply(
-        lambda row: extract_h2h_feature(h2h_data, row['player1'], row['player2'])[1], axis=1
-    )
-
-    # Codificar superfície
     df_encoded = pd.get_dummies(df_combined, columns=['surface'])
     feature_cols = ['player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses',
                     'surface_Clay', 'surface_Hard', 'surface_Grass']
@@ -206,7 +170,6 @@ def main_menu():
     X = df_encoded[feature_cols]
     y = df_encoded['target']
 
-    # Normalizar e treinar modelo
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
@@ -214,10 +177,10 @@ def main_menu():
     model = LogisticRegression()
     model.fit(X_train, y_train)
 
-    print("Modelo treinado com acuccary:", accuracy_score(y_test, model.predict(X_test)))
+    print("✅ Modelo treinado com acuccary:", accuracy_score(y_test, model.predict(X_test)))
 
-    # Menu de previsão
     while True:
+        print("\n========= MENU =========")
         print("1. Fazer previsão de partida")
         print("2. Ver exemplos de previsão")
         print("3. Ver estatísticas de jogador")
@@ -232,27 +195,23 @@ def main_menu():
 
         elif choice == '2':
             print("A gerar exemplos de previsão...")
-            example_matches = df_encoded.sample(5, random_state=1)  # 5 exemplos aleatórios
-            for i, row in example_matches.iterrows():
+            sample = df_encoded.sample(5, random_state=1)
+            for i, row in sample.iterrows():
                 p1 = row['player1']
                 p2 = row['player2']
-                if 'surface_Clay' in row and row['surface_Clay'] == 1:
-                    surface = 'Clay'
-                elif 'surface_Hard' in row and row['surface_Hard'] == 1:
-                    surface = 'Hard'
-                elif 'surface_Grass' in row and row['surface_Grass'] == 1:
-                    surface = 'Grass'
-                else:
-                    surface = 'Hard' # Default to Hard if not specified
-
+                if row.get('surface_Clay', 0): surface = 'Clay'
+                elif row.get('surface_Hard', 0): surface = 'Hard'
+                elif row.get('surface_Grass', 0): surface = 'Grass'
+                else: surface = 'Hard'
                 print(f"\nExemplo {i + 1}: {p1} vs {p2} em {surface}")
                 predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data)
+
         elif choice == '3':
             p = input("Nome do jogador: ").strip()
             show_player_stats(p, matches)
 
         elif choice == '4':
-            print("Saindo...")
+            print("👋 Saindo...")
             break
         else:
             print("❌ Opção inválida.")
@@ -260,5 +219,3 @@ def main_menu():
 # Executar
 if __name__ == '__main__':
     main_menu()
-# This code is a complete implementation of a tennis match prediction system using machine learning.
-# It includes data loading, preprocessing, feature extraction, model training, and prediction functionalities.
