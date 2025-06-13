@@ -55,8 +55,41 @@ def encode_surface(surface):
     elif surface == 'Grass': surface_enc[2] = 1
     return surface_enc
 
+# Construção de estatísticas por superfície
+def build_surface_stats(matches):
+    stats = {}
+    for _, row in matches.iterrows():
+        for player_col, result_col in [('winner_name', 'w'), ('loser_name', 'l')]:
+            player = row[player_col]
+            surface = row['surface']
+            if pd.isnull(player) or pd.isnull(surface):
+                continue
+            if player not in stats:
+                stats[player] = {}
+            if surface not in stats[player]:
+                stats[player][surface] = {'w': 0, 'l': 0}
+            stats[player][surface][result_col] += 1
+    return stats
+
+# Função auxiliar para extrair taxa de vitória por superfície
+def get_surface_features(row, surface_stats):
+    p1 = row['player1']
+    p2 = row['player2']
+    surface = row['surface']
+
+    def win_rate(player):
+        data = surface_stats.get(player, {}).get(surface, {'w': 0, 'l': 0})
+        w, l = data['w'], data['l']
+        total = w + l
+        return w / total if total > 0 else 0.5  # assume 50% se não houver dados
+
+    return pd.Series({
+        'p1_surface_wr': win_rate(p1),
+        'p2_surface_wr': win_rate(p2)
+    })
+
 # Prever vencedor
-def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data):
+def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data, surface_stats):
     try:
         r1 = rank_df.loc[rank_df['player_name'] == p1, 'rank'].values[0]
     except:
@@ -69,8 +102,22 @@ def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data):
     data = h2h_data.get(p1, {}).get(p2, {'w': 0, 'l': 0})
     wins, losses = data['w'], data['l']
     surface_enc = encode_surface(surface)
-    input_vector = [r1, r2, wins, losses] + surface_enc
-    input_df = pd.DataFrame([input_vector], columns=['player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses', 'surface_Clay', 'surface_Hard', 'surface_Grass'])
+
+    def win_rate(player):
+        data = surface_stats.get(player, {}).get(surface, {'w': 0, 'l': 0})
+        w, l = data['w'], data['l']
+        total = w + l
+        return w / total if total > 0 else 0.5
+
+    p1_surface_wr = win_rate(p1)
+    p2_surface_wr = win_rate(p2)
+
+    input_vector = [r1, r2, wins, losses, p1_surface_wr, p2_surface_wr] + surface_enc
+    input_df = pd.DataFrame([input_vector], columns=[
+        'player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses',
+        'p1_surface_wr', 'p2_surface_wr',
+        'surface_Clay', 'surface_Hard', 'surface_Grass'
+    ])
     input_scaled = scaler.transform(input_df)
 
     prob = model.predict_proba(input_scaled)[0]
@@ -156,17 +203,22 @@ def main_menu():
     df_combined = pd.concat([df1, df2], ignore_index=True)
     df_combined = df_combined[['surface', 'player1', 'player2', 'player1_rank', 'player2_rank', 'target']]
 
-    print("📊 A gerar histórico H2H...") # Mudar icon
+    print("📊 A gerar histórico H2H...")
     h2h_data = build_h2h_all(matches)
+    surface_stats = build_surface_stats(matches)
+
     h2h_wins, h2h_losses = get_vectorized_h2h(df_combined, h2h_data)
     df_combined['h2h_wins'] = h2h_wins
     df_combined['h2h_losses'] = h2h_losses
 
+    surface_features = df_combined.apply(lambda row: get_surface_features(row, surface_stats), axis=1)
+    df_combined = pd.concat([df_combined, surface_features], axis=1)
     df_encoded = pd.get_dummies(df_combined, columns=['surface'])
     feature_cols = ['player1_rank', 'player2_rank', 'h2h_wins', 'h2h_losses',
+                    'p1_surface_wr', 'p2_surface_wr',
                     'surface_Clay', 'surface_Hard', 'surface_Grass']
+    print("🔄 A preparar dados para treino...")
     df_encoded = df_encoded[df_encoded[feature_cols].notnull().all(axis=1)]
-
     X = df_encoded[feature_cols]
     y = df_encoded['target']
 
@@ -191,7 +243,7 @@ def main_menu():
             p1 = input("Nome do jogador 1: ").strip()
             p2 = input("Nome do jogador 2: ").strip()
             surface = input("Superfície (Clay, Hard, Grass): ").strip().capitalize()
-            predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data)
+            predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data, surface_stats)
 
         elif choice == '2':
             print("A gerar exemplos de previsão...")
@@ -204,7 +256,7 @@ def main_menu():
                 elif row.get('surface_Grass', 0): surface = 'Grass'
                 else: surface = 'Hard'
                 print(f"\nExemplo {i + 1}: {p1} vs {p2} em {surface}")
-                predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data)
+                predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data, surface_stats)
 
         elif choice == '3':
             p = input("Nome do jogador: ").strip()
