@@ -11,8 +11,7 @@ from sklearn.preprocessing import StandardScaler
 
 # Leitura otimizada dos dados ATP
 def readATPMatchesParseTime(dirname):
-    allFiles = glob.glob(dirname + "/atp_matches_????.csv") + \
-               glob.glob(dirname + "/atp_matches_qual_chall_????.csv")
+    allFiles = glob.glob(dirname + "/wta_matches_????.csv")
     container = []
     for filen in allFiles:
         df = pd.read_csv(filen, encoding="ISO-8859-1", parse_dates=['tourney_date'], dayfirst=False)
@@ -181,14 +180,14 @@ def show_player_stats(player_name, matches):
 
 # Menu principal
 def main_menu():
-    dirname = 'D:/projetos/Tenis ML-AI/data/tennis_atp'
-    rank_file = dirname + '/atp_rankings_current.csv'
+    dirname = 'D:/projetos/Tenis ML-AI/data/tennis_wta'
+    rank_file = dirname + '/wta_rankings_current.csv'
 
-    if os.path.exists('D:/projetos/Tenis ML-AI/models/modelo_treinado.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/dados_preparados.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/scaler_treinado.pkl'):
+    if os.path.exists('D:/projetos/Tenis ML-AI/models/modelo_treinad_wta.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/dados_preparados_wta.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/scaler_treinado_wta.pkl'):
         print("📂 A carregar modelo e dados do disco...")
-        model = joblib.load('D:/projetos/Tenis ML-AI/models/modelo_treinado.pkl')
-        scaler = joblib.load('D:/projetos/Tenis ML-AI/models/scaler_treinado.pkl')
-        matches, df_encoded, rank_df, h2h_data, surface_stats = joblib.load('D:/projetos/Tenis ML-AI/models/dados_preparados.pkl')
+        model = joblib.load('D:/projetos/Tenis ML-AI/models/modelo_treinado_wta.pkl')
+        scaler = joblib.load('D:/projetos/Tenis ML-AI/models/scaler_treinado_wta.pkl')
+        matches, df_encoded, rank_df, h2h_data, surface_stats = joblib.load('D:/projetos/Tenis ML-AI/models/dados_preparados_wta.pkl')
     else:
         print("🔄 A preparar dados e treinar modelo (primeira vez)...")
         matches = readATPMatchesParseTime(dirname)
@@ -239,17 +238,17 @@ def main_menu():
 
         model = RandomForestClassifier(n_estimators=120, max_depth=20, random_state=42, class_weight='balanced')
         model.fit(X_train, y_train)
-        print("✅ Modelo treinado com acurracy:", accuracy_score(y_test, model.predict(X_test)))
+        print("✅ Modelo treinado com acuraccy:", accuracy_score(y_test, model.predict(X_test)))
 
-        print("🔄 A avaliar modelo com acurácia...")
+        print("🔄 A avaliar modelo com acuraccy...")
         f1 = f1_score(y_test, model.predict(X_test))
         print(f"F1-score: {f1:.2f}")
         
         print("🔄 A guardar modelo e dados preparados...")
 
-        joblib.dump(model, 'D:/projetos/Tenis ML-AI/models/modelo_treinado.pkl')
-        joblib.dump(scaler, 'D:/projetos/Tenis ML-AI/models/scaler_treinado.pkl')
-        joblib.dump((matches, df_encoded, rank_df, h2h_data, surface_stats), 'D:/projetos/Tenis ML-AI/models/dados_preparados.pkl')
+        joblib.dump(model, 'D:/projetos/Tenis ML-AI/models/modelo_treinado_wta.pkl')
+        joblib.dump(scaler, 'D:/projetos/Tenis ML-AI/models/scaler_treinado_wta.pkl')
+        joblib.dump((matches, df_encoded, rank_df, h2h_data, surface_stats), 'D:/projetos/Tenis ML-AI/models/dados_preparados_wta.pkl')
 
         print("✅ Modelo e dados preparados salvos com sucesso!")
 
