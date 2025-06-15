@@ -133,6 +133,7 @@ def predict_match(p1, p2, surface, model, scaler, rank_df, h2h_data, surface_sta
     winner = p1 if prob[1] > 0.5 else p2
     confidence = max(prob[1], prob[0])
     print(f"Previsão: {winner} com {confidence*100:.2f}% de confiança.")
+    return winner, confidence
 
 # Estatísticas por jogador
 def show_player_stats(player_name, matches):

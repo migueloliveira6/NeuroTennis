@@ -183,7 +183,7 @@ def main_menu():
     dirname = 'D:/projetos/Tenis ML-AI/data/tennis_wta'
     rank_file = dirname + '/wta_rankings_current.csv'
 
-    if os.path.exists('D:/projetos/Tenis ML-AI/models/modelo_treinad_wta.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/dados_preparados_wta.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/scaler_treinado_wta.pkl'):
+    if os.path.exists('D:/projetos/Tenis ML-AI/models/modelo_treinado_wta.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/dados_preparados_wta.pkl') and os.path.exists('D:/projetos/Tenis ML-AI/models/scaler_treinado_wta.pkl'):
         print("📂 A carregar modelo e dados do disco...")
         model = joblib.load('D:/projetos/Tenis ML-AI/models/modelo_treinado_wta.pkl')
         scaler = joblib.load('D:/projetos/Tenis ML-AI/models/scaler_treinado_wta.pkl')
