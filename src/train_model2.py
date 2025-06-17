@@ -92,9 +92,8 @@ def get_surface_features(row, surface_stats):
 
 # incluir aces e minutos como novas variáveis
 def add_match_features(matches):
-    matches['player1_aces'] = matches.apply(lambda row: row['w_ace'] if row['winner_name'] == row['player1'] else row['l_ace'], axis=1)
-    matches['player2_aces'] = matches.apply(lambda row: row['w_ace'] if row['winner_name'] == row['player2'] else row['l_ace'], axis=1)
-    matches['match_duration'] = matches['minutes']
+    matches['player1_elo'] = matches.apply(lambda row: row['current_elo'] if row['winner_name'] == row['player1'] else row['l_ace'], axis=1)
+    matches['player2_elo'] = matches.apply(lambda row: row['current_elo'] if row['winner_name'] == row['player2'] else row['l_ace'], axis=1)
     return matches
 
 # Prever vencedor
