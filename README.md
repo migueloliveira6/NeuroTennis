@@ -6,9 +6,9 @@
 </head>
 <body>
 
-<h1>🎾 Tennis-ML-AI</h1>
+<h1>Tennis-ML-AI</h1>
 
-<h2>📌 Descrição</h2>
+<h2>Descrição</h2>
 <p>
   Este projeto aplica <strong>Machine Learning</strong> e <strong>Inteligência Artificial</strong> para prever o vencedor de partidas de tênis com base em dados históricos e estatísticas de jogadores. Além disso, implementa um sistema de <strong>ratings Elo</strong> para avaliar a performance relativa dos jogadores, com suporte a <strong>visualizações temporais</strong> da evolução desses ratings.
 </p>
@@ -16,14 +16,14 @@
   O objetivo é fornecer uma ferramenta robusta e interpretável para análise de desempenho, combinando previsão de partidas e sistemas de ranqueamento.
 </p>
 
-<h2>🧠 Funcionalidades</h2>
+<h2>Funcionalidades</h2>
 <ul>
   <li><strong>🔮 Previsão de Vencedores:</strong> modelo de ML treinado com histórico de desempenho e confrontos diretos.</li>
   <li><strong>📈 Cálculo de Elo Ratings:</strong> ranqueamento dinâmico baseado em resultados reais.</li>
   <li><strong>📊 Visualização Temporal:</strong> gráficos da evolução dos ratings Elo dos jogadores.</li>
 </ul>
 
-<h2>🛠 Tecnologias Utilizadas</h2>
+<h2>Tecnologias Utilizadas</h2>
 <ul>
   <li>Python</li>
   <li>Scikit-learn</li>
@@ -44,7 +44,7 @@
 ├── requirements.txt     # Dependências
 └── README.md            # Este arquivo</code></pre>
 
-<h2>▶️ Como Usar</h2>
+<h2>Como Usar</h2>
 
 <h3>1. Clonar o Repositório</h3>
 <pre><code>git clone https://github.com/migueloliveira6/Tennis-ML-AI.git
@@ -66,15 +66,15 @@ pip install -r requirements.txt</code></pre>
 <h3>4. Explorar Notebooks</h3>
 <p>Explore os notebooks em <code>notebooks/</code> para análises e exemplos.</p>
 
-<h2>📊 Conjunto de Dados</h2>
+<h2>Conjunto de Dados</h2>
 <p>
   Inclui resultados de partidas, estatísticas de jogadores e informações de torneios.
 </p>
 <p><em>Nota: Inclua as fontes ou instruções de obtenção dos dados, se necessário.</em></p>
 
-<h2>📌 Exemplos de Resultados</h2>
+<h2>Exemplos de Resultados</h2>
 <ul>
-  <li><strong>Previsão:</strong> Acurácia de <code>X%</code> na previsão (substituir por valor real).</li>
+  <li><strong>Previsão:</strong> Acurracy do <code>84%</code> na previsão.</li>
   <li><strong>Rankings Elo:</strong> Ranking atualizado dos Top 10 jogadores.</li>
   <li><strong>Visualizações:</strong> Exemplos disponíveis na pasta <code>figures/</code>.</li>
 </ul>
