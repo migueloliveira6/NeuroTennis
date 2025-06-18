@@ -1,77 +1,123 @@
-# Tennis-ML-AI
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tennis-ML-AI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    ul {
+      list-style-type: disc;
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
 
-Descrição
-Este projeto utiliza Machine Learning e Inteligência Artificial para prever o vencedor de partidas de tênis com base em dados históricos e estatísticas de jogadores. Além disso, implementa o cálculo de Elo ratings para avaliar a performance relativa dos jogadores e gera visualizações da evolução temporal desses ratings.
-O objetivo é fornecer uma ferramenta robusta para análise de desempenho de jogadores de tênis, combinando técnicas de previsão e sistemas de ranqueamento.
-Funcionalidades
+<h1>🎾 Tennis-ML-AI</h1>
 
-Previsão de Vencedores: Modelo de Machine Learning treinado para prever o resultado de partidas de tênis com base em características como desempenho passado, estatísticas e confrontos diretos.
-Cálculo de Elo Ratings: Implementação do sistema Elo para ranqueamento de jogadores, atualizado dinamicamente com base nos resultados das partidas.
-Visualização Temporal: Geração de gráficos que mostram a evolução dos Elo ratings dos jogadores ao longo do tempo.
+<h2>📌 Descrição</h2>
+<p>
+  Este projeto aplica <strong>Machine Learning</strong> e <strong>Inteligência Artificial</strong> para prever o vencedor de partidas de tênis com base em dados históricos e estatísticas de jogadores. Além disso, implementa um sistema de <strong>ratings Elo</strong> para avaliar a performance relativa dos jogadores, com suporte a <strong>visualizações temporais</strong> da evolução desses ratings.
+</p>
+<p>
+  O objetivo é fornecer uma ferramenta robusta e interpretável para análise de desempenho, combinando previsão de partidas e sistemas de ranqueamento.
+</p>
 
-# Tecnologias Utilizadas
+<h2>🧠 Funcionalidades</h2>
+<ul>
+  <li><strong>🔮 Previsão de Vencedores:</strong> modelo de ML treinado com histórico de desempenho e confrontos diretos.</li>
+  <li><strong>📈 Cálculo de Elo Ratings:</strong> ranqueamento dinâmico baseado em resultados reais.</li>
+  <li><strong>📊 Visualização Temporal:</strong> gráficos da evolução dos ratings Elo dos jogadores.</li>
+</ul>
 
-Python: Linguagem principal para desenvolvimento.
-Scikit-learn (ou outra biblioteca de ML): Para construção e treinamento do modelo de previsão.
-Pandas e NumPy: Para manipulação e análise de dados.
-Matplotlib ou Seaborn: Para visualização de dados e geração de gráficos.
-Jupyter Notebooks: Para experimentação e documentação do processo de desenvolvimento.
+<h2>🛠 Tecnologias Utilizadas</h2>
+<ul>
+  <li>Python</li>
+  <li>Scikit-learn</li>
+  <li>Pandas & NumPy</li>
+  <li>Matplotlib & Seaborn</li>
+  <li>Jupyter Notebooks</li>
+</ul>
 
-# Estrutura do Repositório
-├── data/                   # Conjuntos de dados utilizados (ex.: resultados de partidas)
+<h2>📁 Estrutura do Repositório</h2>
+<pre><code>Tennis-ML-AI/
+├── data/                # Conjuntos de dados
+├── figures/             # Gráficos gerados
+├── models/              # Modelos salvos
+├── notebooks/           # Notebooks Jupyter
+├── src/
+│   ├── model_elo_v2.py  # Script de previsão
+│   ├── visualization.py # Geração de gráficos
+├── requirements.txt     # Dependências
+└── README.md            # Este arquivo</code></pre>
 
-├── figures/                # Imagens e gráficos gerados (ex.: evolução temporal do Elo)
+<h2>▶️ Como Usar</h2>
 
-├── models/                 # Modelos de Machine Learning salvos
+<h3>1. Clonar o Repositório</h3>
+<pre><code>git clone https://github.com/migueloliveira6/Tennis-ML-AI.git
+cd Tennis-ML-AI</code></pre>
 
-├── notebooks/              # Jupyter Notebooks com análises e experimentos
+<h3>2. Instalar Dependências</h3>
+<pre><code>python -m venv venv
+source venv/bin/activate      # Linux/Mac
+venv\Scripts\activate         # Windows
+pip install -r requirements.txt</code></pre>
 
-├── src/                    # Código-fonte do projeto
+<h3>3. Executar o Projeto</h3>
+<p><strong>Treinar modelo:</strong></p>
+<pre><code>python src/model_elo_v2.py</code></pre>
 
-│   ├── model_elo_v2.py # Modelo de previsão de vencedores
+<p><strong>Gerar visualizações:</strong></p>
+<pre><code>python src/visualization.py</code></pre>
 
-│   ├── visualization.py    # Funções para gerar gráficos de evolução temporal
+<h3>4. Explorar Notebooks</h3>
+<p>Explore os notebooks em <code>notebooks/</code> para análises e exemplos.</p>
 
-├── README.md               # Este arquivo
+<h2>📊 Conjunto de Dados</h2>
+<p>
+  Inclui resultados de partidas, estatísticas de jogadores e informações de torneios.
+</p>
+<p><em>Nota: Inclua as fontes ou instruções de obtenção dos dados, se necessário.</em></p>
 
-# Como Usar
+<h2>📌 Exemplos de Resultados</h2>
+<ul>
+  <li><strong>Previsão:</strong> Acurácia de <code>X%</code> na previsão (substituir por valor real).</li>
+  <li><strong>Rankings Elo:</strong> Ranking atualizado dos Top 10 jogadores.</li>
+  <li><strong>Visualizações:</strong> Exemplos disponíveis na pasta <code>figures/</code>.</li>
+</ul>
 
-Clonar o Repositório:
-git clone https://github.com/migueloliveira6/Tennis-ML-AI.git
-cd Tennis-ML-AI
+<h2>🤝 Contribuições</h2>
+<ol>
+  <li>Faça um fork do repositório</li>
+  <li>Crie uma nova branch: <code>git checkout -b feature/nova-funcionalidade</code></li>
+  <li>Commit suas alterações: <code>git commit -m "Adiciona nova funcionalidade"</code></li>
+  <li>Envie um pull request</li>
+</ol>
 
+<h2>📬 Contato</h2>
+<p>Para dúvidas ou sugestões, entre em contato com <strong>Miguel Oliveira</strong>:<br>
+<a href="https://github.com/migueloliveira6">github.com/migueloliveira6</a></p>
 
-Instalar Dependências:Crie um ambiente virtual e instale as dependências listadas em requirements.txt:
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-pip install -r requirements.txt
-
-
-Executar o Projeto:
-
-Para treinar o modelo de previsão, execute o script src/model_elo_v2.py.
-Para gerar visualizações, execute src/visualization.py.
-
-
-Explorar os Notebooks: Os Jupyter Notebooks em notebooks/ contêm análises detalhadas e exemplos de uso.
-
-
-# Conjunto de Dados
-Os dados utilizados incluem resultados de partidas de tênis, estatísticas de jogadores e informações de torneios. (Nota: Certifique-se de incluir a fonte dos dados, se aplicável, ou descreva como obtê-los.)
-Exemplos de Resultados
-
-Previsão: O modelo alcança uma acurracy de X% em prever o vencedor de partidas (substitua X pelo valor real, se disponível).
-Elo Ratings: Exemplo de ranking gerado para os top 10 jogadores.
-Visualizações: Veja exemplos de gráficos na pasta images/.
-
-Contribuições
-Contribuições são bem-vindas! Para contribuir:
-
-Faça um fork do repositório.
-Crie uma branch para sua feature (git checkout -b feature/nova-funcionalidade).
-Commit suas mudanças (git commit -m 'Adiciona nova funcionalidade').
-Envie um pull request.
-
-Contato
-Para dúvidas ou sugestões, entre em contato com migueloliveira6.
+</body>
+</html>
