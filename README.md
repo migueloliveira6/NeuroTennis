@@ -3,34 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tennis-ML-AI</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      line-height: 1.6;
-      color: #333;
-    }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    code {
-      background-color: #f4f4f4;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-size: 0.95em;
-    }
-    pre {
-      background: #f4f4f4;
-      padding: 12px;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-    ul {
-      list-style-type: disc;
-      margin-left: 20px;
-    }
-  </style>
 </head>
 <body>
 
