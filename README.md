@@ -19,12 +19,19 @@ Jupyter Notebooks: Para experimentação e documentação do processo de desenvo
 
 # Estrutura do Repositório
 ├── data/                   # Conjuntos de dados utilizados (ex.: resultados de partidas)
+
 ├── figures/                # Imagens e gráficos gerados (ex.: evolução temporal do Elo)
+
 ├── models/                 # Modelos de Machine Learning salvos
+
 ├── notebooks/              # Jupyter Notebooks com análises e experimentos
+
 ├── src/                    # Código-fonte do projeto
+
 │   ├── model_elo_v2.py # Modelo de previsão de vencedores
+
 │   ├── visualization.py    # Funções para gerar gráficos de evolução temporal
+
 ├── README.md               # Este arquivo
 
 # Como Usar
