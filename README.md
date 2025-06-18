@@ -1,4 +1,5 @@
-#Tennis-ML-AI
+# Tennis-ML-AI
+
 Descrição
 Este projeto utiliza Machine Learning e Inteligência Artificial para prever o vencedor de partidas de tênis com base em dados históricos e estatísticas de jogadores. Além disso, implementa o cálculo de Elo ratings para avaliar a performance relativa dos jogadores e gera visualizações da evolução temporal desses ratings.
 O objetivo é fornecer uma ferramenta robusta para análise de desempenho de jogadores de tênis, combinando técnicas de previsão e sistemas de ranqueamento.
@@ -8,7 +9,7 @@ Previsão de Vencedores: Modelo de Machine Learning treinado para prever o resul
 Cálculo de Elo Ratings: Implementação do sistema Elo para ranqueamento de jogadores, atualizado dinamicamente com base nos resultados das partidas.
 Visualização Temporal: Geração de gráficos que mostram a evolução dos Elo ratings dos jogadores ao longo do tempo.
 
-#Tecnologias Utilizadas
+# Tecnologias Utilizadas
 
 Python: Linguagem principal para desenvolvimento.
 Scikit-learn (ou outra biblioteca de ML): Para construção e treinamento do modelo de previsão.
@@ -16,7 +17,7 @@ Pandas e NumPy: Para manipulação e análise de dados.
 Matplotlib ou Seaborn: Para visualização de dados e geração de gráficos.
 Jupyter Notebooks: Para experimentação e documentação do processo de desenvolvimento.
 
-#Estrutura do Repositório
+# Estrutura do Repositório
 ├── data/                   # Conjuntos de dados utilizados (ex.: resultados de partidas)
 ├── figures/                # Imagens e gráficos gerados (ex.: evolução temporal do Elo)
 ├── models/                 # Modelos de Machine Learning salvos
@@ -26,7 +27,7 @@ Jupyter Notebooks: Para experimentação e documentação do processo de desenvo
 │   ├── visualization.py    # Funções para gerar gráficos de evolução temporal
 ├── README.md               # Este arquivo
 
-#Como Usar
+# Como Usar
 
 Clonar o Repositório:
 git clone https://github.com/migueloliveira6/Tennis-ML-AI.git
@@ -49,7 +50,7 @@ Para gerar visualizações, execute src/visualization.py.
 Explorar os Notebooks: Os Jupyter Notebooks em notebooks/ contêm análises detalhadas e exemplos de uso.
 
 
-#Conjunto de Dados
+# Conjunto de Dados
 Os dados utilizados incluem resultados de partidas de tênis, estatísticas de jogadores e informações de torneios. (Nota: Certifique-se de incluir a fonte dos dados, se aplicável, ou descreva como obtê-los.)
 Exemplos de Resultados
 
