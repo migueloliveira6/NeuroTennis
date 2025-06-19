@@ -62,6 +62,7 @@ pip install -r requirements.txt</code></pre>
 
 <p><strong>Gerar visualizações:</strong></p>
 <pre><code>python src/visualization.py</code></pre>
+<a> <img src="https://github.com/migueloliveira6/Tennis-ML-AI/blob/59113f7f89e0e0d03d74781df3bbe594616d4f4f/figures/Iga%20Swiatek_elo_by_surface.png" alt="iga"/> </a>
 
 <h3>4. Explorar Notebooks</h3>
 <p>Explore os notebooks em <code>notebooks/</code> para análises e exemplos.</p>
