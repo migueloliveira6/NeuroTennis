@@ -3,11 +3,10 @@ import pandas as pd
 import numpy as np
 import joblib
 from datetime import datetime
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 from sklearn.preprocessing import StandardScaler
-from sklearn.calibration import CalibratedClassifierCV
+from difflib import get_close_matches
 
 MODEL_PATH = 'D:/projetos/Tenis ML-AI/models/'
 
@@ -547,8 +546,42 @@ class TennisPredictor:
             print("Carregando dados históricos...")
             self._load_historical_data()  # Método que carrega apenas os dados necessários
         
+        def find_closest_player(name, player_list):
+            matches = get_close_matches(name, player_list, n=1, cutoff=0.7)
+            return matches[0] if matches else None
+
+        player_names = list(self.player_history.keys())
+
         player1 = input("Nome do Jogador 1: ").strip()
+        if player1 not in player_names:
+            suggestion = find_closest_player(player1, player_names)
+            if suggestion:
+                print(f"Jogador 1 não encontrado. Você quis dizer '{suggestion}'?")
+                confirm = input(f"Usar '{suggestion}'? (s/n): ").strip().lower()
+                if confirm == 's':
+                    player1 = suggestion
+                else:
+                    print("Jogador não encontrado. Tente novamente.")
+                    return
+            else:
+                print("Jogador não encontrado. Tente novamente.")
+                return
+
         player2 = input("Nome do Jogador 2: ").strip()
+        if player2 not in player_names:
+            suggestion = find_closest_player(player2, player_names)
+            if suggestion:
+                print(f"Jogador 2 não encontrado. Você quis dizer '{suggestion}'?")
+                confirm = input(f"Usar '{suggestion}'? (s/n): ").strip().lower()
+                if confirm == 's':
+                    player2 = suggestion
+                else:
+                    print("Jogador não encontrado. Tente novamente.")
+                    return
+            else:
+                print("Jogador não encontrado. Tente novamente.")
+                return
+
         surface = input("Superfície (Clay/Hard/Grass): ").strip().capitalize()
         
         # Validar superfície
