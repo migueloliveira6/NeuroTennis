@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "layer": [{"data": {"name": "data-a57f68e3457daa11b39f3c0897ab12e9"}, "mark": {"type": "line", "point": true}, "encoding": {"x": {"axis": {"title": "Tournament (first four rounds)"}, "field": "FullName", "sort": ["2021 AO", "2021 AO", "2021 RG", "2021 RG", "2021 Wimb", "2021 Wimb", "2021 USO", "2021 USO", "2022 AO", "2022 AO", "2022 RG", "2022 RG", "2022 Wimb", "2022 Wimb", "2022 USO", "2022 USO", "2023 RG", "2023 RG", "2023 Wimb", "2023 Wimb", "2023 USO", "2023 USO", "2024 AO", "2024 AO", "2024 RG", "2024 RG", "2024 Wimb", "2024 Wimb", "2024 USO", "2024 USO"], "type": "nominal"}, "y": {"axis": {"title": "Dominance Ratio"}, "field": "DR", "scale": {"domain": [0.7, 2.5]}, "type": "quantitative"}}}, {"data": {"name": "data-f180b3edb05720677307834fa52aa9e3"}, "mark": {"type": "point", "color": "orange", "filled": true, "size": 200}, "encoding": {"tooltip": [{"field": "Tourney", "type": "nominal"}, {"field": "Date", "type": "quantitative"}, {"field": "DR", "type": "quantitative"}], "x": {"field": "FullName", "sort": ["2021 AO", "2021 AO", "2021 RG", "2021 RG", "2021 Wimb", "2021 Wimb", "2021 USO", "2021 USO", "2022 AO", "2022 AO", "2022 RG", "2022 RG", "2022 Wimb", "2022 Wimb", "2022 USO", "2022 USO", "2023 RG", "2023 RG", "2023 Wimb", "2023 Wimb", "2023 USO", "2023 USO", "2024 AO", "2024 AO", "2024 RG", "2024 RG", "2024 Wimb", "2024 Wimb", "2024 USO", "2024 USO"], "type": "nominal"}, "y": {"field": "DR", "type": "quantitative"}}, "title": "Pontos laranja indicam torneios Grand Slam vencidos pelo jogador"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-a57f68e3457daa11b39f3c0897ab12e9": [{"Tourney": "Australian Open", "Date": 20210208, "DR": 1.1305763594920222, "Title": 0, "FullName": "2021 AO"}, {"Tourney": "Australian Open", "Date": 20210208, "DR": 1.1305763594920222, "Title": 0, "FullName": "2021 AO"}, {"Tourney": "Roland Garros", "Date": 20210531, "DR": 1.040487337731432, "Title": 0, "FullName": "2021 RG"}, {"Tourney": "Roland Garros", "Date": 20210531, "DR": 1.040487337731432, "Title": 0, "FullName": "2021 RG"}, {"Tourney": "Wimbledon", "Date": 20210628, "DR": 0.9127272727272726, "Title": 0, "FullName": "2021 Wimb"}, {"Tourney": "Wimbledon", "Date": 20210628, "DR": 0.9127272727272726, "Title": 0, "FullName": "2021 Wimb"}, {"Tourney": "Us Open", "Date": 20210830, "DR": 1.1904698991500418, "Title": 0, "FullName": "2021 USO"}, {"Tourney": "Us Open", "Date": 20210830, "DR": 1.1904698991500418, "Title": 0, "FullName": "2021 USO"}, {"Tourney": "Australian Open", "Date": 20220117, "DR": 1.3570256971022414, "Title": 0, "FullName": "2022 AO"}, {"Tourney": "Australian Open", "Date": 20220117, "DR": 1.3570256971022414, "Title": 0, "FullName": "2022 AO"}, {"Tourney": "Roland Garros", "Date": 20220523, "DR": 1.4503171247357294, "Title": 0, "FullName": "2022 RG"}, {"Tourney": "Roland Garros", "Date": 20220523, "DR": 1.4503171247357294, "Title": 0, "FullName": "2022 RG"}, {"Tourney": "Wimbledon", "Date": 20220627, "DR": 1.1920048866567121, "Title": 0, "FullName": "2022 Wimb"}, {"Tourney": "Wimbledon", "Date": 20220627, "DR": 1.1920048866567121, "Title": 0, "FullName": "2022 Wimb"}, {"Tourney": "Us Open", "Date": 20220829, "DR": 1.2141038981829824, "Title": 1, "FullName": "2022 USO"}, {"Tourney": "Us Open", "Date": 20220829, "DR": 1.2141038981829824, "Title": 1, "FullName": "2022 USO"}, {"Tourney": "Roland Garros", "Date": 20230529, "DR": 1.669429336096003, "Title": 0, "FullName": "2023 RG"}, {"Tourney": "Roland Garros", "Date": 20230529, "DR": 1.669429336096003, "Title": 0, "FullName": "2023 RG"}, {"Tourney": "Wimbledon", "Date": 20230703, "DR": 1.3942068305138842, "Title": 1, "FullName": "2023 Wimb"}, {"Tourney": "Wimbledon", "Date": 20230703, "DR": 1.3942068305138842, "Title": 1, "FullName": "2023 Wimb"}, {"Tourney": "Us Open", "Date": 20230828, "DR": 1.4964594807238398, "Title": 0, "FullName": "2023 USO"}, {"Tourney": "Us Open", "Date": 20230828, "DR": 1.4964594807238398, "Title": 0, "FullName": "2023 USO"}, {"Tourney": "Australian Open", "Date": 20240115, "DR": 1.7565733672603905, "Title": 0, "FullName": "2024 AO"}, {"Tourney": "Australian Open", "Date": 20240115, "DR": 1.7565733672603905, "Title": 0, "FullName": "2024 AO"}, {"Tourney": "Roland Garros", "Date": 20240527, "DR": 1.4751072596746102, "Title": 1, "FullName": "2024 RG"}, {"Tourney": "Roland Garros", "Date": 20240527, "DR": 1.4751072596746102, "Title": 1, "FullName": "2024 RG"}, {"Tourney": "Wimbledon", "Date": 20240701, "DR": 1.2049423785196625, "Title": 1, "FullName": "2024 Wimb"}, {"Tourney": "Wimbledon", "Date": 20240701, "DR": 1.2049423785196625, "Title": 1, "FullName": "2024 Wimb"}, {"Tourney": "Us Open", "Date": 20240826, "DR": 1.2718378756114603, "Title": 0, "FullName": "2024 USO"}, {"Tourney": "Us Open", "Date": 20240826, "DR": 1.2718378756114603, "Title": 0, "FullName": "2024 USO"}], "data-f180b3edb05720677307834fa52aa9e3": [{"Tourney": "Us Open", "Date": 20220829, "DR": 1.2141038981829824, "Title": 1, "FullName": "2022 USO"}, {"Tourney": "Us Open", "Date": 20220829, "DR": 1.2141038981829824, "Title": 1, "FullName": "2022 USO"}, {"Tourney": "Wimbledon", "Date": 20230703, "DR": 1.3942068305138842, "Title": 1, "FullName": "2023 Wimb"}, {"Tourney": "Wimbledon", "Date": 20230703, "DR": 1.3942068305138842, "Title": 1, "FullName": "2023 Wimb"}, {"Tourney": "Roland Garros", "Date": 20240527, "DR": 1.4751072596746102, "Title": 1, "FullName": "2024 RG"}, {"Tourney": "Roland Garros", "Date": 20240527, "DR": 1.4751072596746102, "Title": 1, "FullName": "2024 RG"}, {"Tourney": "Wimbledon", "Date": 20240701, "DR": 1.2049423785196625, "Title": 1, "FullName": "2024 Wimb"}, {"Tourney": "Wimbledon", "Date": 20240701, "DR": 1.2049423785196625, "Title": 1, "FullName": "2024 Wimb"}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
