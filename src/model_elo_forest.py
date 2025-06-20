@@ -25,7 +25,7 @@ class TennisPredictor:
     def load_data(self):
         """Carrega os dados das partidas"""
         print("Carregando dados de partidas...")
-        self.matches = pd.read_csv('atp_matches_with_surface_elo.csv',
+        self.matches = pd.read_csv('atp_chall_itf_matches_with_surface_elo.csv',
                                  parse_dates=['tourney_date'])
         
         # Verificar colunas essenciais
@@ -57,6 +57,9 @@ class TennisPredictor:
         # Ordenar por data para processamento temporal
         valid_matches = valid_matches.sort_values('tourney_date')
         
+        # Construir H2H apenas uma vez antes de extrair features
+        self.build_h2h_data(valid_matches)
+
         # Processar cada partida
         features = []
         for _, row in valid_matches.iterrows():
@@ -69,7 +72,6 @@ class TennisPredictor:
             
             if pd.isna(winner_elo_pre) or pd.isna(loser_elo_pre):
                 continue
-                
             # Perspectiva do vencedor (target=1)
             features.append(self._extract_features(
                 row, perspective='winner',
@@ -109,23 +111,8 @@ class TennisPredictor:
                 'date': date,
                 'surface': surface,
                 'elo_after': row['winner_surface_elo'] if is_winner else row['loser_surface_elo'],
-                'opponent': loser if is_winner else winner,
                 'result': 'win' if is_winner else 'loss'
             })
-        
-        # Atualizar H2H
-        if winner not in self.h2h_data:
-            self.h2h_data[winner] = {}
-        if loser not in self.h2h_data[winner]:
-            self.h2h_data[winner][loser] = {'wins': 0, 'losses': 0}
-        self.h2h_data[winner][loser]['wins'] += 1
-        
-        if loser not in self.h2h_data:
-            self.h2h_data[loser] = {}
-        if winner not in self.h2h_data[loser]:
-            self.h2h_data[loser][winner] = {'wins': 0, 'losses': 0}
-        self.h2h_data[loser][winner]['losses'] += 1
-        
         # Atualizar estatísticas por superfície
         for player, is_winner in [(winner, True), (loser, False)]:
             if player not in self.surface_stats:
@@ -137,6 +124,41 @@ class TennisPredictor:
                 self.surface_stats[player][surface]['wins'] += 1
             else:
                 self.surface_stats[player][surface]['losses'] += 1
+
+    def build_h2h_data(self, matches):
+        """Constrói o histórico head-to-head conforme sua estrutura solicitada"""
+        print("Construindo histórico H2H...")
+        self.h2h_data = {}
+        
+        for _, row in matches.iterrows():
+            winner = row['winner_name']
+            loser = row['loser_name']
+            date = row['tourney_date']
+            
+            # Atualizar registro do vencedor
+            if winner not in self.h2h_data:
+                self.h2h_data[winner] = {}
+            if loser not in self.h2h_data[winner]:
+                self.h2h_data[winner][loser] = {'w': 0, 'l': 0, 'matches': []}
+            self.h2h_data[winner][loser]['w'] += 1
+            self.h2h_data[winner][loser]['matches'].append({'date': date, 'result': 'win'})
+            
+            # Atualizar registro do perdedor
+            if loser not in self.h2h_data:
+                self.h2h_data[loser] = {}
+            if winner not in self.h2h_data[loser]:
+                self.h2h_data[loser][winner] = {'w': 0, 'l': 0, 'matches': []}
+            self.h2h_data[loser][winner]['l'] += 1
+            self.h2h_data[loser][winner]['matches'].append({'date': date, 'result': 'loss'})
+
+    def _format_h2h(self, player1, player2, h2h):
+        """Formata o H2H para exibição"""
+        total = h2h['w'] + h2h['l']
+        if total == 0:
+            return "Igual (sem confrontos anteriores)"
+        
+        percentage = h2h['w'] / total
+        return f"{h2h['w']}-{h2h['l']} ({percentage:.0%} para {player1})"
 
     def _get_elo_before_match(self, player, surface, date):
         """Obtém o ELO do jogador antes da partida atual"""
@@ -199,8 +221,8 @@ class TennisPredictor:
         
         # Head-to-head até antes desta partida
         h2h = self._get_h2h_stats_before_match(player, opponent, date)
-        h2h_total = h2h['wins'] + h2h['losses']
-        h2h_win_rate = h2h['wins'] / h2h_total if h2h_total > 0 else 0.5
+        h2h_total = h2h['w'] + h2h['l']
+        h2h_win_rate = h2h['w'] / h2h_total if h2h_total > 0 else 0.5
         
         # Estatísticas por superfície até antes desta partida
         player_stats = self._get_surface_stats_before(player, surface, date)
@@ -223,20 +245,22 @@ class TennisPredictor:
 
     def _get_h2h_stats_before_match(self, player1, player2, date):
         """Calcula H2H (vitórias e derrotas) até antes de uma data específica"""
-        wins = 0
-        losses = 0
+        if player1 not in self.h2h_data or player2 not in self.h2h_data[player1]:
+            return {'w': 0, 'l': 0}
+    
+        # Se não houver data especificada, retorna todo o histórico
+        if date is None:
+            return {
+                'w': self.h2h_data[player1][player2]['w'],
+                'l': self.h2h_data[player1][player2]['l']
+            }
         
-        if player1 not in self.player_history:
-            return {'wins': 0, 'losses': 0}
-            
-        for match in self.player_history[player1]:
-            if match['date'] < date and match['opponent'] == player2:
-                if match['result'] == 'win':
-                    wins += 1
-                else:
-                    losses += 1
-                    
-        return {'wins': wins, 'losses': losses}
+        # Filtra partidas anteriores à data especificada
+        matches = [m for m in self.h2h_data[player1][player2]['matches'] if m['date'] < date]
+        wins = sum(1 for m in matches if m['result'] == 'win')
+        losses = sum(1 for m in matches if m['result'] == 'loss')
+        
+        return {'w': wins, 'l': losses}
 
     def _get_surface_stats_before(self, player, surface, date):
         """Calcula estatísticas por superfície até antes de uma data"""
@@ -261,7 +285,7 @@ class TennisPredictor:
     def _load_historical_data(self):
         """Carrega apenas os dados necessários para previsões"""
         try:
-            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data.pkl'))
+            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data1.pkl'))
             self.player_history = data.get('player_history', {})
             self.h2h_data = data.get('h2h_data', {})
             self.surface_stats = data.get('surface_stats', {})
@@ -375,8 +399,9 @@ class TennisPredictor:
         
         # Obter estatísticas até a data
         h2h = self._get_h2h_stats_before_match(player1, player2, date)
-        h2h_total = h2h['wins'] + h2h['losses']
-        h2h_win_rate = h2h['wins'] / h2h_total if h2h_total > 0 else 0.5
+        h2h_display = self._format_h2h(player1, player2, h2h)
+        h2h_total = h2h['w'] + h2h['l']
+        h2h_win_rate = h2h['w'] / h2h_total if h2h_total > 0 else 0.5
         
         player1_stats = self._get_surface_stats_before(player1, surface, date)
         player2_stats = self._get_surface_stats_before(player2, surface, date)
@@ -423,7 +448,8 @@ class TennisPredictor:
             'player1_elo': player1_elo,
             'player2_elo': player2_elo,
             'elo_diff': features['elo_diff'],
-            'h2h': f"{h2h['wins']}-{h2h['losses']}",
+            'h2h': h2h_display,
+            'h2h_raw': h2h,
             'player1_surface_win_rate': player1_stats['win_rate'],
             'player2_surface_win_rate': player2_stats['win_rate'],
             'probability': confidence
@@ -557,7 +583,7 @@ class TennisPredictor:
             print(f"Diferença de ELO: {details['elo_diff']:.1f}")
             
             # Formatar histórico H2H
-            h2h_text = "Igual (sem confrontos anteriores)" if details['h2h'] == "0-0" else f"{details['h2h']} (Vitórias de {player1})"
+            h2h_text = "Igual (sem confrontos anteriores)" if details['h2h'] == "0-0" else f"{details['h2h']}"
             print(f"Histórico H2H: {h2h_text}")
             
             print(f"Taxa de vitória em {surface}:")
