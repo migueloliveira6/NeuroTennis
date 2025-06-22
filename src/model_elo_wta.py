@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 from sklearn.preprocessing import StandardScaler
-from sklearn.calibration import CalibratedClassifierCV
+from xgboost import XGBClassifier
 
 MODEL_PATH = 'D:/projetos/Tenis ML-AI/models/'
 
@@ -261,7 +261,7 @@ class TennisPredictor:
     def _load_historical_data(self):
         """Carrega apenas os dados necessários para previsões"""
         try:
-            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data.pkl'))
+            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data_wta_xgboost.pkl'))
             self.player_history = data.get('player_history', {})
             self.h2h_data = data.get('h2h_data', {})
             self.surface_stats = data.get('surface_stats', {})
@@ -310,7 +310,13 @@ class TennisPredictor:
         self.scaler = StandardScaler()
         X_train_scaled = self.scaler.fit_transform(X_train)
         
-        self.model = RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+        self.model = XGBClassifier(
+            n_estimators=200,
+            random_state=42,
+            n_jobs=-1,
+            use_label_encoder=False,
+            eval_metric='logloss'
+        )
         self.model.fit(X_train_scaled, y_train)
         
         # Avaliar
@@ -438,8 +444,8 @@ class TennisPredictor:
             os.makedirs(MODEL_PATH)
         
         # Salvar componentes do modelo
-        joblib.dump(self.model, os.path.join(MODEL_PATH, 'tennis_surface_elo_model_wta.pkl'))
-        joblib.dump(self.scaler, os.path.join(MODEL_PATH, 'tennis_surface_elo_scaler_wta.pkl'))
+        joblib.dump(self.model, os.path.join(MODEL_PATH, 'tennis_surface_elo_model_wta_xgboost.pkl'))
+        joblib.dump(self.scaler, os.path.join(MODEL_PATH, 'tennis_surface_elo_scaler_wta_xgboost.pkl'))
         
         # Salvar dados necessários para previsões
         joblib.dump({
@@ -447,7 +453,7 @@ class TennisPredictor:
             'h2h_data': self.h2h_data,
             'surface_stats': self.surface_stats,
             'feature_columns': self.feature_columns  # Adicionado para garantir consistência
-        }, os.path.join(MODEL_PATH, 'tennis_surface_elo_data_wta.pkl'))
+        }, os.path.join(MODEL_PATH, 'tennis_surface_elo_data_wta_xgboost.pkl'))
         
         print(f"Modelo e dados salvos em {MODEL_PATH}")
 
@@ -455,10 +461,10 @@ class TennisPredictor:
         """Carrega um modelo treinado anteriormente"""
         print("Carregando modelo salvo...")
         try:
-            self.model = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_model_wta.pkl'))
-            self.scaler = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_scaler_wta.pkl'))
+            self.model = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_model_wta_xgboost.pkl'))
+            self.scaler = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_scaler_wta_xgboost.pkl'))
             
-            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data_wta.pkl'))
+            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data_wta_xgboost.pkl'))
             self.player_history = data['player_history']
             self.h2h_data = data['h2h_data']
             self.surface_stats = data['surface_stats']
@@ -601,9 +607,9 @@ def main():
     
     # Verificar se existe modelo treinado
     if all(os.path.exists(os.path.join(MODEL_PATH, f)) for f in [
-        'tennis_surface_elo_model_wta.pkl',
-        'tennis_surface_elo_scaler_wta.pkl',
-        'tennis_surface_elo_data_wta.pkl'
+        'tennis_surface_elo_model_wta_xgboost.pkl',
+        'tennis_surface_elo_scaler_wta_xgboost_xgboost.pkl',
+        'tennis_surface_elo_data_wta_xgboost_xgboost.pkl'
     ]):
         print("Modelo treinado encontrado. Carregando...")
         if not predictor.load_saved_model():
