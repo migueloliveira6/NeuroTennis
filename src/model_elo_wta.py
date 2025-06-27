@@ -608,8 +608,8 @@ def main():
     # Verificar se existe modelo treinado
     if all(os.path.exists(os.path.join(MODEL_PATH, f)) for f in [
         'tennis_surface_elo_model_wta_xgboost.pkl',
-        'tennis_surface_elo_scaler_wta_xgboost_xgboost.pkl',
-        'tennis_surface_elo_data_wta_xgboost_xgboost.pkl'
+        'tennis_surface_elo_scaler_wta_xgboost.pkl',
+        'tennis_surface_elo_data_wta_xgboost.pkl'
     ]):
         print("Modelo treinado encontrado. Carregando...")
         if not predictor.load_saved_model():
