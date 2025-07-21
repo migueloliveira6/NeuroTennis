@@ -24,7 +24,7 @@ class TennisPredictor:
     def load_data(self):
         """Carrega os dados das partidas"""
         print("Carregando dados de partidas...")
-        self.matches = pd.read_csv('atp_chall_itf_matches_with_surface_elo.csv',
+        self.matches = pd.read_csv('atp_chall_itf_matches_with_surface_elo_variable_k.csv',
                                  parse_dates=['tourney_date'])
         
         # Verificar colunas essenciais
