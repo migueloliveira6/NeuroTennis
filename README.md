@@ -58,10 +58,10 @@ pip install -r requirements.txt</code></pre>
 
 <h3>3. Executar o Projeto</h3>
 <p><strong>Treinar modelo:</strong></p>
-<pre><code>python src/model_elo_v2.py</code></pre>
+<pre><code>python src/model_elo_xgboost.py</code></pre>
 
 <p><strong>Gerar visualizações:</strong></p>
-<pre><code>python src/visualization.py</code></pre>
+<pre><code> notebooks/atp_chall_itf_matches_elo.ipynb</code></pre>
 <a> <img src="https://github.com/migueloliveira6/NeuroTennis/blob/main/notebooks/dashboard%20rafa%20nadal.png"/> </a>
 
 <h3>4. Explorar Notebooks</h3>
