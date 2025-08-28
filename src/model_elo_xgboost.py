@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import numpy as np
 import joblib
+import optuna
 from datetime import datetime
-from sklearn.metrics import accuracy_score, f1_score, classification_report
-from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss
 from difflib import get_close_matches
 from xgboost import XGBClassifier
 
@@ -302,95 +302,94 @@ class TennisPredictor:
                 dates.extend([match['date'] for match in self.player_history[player] if match['date']])
         return max(dates) if dates else None
 
-    def train_model(self, df):
-        """Treina o modelo com validação temporal"""
-        # Ordenar por data
-        df = df.sort_values('date')
+    def train_model(self, df, n_trials=50):
+        """Treina modelo com validação temporal + ajuste de hiperparâmetros via Optuna"""
         
-        # Divisão temporal estratificada para treino, validação e teste
-        # Garante que as proporções das classes sejam mantidas em cada divisão
-
-        # Ordenar por data para garantir ordem temporal
+        # Ordenar por data
         df = df.sort_values('date').reset_index(drop=True)
 
-        # Índices das classes
-        idx_class_0 = df[df['target'] == 0].index.tolist()
-        idx_class_1 = df[df['target'] == 1].index.tolist()
+        # Split temporal global
+        n = len(df)
+        train_end = int(0.7 * n)
+        val_end = int(0.85 * n)
 
-        def split_indices(indices, train_frac=0.7, val_frac=0.15):
-            n = len(indices)
-            train_end = int(train_frac * n)
-            val_end = train_end + int(val_frac * n)
-            return (
-            indices[:train_end],
-            indices[train_end:val_end],
-            indices[val_end:]
-            )
+        train = df.iloc[:train_end].reset_index(drop=True)
+        val = df.iloc[train_end:val_end].reset_index(drop=True)
+        test = df.iloc[val_end:].reset_index(drop=True)
 
-        train_idx_0, val_idx_0, test_idx_0 = split_indices(idx_class_0)
-        train_idx_1, val_idx_1, test_idx_1 = split_indices(idx_class_1)
-
-        train_indices = train_idx_0 + train_idx_1
-        val_indices = val_idx_0 + val_idx_1
-        test_indices = test_idx_0 + test_idx_1
-
-        # Garantir ordem temporal dentro de cada conjunto
-        train = df.loc[sorted(train_indices)].reset_index(drop=True)
-        val = df.loc[sorted(val_indices)].reset_index(drop=True)
-        test = df.loc[sorted(test_indices)].reset_index(drop=True)
-        
-        # As divisões train, val, test já foram criadas acima usando índices estratificados e temporais
-        
-        # Identificar colunas a serem removidas - apenas as que existem
+        # Features e target
         cols_to_drop = ['date', 'target']
-        for col in ['player', 'opponent']:  # Verifica se essas colunas existem
+        for col in ['player', 'opponent']:
             if col in df.columns:
                 cols_to_drop.append(col)
-        
-        # Preparar features
-        X_train = train.drop(cols_to_drop, axis=1)
-        y_train = train['target']
-        
-        # Codificar superfície
-        X_train = pd.get_dummies(X_train, columns=['surface'])
-        self.feature_columns = X_train.columns  # Salva as colunas para referência futura
-        
-        # Treinar modelo XGBoost
-        self.scaler = StandardScaler()
-        X_train_scaled = self.scaler.fit_transform(X_train)
-        
-        self.model = XGBClassifier(
-            n_estimators=200,
-            random_state=42,
-            n_jobs=-1,
-            use_label_encoder=False,
-            eval_metric='logloss'
-        )
-        self.model.fit(X_train_scaled, y_train)
-        
-        # Avaliar
-        for name, dataset in [('Validação', val), ('Teste', test)]:
+
+        def prepare_Xy(dataset):
             X = dataset.drop(cols_to_drop, axis=1)
             X = pd.get_dummies(X, columns=['surface'])
-            
-            # Garantir que temos as mesmas colunas que no treino
-            X = X.reindex(columns=self.feature_columns, fill_value=0)
-            
-            X_scaled = self.scaler.transform(X)
+            X = X.reindex(columns=self.feature_columns, fill_value=0) if hasattr(self, "feature_columns") else X
             y = dataset['target']
-            
-            y_pred = self.model.predict(X_scaled)
-            print(f"\nAvaliação {name}:")
-            print(f"Acurácia: {accuracy_score(y, y_pred):.2f}")
-            print(f"F1-score: {f1_score(y, y_pred):.2f}")
-            print("Relatório de classificação:")
-            print(classification_report(y, y_pred))
-        
-        # Feature importance
+            return X, y
+
+        # Preparar train/val
+        X_train, y_train = prepare_Xy(train)
+        X_val, y_val = prepare_Xy(val)
+
+        # Salvar colunas
+        self.feature_columns = X_train.columns
+
+        # Definição do objetivo de Optuna
+        def objective(trial):
+            params = {
+                'objective': 'binary:logistic',
+                'eval_metric': 'logloss',
+                'n_estimators': trial.suggest_int('n_estimators', 200, 800),
+                'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.2),
+                'max_depth': trial.suggest_int('max_depth', 3, 8),
+                'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
+                'subsample': trial.suggest_float('subsample', 0.6, 1.0),
+                'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
+                'gamma': trial.suggest_float('gamma', 0, 0.5),
+                'reg_lambda': trial.suggest_float('reg_lambda', 0.5, 2.0),
+                'n_jobs': -1,
+                'random_state': 42
+            }
+
+            model = XGBClassifier(**params)
+            model.fit(X_train, y_train)
+            y_pred_proba = model.predict_proba(X_val)[:, 1]
+            return log_loss(y_val, y_pred_proba)
+
+        # Rodar Optuna
+        study = optuna.create_study(direction='minimize')
+        study.optimize(objective, n_trials=n_trials)
+        best_params = study.best_params
+        print("\nMelhores parâmetros encontrados:", best_params)
+
+        # Treinar modelo final em train+val
+        X_train_val = pd.concat([X_train, X_val])
+        y_train_val = pd.concat([y_train, y_val])
+
+        self.model = XGBClassifier(**best_params)
+        self.model.fit(X_train_val, y_train_val)
+
+        # Avaliação no conjunto de teste
+        X_test, y_test = prepare_Xy(test)
+        y_pred = self.model.predict(X_test)
+        y_proba = self.model.predict_proba(X_test)[:, 1]
+
+        print("\n--- Avaliação Teste (dados mais recentes) ---")
+        print(f"Acurácia: {accuracy_score(y_test, y_pred):.3f}")
+        print(f"F1-score: {f1_score(y_test, y_pred):.3f}")
+        print(f"LogLoss: {log_loss(y_test, y_proba):.3f}")
+        print(f"Brier Score: {brier_score_loss(y_test, y_proba):.3f}")
+        print("Relatório de classificação:")
+        print(classification_report(y_test, y_pred))
+
+        # Importância das features
         if hasattr(self.model, 'feature_importances_'):
-            print("\nImportância das features:")
+            print("\nTop features:")
             feature_importance = pd.DataFrame({
-                'feature': X.columns,
+                'feature': self.feature_columns,
                 'importance': self.model.feature_importances_
             }).sort_values('importance', ascending=False)
             print(feature_importance.head(10))
@@ -398,17 +397,8 @@ class TennisPredictor:
     def predict_match(self, player1, player2, surface, date=None):
         """
         Faz uma previsão para uma partida específica em uma data específica
-        
-        Args:
-            player1 (str): Nome do primeiro jogador
-            player2 (str): Nome do segundo jogador
-            surface (str): Superfície da partida ('Clay', 'Hard', 'Grass')
-            date (datetime): Data da partida (se None, usa a data mais recente)
-        
-        Returns:
-            tuple: (jogador_previsto, probabilidade, detalhes)
         """
-        # Verificar se a data é válida
+        # Verificar data
         if date is not None and not isinstance(date, pd.Timestamp):
             try:
                 date = pd.to_datetime(date)
@@ -418,26 +408,27 @@ class TennisPredictor:
 
         if date is None:
             date = self.matches['tourney_date'].max()
-        
-        # Verificar se os jogadores existem no histórico
+
+        # Verificar jogadores
         if player1 not in self.player_history or player2 not in self.player_history:
             print("Um ou ambos os jogadores não foram encontrados nos dados históricos.")
             return None, None, None
-        
-        # Obter ELOs antes da partida
+
+        # Obter ELOs
         player1_elo = self._get_elo_before_match(player1, surface, date)
         player2_elo = self._get_elo_before_match(player2, surface, date)
-        
-        # Obter estatísticas até a data
+
+        # Obter H2H
         h2h = self._get_h2h_stats_before_match(player1, player2, date)
         h2h_display = self._format_h2h(player1, player2, h2h)
         h2h_total = h2h['w'] + h2h['l']
         h2h_win_rate = h2h['w'] / h2h_total if h2h_total > 0 else 0.5
-        
+
+        # Stats por superfície
         player1_stats = self._get_surface_stats_before(player1, surface, date)
         player2_stats = self._get_surface_stats_before(player2, surface, date)
-        
-        # Preparar features
+
+        # Features
         features = {
             'elo_diff': player1_elo - player2_elo,
             'player_elo': player1_elo,
@@ -450,29 +441,22 @@ class TennisPredictor:
             'opponent_surface_matches': player2_stats['total_matches'],
             'surface': surface
         }
-        
-        # Criar DataFrame e codificar superfície
+
+        # Criar DataFrame
         df = pd.DataFrame([features])
         df = pd.get_dummies(df, columns=['surface'])
-        
-        # Garantir que temos todas as colunas esperadas
-        expected_columns = set(self.scaler.feature_names_in_)
-        missing_cols = expected_columns - set(df.columns)
-        for col in missing_cols:
-            df[col] = 0
-        
-        # Reordenar colunas
-        df = df[self.scaler.feature_names_in_]
-        
-        # Normalizar e prever
-        X = self.scaler.transform(df)
-        prob = self.model.predict_proba(X)[0]
-        
-        # Determinar vencedor
-        winner = player1 if prob[1] > 0.5 else player2
-        confidence = max(prob[1], prob[0])
-        
-        # Detalhes da previsão
+
+        # Garantir todas as colunas usadas no treino
+        df = df.reindex(columns=self.feature_columns, fill_value=0)
+
+        # Prever probabilidade
+        proba = self.model.predict_proba(df)[0]
+        prob_player1 = proba[1]  # classe "1" significa player1 venceu
+
+        winner = player1 if prob_player1 > 0.5 else player2
+        confidence = max(prob_player1, 1 - prob_player1)
+
+        # Detalhes
         details = {
             'date': date,
             'surface': surface,
@@ -485,8 +469,9 @@ class TennisPredictor:
             'player2_surface_win_rate': player2_stats['win_rate'],
             'probability': confidence
         }
-        
+
         return winner, confidence, details
+
     
     def save_model(self):
         """Salva o modelo, scaler e dados necessários para previsão futura"""
