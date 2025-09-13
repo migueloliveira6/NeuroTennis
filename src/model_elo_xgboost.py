@@ -24,7 +24,7 @@ class TennisPredictor:
     def load_data(self):
         """Carrega os dados das partidas"""
         print("Carregando dados de partidas...")
-        self.matches = pd.read_csv('atp_chall_itf_matches_with_surface_elo_variable_k.csv',
+        self.matches = pd.read_csv('D:/projetos/Tenis ML-AI/src/atp_chall_matches_2025_elo.csv',
                                  parse_dates=['tourney_date'])
         
         # Verificar colunas essenciais
@@ -302,8 +302,8 @@ class TennisPredictor:
                 dates.extend([match['date'] for match in self.player_history[player] if match['date']])
         return max(dates) if dates else None
 
-    def train_model(self, df, n_trials=50):
-        """Treina modelo com validação temporal + ajuste de hiperparâmetros via Optuna"""
+    def train_model(self, df):
+        """Treina modelo XGBoost com parâmetros fixos e validação temporal"""
         
         # Ordenar por data
         df = df.sort_values('date').reset_index(drop=True)
@@ -337,39 +337,27 @@ class TennisPredictor:
         # Salvar colunas
         self.feature_columns = X_train.columns
 
-        # Definição do objetivo de Optuna
-        def objective(trial):
-            params = {
-                'objective': 'binary:logistic',
-                'eval_metric': 'logloss',
-                'n_estimators': trial.suggest_int('n_estimators', 200, 800),
-                'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.2),
-                'max_depth': trial.suggest_int('max_depth', 3, 8),
-                'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
-                'subsample': trial.suggest_float('subsample', 0.6, 1.0),
-                'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
-                'gamma': trial.suggest_float('gamma', 0, 0.5),
-                'reg_lambda': trial.suggest_float('reg_lambda', 0.5, 2.0),
-                'n_jobs': -1,
-                'random_state': 42
-            }
+        # Parâmetros fixos otimizados
+        params = {
+            'n_estimators': 678,
+            'learning_rate': 0.04055644934168437,
+            'max_depth': 5,
+            'min_child_weight': 8,
+            'subsample': 0.6885668806914912,
+            'colsample_bytree': 0.8921538666691872,
+            'gamma': 0.0294042820064134,
+            'reg_lambda': 1.8053905558856824,
+            'n_jobs': -1,
+            'random_state': 42
+        }
 
-            model = XGBClassifier(**params)
-            model.fit(X_train, y_train)
-            y_pred_proba = model.predict_proba(X_val)[:, 1]
-            return log_loss(y_val, y_pred_proba)
-
-        # Rodar Optuna
-        study = optuna.create_study(direction='minimize')
-        study.optimize(objective, n_trials=n_trials)
-        best_params = study.best_params
-        print("\nMelhores parâmetros encontrados:", best_params)
+        print("Parâmetros utilizados:", params)
 
         # Treinar modelo final em train+val
         X_train_val = pd.concat([X_train, X_val])
         y_train_val = pd.concat([y_train, y_val])
 
-        self.model = XGBClassifier(**best_params)
+        self.model = XGBClassifier(**params)
         self.model.fit(X_train_val, y_train_val)
 
         # Avaliação no conjunto de teste
