@@ -1,0 +1,78 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# ============================================
+# Projeto: Tennis ML-AI
+# Ambiente: Python + Jupyter + ML + Telegram Bot
+# ============================================
+
+# 🔹 Ambiente virtual
+.venv/
+venv/
+env/
+ENV/
+
+# 🔹 Variáveis de ambiente e credenciais
+.env
+*.env
+
+# 🔹 Modelos treinados e dados locais
+models/
+data/
+datasets/
+logs/
+output/
+checkpoints/
+
+# 🔹 Ficheiros temporários e cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.joblib
+*.tmp
+*.log
+
+# 🔹 Notebooks
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# 🔹 Compilação e distribuição
+build/
+dist/
+*.egg-info/
+*.spec
+
+# 🔹 Configurações de IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# 🔹 Sistema operativo
+# (evita ficheiros ocultos que o Windows/macOS criam)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 🔹 Arquivos gerados automaticamente
+*.bak
+*.old
+*.swp
+*.swo
+
+# 🔹 Saídas e relatórios
+reports/
+exports/
+results/
+
+# 🔹 Cache do pip e do huggingface/datasets (caso uses)
+__pypackages__/
+pip-wheel-metadata/
+.cache/
+.huggingface/
+datasets_cache/
+
+# 🔹 Arquivos de testes temporários
+tests/tmp/
+tmp/
+
+
