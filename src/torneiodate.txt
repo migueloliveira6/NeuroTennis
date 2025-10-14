@@ -1,38 +1,43 @@
-Winston-Salem — 20250817  
-Canada Masters — 20250726  
-Gstaad — 20250714  
-Los Cabos — 20250714  
-Bastad — 20250714  
-Eastbourne — 20250623  
-Mallorca — 20250623  
-Queen’s-Club — 20250616  
-Halle — 20250616  
-Stuttgart — 20250609  
-’s-Hertogenbosch — 20250609  
-Roland-Garros — 20250525  
-Geneva — 20250518  
-Hamburg — 20250518  
-Rome Masters — 20250505  
-Madrid Masters — 20250428  
-Munich — 20250420  
-Barcelona — 20250421  
-Monte-Carlo Masters — 20250406  
-Houston — 20250405  
-Marrakech — 20250224  
-Bucharest — 20250331  
-Miami Masters — 20250318  
-Indian-Wells Masters — 20250303  
-Dubai — 20250217  
-Acapulco — 20250225  
-Santiago — 20250224  
-Doha — 20250203  
-Rio de Janeiro — 20250217  
-Delray Beach — 20250219  
-Marseille — 20250210  
-Buenos Aires — 20250203  
-Dallas — 20250203  
-Rotterdam — 20250210  
-Montpellier — 20250202  
-Australian Open — 20250120  
-Adelaide — 20250106  
-Auckland — 20250106
+Shanghai Masters — 20251001, Hard
+Beijing — 20250925, Hard
+Tokyo — 20250924, Hard
+Hangzhou — 20250917, Hard
+Chengdu —  20250917, Hard
+Winston-Salem — 20250817, Hard  
+Canada Masters — 20250726, Hard  
+Gstaad — 20250714, Clay  
+Los Cabos — 20250714, Hard  
+Bastad — 20250714, Clay  
+Eastbourne — 20250623, Grass  
+Mallorca — 20250623, Grass  
+Queen’s-Club — 20250616, Grass  
+Halle — 20250616, Grass  
+Stuttgart — 20250609, Grass  
+’s-Hertogenbosch — 20250609, Grass  
+Roland-Garros — 20250525, Clay  
+Geneva — 20250518, Clay  
+Hamburg — 20250518, Clay  
+Rome Masters — 20250505, Clay  
+Madrid Masters — 20250428, Clay  
+Munich — 20250420, Clay  
+Barcelona — 20250421, Clay  
+Monte-Carlo Masters — 20250406, Clay  
+Houston — 20250405, Clay  
+Marrakech — 20250224, Clay  
+Bucharest — 20250331, Clay  
+Miami Masters — 20250318, Hard  
+Indian-Wells Masters — 20250303, Hard  
+Dubai — 20250217, Hard  
+Acapulco — 20250225, Hard  
+Santiago — 20250224, Clay  
+Doha — 20250203, Hard  
+Rio de Janeiro — 20250217, Clay  
+Delray Beach — 20250219, Hard  
+Marseille — 20250210, Hard  
+Buenos Aires — 20250203, Clay  
+Dallas — 20250203, Hard  
+Rotterdam — 20250210, Hard  
+Montpellier — 20250202, Hard  
+Australian Open — 20250120, Hard  
+Adelaide — 20250106, Hard  
+Auckland — 20250106, Hard

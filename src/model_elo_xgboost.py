@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import numpy as np
 import joblib
-import optuna
 from datetime import datetime
 from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss
 from difflib import get_close_matches
@@ -284,7 +283,7 @@ class TennisPredictor:
     def _load_historical_data(self):
         """Carrega apenas os dados necessários para previsões"""
         try:
-            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data1.pkl'))
+            data = joblib.load(os.path.join(MODEL_PATH, 'tennis_surface_elo_data_xgboost.pkl'))
             self.player_history = data.get('player_history', {})
             self.h2h_data = data.get('h2h_data', {})
             self.surface_stats = data.get('surface_stats', {})
