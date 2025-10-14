@@ -12,6 +12,7 @@ ENV/
 
 # 🔹 Variáveis de ambiente e credenciais
 .env
+.csv
 *.env
 
 # 🔹 Modelos treinados e dados locais
@@ -21,6 +22,7 @@ datasets/
 logs/
 output/
 checkpoints/
+notebooks/previsoes/
 
 # 🔹 Ficheiros temporários e cache
 __pycache__/

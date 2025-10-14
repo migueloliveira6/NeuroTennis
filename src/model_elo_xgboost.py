@@ -6,8 +6,12 @@ from datetime import datetime
 from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss
 from difflib import get_close_matches
 from xgboost import XGBClassifier
+from dotenv import load_dotenv
 
-MODEL_PATH = 'D:/projetos/Tenis ML-AI/models/'
+load_dotenv()
+
+MODEL_PATH = os.getenv('MODEL_PATH')
+DATA_PATH = os.getenv('DATA_PATH')
 
 class TennisPredictor:
     def __init__(self):
@@ -23,7 +27,7 @@ class TennisPredictor:
     def load_data(self):
         """Carrega os dados das partidas"""
         print("Carregando dados de partidas...")
-        self.matches = pd.read_csv('D:/projetos/Tenis ML-AI/src/atp_chall_matches_2025_elo.csv',
+        self.matches = pd.read_csv(DATA_PATH,
                                  parse_dates=['tourney_date'])
         
         # Verificar colunas essenciais
