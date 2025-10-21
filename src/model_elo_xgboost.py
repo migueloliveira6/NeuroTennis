@@ -344,12 +344,13 @@ class TennisPredictor:
         params = {
             'n_estimators': 678,
             'learning_rate': 0.04055644934168437,
-            'max_depth': 5,
-            'min_child_weight': 8,
-            'subsample': 0.6885668806914912,
-            'colsample_bytree': 0.8921538666691872,
+            'max_depth': 4,
+            'min_child_weight': 10,
+            'subsample': 0.8,
+            'colsample_bytree': 0.8,
             'gamma': 0.0294042820064134,
-            'reg_lambda': 1.8053905558856824,
+            'reg_lambda': 2,
+            'reg_alpha': 0.1,
             'n_jobs': -1,
             'random_state': 42
         }
