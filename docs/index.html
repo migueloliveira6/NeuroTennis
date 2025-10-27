@@ -96,9 +96,49 @@
             margin-bottom: 15px;
         }
 
-        .players {
-            font-size: 1.2em;
+        .players-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+            gap: 15px;
+        }
+
+        .player-name {
+            flex: 1;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 12px;
+            background: #f8f9fa;
+            color: #667eea;
+            border-radius: 8px;
+            border: 2px solid #af4a43;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .player-name.predicted-winner {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #317a34;
             font-weight: bold;
+            color: #667eea;
+        }
+
+        .vs-divider {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #999;
+            padding: 0 5px;
+        }
+
+        .trophy {
+            margin-left: 8px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .winner-badge {
@@ -182,14 +222,27 @@
             .match-details {
                 grid-template-columns: 1fr;
             }
+
+            .players-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .vs-divider {
+                transform: rotate(90deg);
+            }
+
+            .player-name {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>NeuroTennis</h1>
-            <p class="subtitle">Um modelo criado para previsões de Tênis com Machine Learning</p>
+            <h1>🎾 NeuroTennis</h1>
+            <p class="subtitle">Um modelo criado para previsões de Ténis com Machine Learning</p>
         </header>
 
         <div class="stats-grid" id="stats">
@@ -257,8 +310,16 @@
                         <div class="winner-badge">${match["Confiança (%)"]}% confiança</div>
                     </div>
                     
-                    <div class="players">
-                        ${match["Jogador 1"]} vs ${match["Jogador 2"]}
+                    <div class="players-section">
+                        <div class="player-name ${match["Vencedor Previsto"] === match["Jogador 1"] ? 'predicted-winner' : ''}">
+                            ${match["Jogador 1"]}
+                            ${match["Vencedor Previsto"] === match["Jogador 1"] ? '<span class="trophy">🏆</span>' : ''}
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="player-name ${match["Vencedor Previsto"] === match["Jogador 2"] ? 'predicted-winner' : ''}">
+                            ${match["Jogador 2"]}
+                            ${match["Vencedor Previsto"] === match["Jogador 2"] ? '<span class="trophy">🏆</span>' : ''}
+                        </div>
                     </div>
                     
                     <div class="confidence-bar">
