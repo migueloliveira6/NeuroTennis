@@ -2,7 +2,7 @@ name: Daily Tennis Predictions
 
 on:
   schedule:
-    - cron: '0 23 * * *'  # Executa às 6h UTC diariamente
+    - cron: '0 23 * * *'  # Executa às 23h UTC diariamente
   workflow_dispatch:
 
 jobs:

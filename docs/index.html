@@ -76,7 +76,7 @@
         }
 
         .match-card {
-            border: 2px solid #f0f0f0;
+            border: 2px solid #f0e6e6;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 15px;
@@ -111,7 +111,7 @@
             padding: 12px;
             background: #f8f9fa;
             color: #667eea;
-            border-radius: 8px;
+            border-radius: 20px;
             border: 2px solid #af4a43;
             text-align: center;
             transition: all 0.3s ease;
@@ -160,6 +160,7 @@
             background: #f8f9fa;
             padding: 10px;
             border-radius: 6px;
+            border: 2px solid #daddda;
         }
 
         .detail-label {
@@ -355,7 +356,7 @@
                         <div class="detail-item">
                             <div class="detail-label">📈 ROI Esperado</div>
                             <div class="detail-value ${match["ROI Esperado (%)"] > 0 ? 'roi-positive' : 'roi-negative'}">
-                                ${match["ROI Esperado (%)"]}%
+                                ${match["ROI Esperado (%)"].toFixed(1)}%
                             </div>
                         </div>
                     </div>
