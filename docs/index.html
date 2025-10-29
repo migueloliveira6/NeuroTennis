@@ -75,6 +75,52 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        .predictions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .predictions-header h2 {
+            margin: 0;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-container label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        #tournamentFilter {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        #tournamentFilter:hover {
+            border-color: #667eea;
+        }
+
+        #tournamentFilter:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
         .match-card {
             border: 2px solid #f0e6e6;
             border-radius: 8px;
@@ -236,6 +282,21 @@
             .player-name {
                 width: 100%;
             }
+
+            .predictions-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-container {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #tournamentFilter {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -266,7 +327,15 @@
         </div>
 
         <div class="predictions-container">
-            <h2 style="margin-bottom: 20px;">📊 Previsões do Dia</h2>
+            <div class="predictions-header">
+                <h2>📊 Previsões do Dia</h2>
+                <div class="filter-container">
+                    <label for="tournamentFilter">🏟️ Filtrar por Torneio:</label>
+                    <select id="tournamentFilter" onchange="filterByTournament()">
+                        <option value="all">Todos os Torneios</option>
+                    </select>
+                </div>
+            </div>
             <div id="predictions" class="loading">
                 Carregando previsões...
             </div>
@@ -274,10 +343,15 @@
     </div>
 
     <script>
-        // Dados de exemplo - substitua por fetch de predictions.json
+        let allMatches = []; // Armazena todos os jogos
+        let currentFilter = 'all'; // Filtro atual
+
+        // Carregar dados
         fetch('predicts/predictions.json')
             .then(r => r.json())
             .then(data => {
+                allMatches = data;
+                populateTournamentFilter(data);
                 renderStats(data);
                 renderPredictions(data);
             })
@@ -286,11 +360,40 @@
                 '<p style="color: #ef4444;">Erro ao carregar previsões</p>';
             });
 
+        function populateTournamentFilter(data) {
+            const tournaments = [...new Set(data.map(m => m.Torneio))].sort();
+            const select = document.getElementById('tournamentFilter');
+            
+            // Adicionar opções de torneios
+            tournaments.forEach(tournament => {
+                const option = document.createElement('option');
+                option.value = tournament;
+                option.textContent = `${tournament} (${data.filter(m => m.Torneio === tournament).length} jogos)`;
+                select.appendChild(option);
+            });
+        }
+
+        function filterByTournament() {
+            const select = document.getElementById('tournamentFilter');
+            currentFilter = select.value;
+            
+            if (currentFilter === 'all') {
+                renderStats(allMatches);
+                renderPredictions(allMatches);
+            } else {
+                const filtered = allMatches.filter(m => m.Torneio === currentFilter);
+                renderStats(filtered);
+                renderPredictions(filtered);
+            }
+        }
+
         function renderStats(data) {
             const totalMatches = data.length;
-            const avgConfidence = (data.reduce((sum, m) => sum + m["Confiança (%)"], 0) / totalMatches).toFixed(1);
+            const avgConfidence = totalMatches > 0 ? 
+                (data.reduce((sum, m) => sum + m["Confiança (%)"], 0) / totalMatches).toFixed(1) : 0;
             const tournaments = [...new Set(data.map(m => m.Torneio))].length;
-            const avgRoi = (data.reduce((sum, m) => sum + m["ROI Esperado (%)"], 0) / totalMatches).toFixed(1);
+            const avgRoi = totalMatches > 0 ? 
+                (data.reduce((sum, m) => sum + m["ROI Esperado (%)"], 0) / totalMatches).toFixed(1) : 0;
 
             document.getElementById('totalMatches').textContent = totalMatches;
             document.getElementById('avgConfidence').textContent = avgConfidence + '%';
@@ -300,6 +403,11 @@
 
         function renderPredictions(data) {
             const container = document.getElementById('predictions');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Nenhum jogo encontrado para este torneio.</p>';
+                return;
+            }
             
             const html = data.map(match => `
                 <div class="match-card">
@@ -329,17 +437,17 @@
                     
                     <div class="match-details">
                         <div class="detail-item">
-                            <div class="detail-label">🏆 Vencedor Previsto</div>
+                            <div class="detail-label">Vencedor Previsto</div>
                             <div class="detail-value">${match["Vencedor Previsto"]}</div>
                         </div>
                         
                         <div class="detail-item">
-                            <div class="detail-label">📊 ELO Diff</div>
+                            <div class="detail-label">ELO Diff</div>
                             <div class="detail-value">${match["ELO Diff"]}</div>
                         </div>
                         
                         <div class="detail-item">
-                            <div class="detail-label">🤝 H2H</div>
+                            <div class="detail-label">H2H</div>
                             <div class="detail-value">${match.H2H}</div>
                         </div>
                         
@@ -349,7 +457,7 @@
                         </div>
                         
                         <div class="detail-item">
-                            <div class="detail-label">💵 Valor Aposta</div>
+                            <div class="detail-label">Valor Aposta</div>
                             <div class="detail-value">${(match["Valor Aposta"] * 100).toFixed(1)}%</div>
                         </div>
                         

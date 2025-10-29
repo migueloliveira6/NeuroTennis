@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from datetime import datetime
-from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss
+from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss, mean_absolute_error, r2_score
 from difflib import get_close_matches
 from xgboost import XGBClassifier
 from dotenv import load_dotenv
@@ -342,17 +342,22 @@ class TennisPredictor:
 
         # Parâmetros fixos otimizados
         params = {
-            'n_estimators': 678,
-            'learning_rate': 0.04055644934168437,
-            'max_depth': 4,
-            'min_child_weight': 10,
-            'subsample': 0.8,
-            'colsample_bytree': 0.8,
-            'gamma': 0.0294042820064134,
-            'reg_lambda': 2,
-            'reg_alpha': 0.1,
+            'n_estimators': 800,            # Mais árvores: o dataset suporta
+            'learning_rate': 0.025,         # Aprendizado lento → melhor generalização
+            'max_depth': 5,                 # Ligeiramente mais profundo, pois há dados suficientes
+            'min_child_weight': 6,          # Permite divisões mais finas sem overfit
+            'subsample': 0.8,               # Mantém diversidade entre árvores
+            'colsample_bytree': 0.8,        # Usa 80% das features em cada árvore
+            'gamma': 0.1,                   # Penaliza splits fracos
+            'reg_lambda': 2.0,              # Regularização L2 padrão
+            'reg_alpha': 0.1,               # Regularização L1 leve
+            'max_delta_step': 1,            # Melhora estabilidade da probabilidade
+            'scale_pos_weight': 1,          # Dataset equilibrado 0/1
+            'tree_method': 'hist',          # Muito mais rápido em datasets grandes
+            'random_state': 42,
+            'early_stopping_rounds' : 50,    # Early stopping para evitar overfitting
             'n_jobs': -1,
-            'random_state': 42
+            'use_label_encoder': False
         }
 
         print("Parâmetros utilizados:", params)
@@ -362,7 +367,13 @@ class TennisPredictor:
         y_train_val = pd.concat([y_train, y_val])
 
         self.model = XGBClassifier(**params)
-        self.model.fit(X_train_val, y_train_val)
+        self.model.fit(X_train_val, y_train_val, 
+                       eval_set=[(X_val, y_val)],
+                        verbose=50)
+                        
+        best_iteration = self.model.best_iteration
+        self.model.set_params(n_estimators=best_iteration)
+        print(f"\nMelhor número de estimadores após early stopping: {best_iteration}")
 
         # Avaliação no conjunto de teste
         X_test, y_test = prepare_Xy(test)
@@ -374,6 +385,8 @@ class TennisPredictor:
         print(f"F1-score: {f1_score(y_test, y_pred):.3f}")
         print(f"LogLoss: {log_loss(y_test, y_proba):.3f}")
         print(f"Brier Score: {brier_score_loss(y_test, y_proba):.3f}")
+        print(f"MAE (probabilidade): {mean_absolute_error(y_test, y_proba):.3f}")
+        print(f"R² (probabilidade): {r2_score(y_test, y_proba):.3f}")
         print("Relatório de classificação:")
         print(classification_report(y_test, y_pred))
 
