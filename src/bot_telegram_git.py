@@ -498,7 +498,7 @@ scraper = NeuroTennis(timeout=15)
 
 # Extrair jogos de hoje
 print("🔄 Extraindo jogos...")
-jogos_hoje = scraper.extrair_jogos_agrupados_por_torneio(dias_offset=0)
+jogos_hoje = scraper.extrair_jogos_agrupados_por_torneio(dias_offset=1)
 
 print(f"\n📊 Resumo da extração:")
 print(f"Total de torneios encontrados: {len(jogos_hoje)}")
@@ -517,7 +517,7 @@ print(f"\n🎾 Total de jogos extraídos: {total_jogos}")
 
 # Usar a função wrapper para compatibilidade com código existente
 print("🔄 Usando função legada...")
-jogos_compativel = extrair_jogos_agrupados_por_torneio(dias_offset=0)
+jogos_compativel = extrair_jogos_agrupados_por_torneio(dias_offset=1)
 
 print(f"📊 Formato compatível: {len(jogos_compativel)} torneios encontrados")
 print("Exemplo do primeiro torneio:")
@@ -1264,12 +1264,12 @@ print("✅ Scraping e previsões concluídos com sucesso!")
 
 # Enviar notificação via Telegram
 
-MENSAGEM = "(automatic message workes!)"
+MENSAGEM = "🎾 Previsões de Ténis prontas para amanhã!"
 
 url = f"https://api.telegram.org/bot{TOKEN_BOT}/sendMessage"
 res = requests.post(url, data={"chat_id": CHAT_ID, "text": MENSAGEM})
 print("✅ Enviado:", res.json())
-'''
+
 df = pd.read_csv(csv_path)
 
 linhas = []
@@ -1364,4 +1364,3 @@ else:
             print("Mensagens enviadas com sucesso!")
         else:
             print("⚠️ Falha ao enviar mensagens:", res1.status_code, res2.status_code, res3.status_code)
-'''
