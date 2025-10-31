@@ -1261,15 +1261,15 @@ csv_path = os.path.join(PREVISOES_PATH, "previsoes_tenis.csv")
 df_resultados.to_csv(csv_path, index=False)
 print(f"📁 Previsões salvas em: {csv_path}")
 print("✅ Scraping e previsões concluídos com sucesso!")
-'''
+
 # Enviar notificação via Telegram
 
-MENSAGEM = "🎾 Previsões de Ténis prontas para amanhã!"
+MENSAGEM = "(automatic message workes!)"
 
 url = f"https://api.telegram.org/bot{TOKEN_BOT}/sendMessage"
 res = requests.post(url, data={"chat_id": CHAT_ID, "text": MENSAGEM})
 print("✅ Enviado:", res.json())
-
+'''
 df = pd.read_csv(csv_path)
 
 linhas = []
