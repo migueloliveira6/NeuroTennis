@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/docs/NeuroTennis.ico" type="image/x-icon">
+    <title>NeuroTennis - Previsões</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'Sakana';
+            src: url('fonts/Sakana.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Sakana', sans-serif;
+            background: linear-gradient(120deg, #000000 15%, #784ba5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-family: 'Sakana', sans-serif;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            /*background: white;*/
+            padding: 20px;
+            border-radius: 12px;
+            border: #764ba2 2px solid;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #a466ea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .predictions-container {
+            /*background: linear-gradient(135deg, #ffffff 0%, #7c51a8 100%);*/
+            border-radius: 12px;
+            border: #764ba2 2px solid;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .predictions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-left: 3rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .predictions-header h2 {
+            margin: 0;
+            color: #764ba2;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-container label {
+            font-weight: 600;
+            color: #764ba2;
+            font-size: 0.95em;
+        }
+
+        #tournamentFilter {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #ffffff;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        #tournamentFilter:hover {
+            border-color: #667eea;
+        }
+
+        #tournamentFilter:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .match-card {
+            /*border: 2px solid #f0e6e6;*/
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .match-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .players-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+            gap: 15px;
+        }
+
+        .player-name {
+            flex: 1;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 12px;
+            background: linear-gradient(135deg, #862f2f 0%, #e43636 100%);
+            color: #ffffff;
+            border-radius: 20px;
+            border: 3px solid #af4a43;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .player-name.predicted-winner {
+            background: linear-gradient(100deg, #226d28 0%, #2ed336 100%);
+            border: 3px solid #317a34;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .vs-divider {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #999;
+            padding: 0 5px;
+        }
+
+        .trophy {
+            margin-left: 8px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .winner-badge {
+            background: linear-gradient(90deg, #000000 20%, #7c51a8 100%);
+            color: rgb(255, 255, 255);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .match-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            /*background: #f8f9fa;*/
+            padding: 10px;
+            border-radius: 6px;
+            border: 2px solid #764ba2;
+        }
+
+        .detail-label {
+            font-size: 0.8em;
+            color: #ffffff;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .tournament-badge {
+            display: inline-block;
+            background: #421b4e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            color: #ffffff;
+            margin-right: 10px;
+        }
+
+        .roi-positive {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .roi-negative {
+            color: #ef4444;
+        }
+
+        .valor_positive {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .valor-negative {
+            color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .match-details {
+                grid-template-columns: 1fr;
+            }
+
+            .players-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .vs-divider {
+                transform: rotate(90deg);
+            }
+
+            .player-name {
+                width: 100%;
+            }
+
+            .predictions-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-container {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #tournamentFilter {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎾 NeuroTennis</h1>
+            <p class="subtitle">Um modelo criado para previsões de Ténis com Machine Learning</p>
+        </header>
+
+        <div class="stats-grid" id="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalMatches">-</div>
+                <div class="stat-label">Total de Jogos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgConfidence">-</div>
+                <div class="stat-label">Confiança Média</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tournaments">-</div>
+                <div class="stat-label">Torneios</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgRoi">-</div>
+                <div class="stat-label">ROI Médio</div>
+            </div>
+        </div>
+
+        <div class="predictions-container">
+            <div class="predictions-header">
+                <h2>Previsões do Dia</h2>
+                <div class="filter-container">
+                    <label for="tournamentFilter">Filtrar por Torneio:</label>
+                    <select id="tournamentFilter" onchange="filterByTournament()">
+                        <option value="all">Todos os Torneios</option>
+                    </select>
+                </div>
+            </div>
+            <div id="predictions" class="loading">
+                Carregando previsões...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allMatches = []; // Armazena todos os jogos
+        let currentFilter = 'all'; // Filtro atual
+
+        // Carregar dados
+        fetch('predicts/predictions.json')
+            .then(r => r.json())
+            .then(data => {
+                allMatches = data;
+                populateTournamentFilter(data);
+                renderStats(data);
+                renderPredictions(data);
+            })
+            .catch(() => {
+                document.getElementById('predictions').innerHTML =
+                '<p style="color: #ef4444;">Erro ao carregar previsões</p>';
+            });
+
+        function populateTournamentFilter(data) {
+            const tournaments = [...new Set(data.map(m => m.Torneio))].sort();
+            const select = document.getElementById('tournamentFilter');
+            
+            // Adicionar opções de torneios
+            tournaments.forEach(tournament => {
+                const option = document.createElement('option');
+                option.value = tournament;
+                option.textContent = `${tournament} (${data.filter(m => m.Torneio === tournament).length} jogos)`;
+                select.appendChild(option);
+            });
+        }
+
+        function filterByTournament() {
+            const select = document.getElementById('tournamentFilter');
+            currentFilter = select.value;
+            
+            if (currentFilter === 'all') {
+                renderStats(allMatches);
+                renderPredictions(allMatches);
+            } else {
+                const filtered = allMatches.filter(m => m.Torneio === currentFilter);
+                renderStats(filtered);
+                renderPredictions(filtered);
+            }
+        }
+
+        function renderStats(data) {
+            const totalMatches = data.length;
+            const avgConfidence = totalMatches > 0 ? 
+                (data.reduce((sum, m) => sum + m["Confiança (%)"], 0) / totalMatches).toFixed(1) : 0;
+            const tournaments = [...new Set(data.map(m => m.Torneio))].length;
+            const avgRoi = totalMatches > 0 ? 
+                (data.reduce((sum, m) => sum + m["ROI Esperado (%)"], 0) / totalMatches).toFixed(1) : 0;
+
+            document.getElementById('totalMatches').textContent = totalMatches;
+            document.getElementById('avgConfidence').textContent = avgConfidence + '%';
+            document.getElementById('tournaments').textContent = tournaments;
+            document.getElementById('avgRoi').textContent = avgRoi + '%';
+        }
+
+        function renderPredictions(data) {
+            const container = document.getElementById('predictions');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Nenhum jogo encontrado para este torneio</p>';
+                return;
+            }
+            
+            const html = data.map(match => `
+                <div class="match-card">
+                    <div class="match-header">
+                        <div>
+                            <span class="tournament-badge">${match.Torneio}</span>
+                            <span class="tournament-badge">${match.Superfície}</span>
+                        </div>
+                        <div class="winner-badge">${match["Confiança (%)"]}% confiança</div>
+                    </div>
+                    
+                    <div class="players-section">
+                        <div class="player-name ${match["Vencedor Previsto"] === match["Jogador 1"] ? 'predicted-winner' : ''}">
+                            ${match["Jogador 1"]}
+                            ${match["Vencedor Previsto"] === match["Jogador 1"] ? '<span class="trophy">🏆</span>' : ''}
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="player-name ${match["Vencedor Previsto"] === match["Jogador 2"] ? 'predicted-winner' : ''}">
+                            ${match["Jogador 2"]}
+                            ${match["Vencedor Previsto"] === match["Jogador 2"] ? '<span class="trophy">🏆</span>' : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${match["Confiança (%)"]}%"></div>
+                    </div>
+                    
+                    <div class="match-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Vencedor Previsto</div>
+                            <div class="detail-value">${match["Vencedor Previsto"]}</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">ELO Diff</div>
+                            <div class="detail-value">${match["ELO Diff"]}</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">H2H</div>
+                            <div class="detail-value">${match.H2H}</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">💰 Odds</div>
+                            <div class="detail-value">${match["Odd 1"]} / ${match["Odd 2"]}</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">Valor Aposta</div>
+                            <div class="detail-value ${match["Valor Aposta"] > 0 ? 'valor_positive' : 'valor-negative'}">
+                                ${match["Valor Aposta"].toFixed(1)}%
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">📈 ROI Esperado</div>
+                            <div class="detail-value ${match["ROI Esperado (%)"] > 0 ? 'roi-positive' : 'roi-negative'}">
+                                ${match["ROI Esperado (%)"].toFixed(1)}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
