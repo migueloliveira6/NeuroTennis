@@ -8,14 +8,14 @@ from model_elo_xgboost import TennisPredictor
 # === CONFIGURAÇÕES ===
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
-NOTEBOOKS_DIR = os.path.join(BASE_DIR, "notebooks", "previsoes")
+NOTEBOOKS_DIR = os.path.join(BASE_DIR, "previsoes")
 DOCS_DATA_DIR = os.path.join(BASE_DIR, "docs", "predicts")
 
 # Cria pastas se não existirem
 os.makedirs(DOCS_DATA_DIR, exist_ok=True)
 
 # === 1️⃣ Localizar o CSV mais recente de previsões ===
-csv_files = [f for f in os.listdir(NOTEBOOKS_DIR) if f.startswith("previsoes_tenis_v2_") and f.endswith(".csv")]
+csv_files = [f for f in os.listdir(NOTEBOOKS_DIR) if f.startswith("previsoes_tenis") and f.endswith(".csv")]
 if not csv_files:
     raise FileNotFoundError("Nenhum arquivo de previsões encontrado em notebooks/previsoes/")
 
