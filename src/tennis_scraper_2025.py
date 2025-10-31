@@ -146,6 +146,11 @@ class TennisAbstractScraper:
 
         # Dicionário com torneios, datas e superfícies
         tournament_calendar = {
+            "Basel": ("20251020", "Hard"),
+            "Vienna": ("20251020", "Hard"),
+            "Brussels": ("20251013", "Hard"),
+            "Almaty": ("20251013", "Hard"),
+            "Stockholm": ("20251013", "Hard"),
             "Shanghai-Masters": ("20251001", "Hard"),
             "Beijing": ("20250925", "Hard"),
             "Tokyo": ("20250924", "Hard"),
@@ -240,7 +245,7 @@ class TennisAbstractScraper:
             self.scrape_tournament(t)
         return self.all_matches
 
-    def save_to_csv(self, filename="tennis_2025_data.csv"):
+    def save_to_csv(self, filename):
         df = pd.DataFrame(self.all_matches)
         # garantir todas as colunas no output
         for col in self.columns:
@@ -282,7 +287,7 @@ if __name__ == "__main__":
     matches = scraper.scrape_all_from_file(LINKS_2025)
     
     # Salvar dados
-    df = scraper.save_to_csv('tennis_2025_data_v2.csv')
+    df = scraper.save_to_csv('tennis_2025_data_v3.csv')
     
     if df is not None:
         print("\nPrimeiras 5 linhas do dataset:")
