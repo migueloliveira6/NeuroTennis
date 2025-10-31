@@ -12,27 +12,29 @@ ENV/
 
 # 🔹 Variáveis de ambiente e credenciais
 .env
-.csv
 *.env
-.github/workflows/
 
 # 🔹 Modelos treinados e dados locais
-models/
+models/*.pkl
+!models/tennis_surface_elo_model_xgboost.pkl
+!models/tennis_surface_elo_scaler_xgboost.pkl
+!models/tennis_surface_elo_data_xgboost.pkl
 datasets/
-logs/
-output/
-checkpoints/
 data/
 previsoes/*
 !previsoes/previsoes_tenis.csv
 notebooks/*
+
+# 🔹 Dados brutos e intermediários
+src/*.csv
+src/model_claude_test.py
+src/generate_analytics.py
 
 # 🔹 Ficheiros temporários e cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.pkl
 *.joblib
 *.tmp
 *.log
@@ -46,6 +48,7 @@ build/
 dist/
 *.egg-info/
 *.spec
+docs/
 
 # 🔹 Configurações de IDEs
 .vscode/

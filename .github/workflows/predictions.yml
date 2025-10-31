@@ -13,7 +13,7 @@ jobs:
       TOKEN_BOT: ${{ secrets.TOKEN_BOT }}
       CHAT_ID: ${{ secrets.CHAT_ID }}
       MODEL_PATH: ${{ secrets.MODEL_PATH }}
-      PREVISOES_PATH: ${{ secrets.PREVISOES_PATH }}
+      PREVISOES_PATH: ${{ vars.PREVISOES_PATH }}
 
     steps:
       - uses: actions/checkout@v3
@@ -29,8 +29,8 @@ jobs:
       - name: Run scraping
         run: python src/bot_telegram_git.py
 
-      - name: Run predictions
-        run: python src/generate_predictions.py
+      #- name: Run predictions
+       # run: python src/generate_predictions.py
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
