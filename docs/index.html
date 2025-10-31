@@ -12,9 +12,16 @@
             box-sizing: border-box;
         }
 
+        @font-face {
+            font-family: 'Sakana';
+            src: url('fonts/Sakana.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Sakana', sans-serif;
+            background: linear-gradient(120deg, #000000 15%, #784ba5 100%);
             color: #333;
             min-height: 100vh;
             padding: 20px;
@@ -29,6 +36,7 @@
             text-align: center;
             color: white;
             margin-bottom: 40px;
+            font-family: 'Sakana', sans-serif;
         }
 
         h1 {
@@ -50,17 +58,17 @@
         }
 
         .stat-card {
-            background: white;
+            /*background: white;*/
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: #764ba2 2px solid;
             text-align: center;
         }
 
         .stat-value {
             font-size: 2.5em;
             font-weight: bold;
-            color: #667eea;
+            color: #a466ea;
         }
 
         .stat-label {
@@ -69,8 +77,9 @@
         }
 
         .predictions-container {
-            background: white;
+            /*background: linear-gradient(135deg, #ffffff 0%, #7c51a8 100%);*/
             border-radius: 12px;
+            border: #764ba2 2px solid;
             padding: 30px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
@@ -80,12 +89,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            margin-left: 3rem;
             flex-wrap: wrap;
             gap: 15px;
         }
 
         .predictions-header h2 {
             margin: 0;
+            color: #764ba2;
         }
 
         .filter-container {
@@ -96,7 +107,7 @@
 
         .filter-container label {
             font-weight: 600;
-            color: #666;
+            color: #764ba2;
             font-size: 0.95em;
         }
 
@@ -104,7 +115,7 @@
             padding: 8px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            background: white;
+            background: #ffffff;
             font-size: 0.95em;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -122,7 +133,7 @@
         }
 
         .match-card {
-            border: 2px solid #f0e6e6;
+            /*border: 2px solid #f0e6e6;*/
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 15px;
@@ -155,19 +166,19 @@
             font-size: 1.1em;
             font-weight: 600;
             padding: 12px;
-            background: #f8f9fa;
-            color: #667eea;
+            background: linear-gradient(135deg, #862f2f 0%, #e43636 100%);
+            color: #ffffff;
             border-radius: 20px;
-            border: 2px solid #af4a43;
+            border: 3px solid #af4a43;
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .player-name.predicted-winner {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border: 2px solid #317a34;
+            background: linear-gradient(100deg, #226d28 0%, #2ed336 100%);
+            border: 3px solid #317a34;
             font-weight: bold;
-            color: #667eea;
+            color: #ffffff;
         }
 
         .vs-divider {
@@ -188,8 +199,8 @@
         }
 
         .winner-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(90deg, #000000 20%, #7c51a8 100%);
+            color: rgb(255, 255, 255);
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9em;
@@ -203,21 +214,21 @@
         }
 
         .detail-item {
-            background: #f8f9fa;
+            /*background: #f8f9fa;*/
             padding: 10px;
             border-radius: 6px;
-            border: 2px solid #daddda;
+            border: 2px solid #764ba2;
         }
 
         .detail-label {
             font-size: 0.8em;
-            color: #666;
+            color: #ffffff;
             margin-bottom: 3px;
         }
 
         .detail-value {
             font-weight: bold;
-            color: #333;
+            color: #ffffff;
         }
 
         .confidence-bar {
@@ -244,11 +255,11 @@
 
         .tournament-badge {
             display: inline-block;
-            background: #f8f9fa;
+            background: #421b4e;
             padding: 4px 12px;
             border-radius: 12px;
             font-size: 0.85em;
-            color: #666;
+            color: #ffffff;
             margin-right: 10px;
         }
 
@@ -258,6 +269,15 @@
         }
 
         .roi-negative {
+            color: #ef4444;
+        }
+
+        .valor_positive {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .valor-negative {
             color: #ef4444;
         }
 
@@ -328,9 +348,9 @@
 
         <div class="predictions-container">
             <div class="predictions-header">
-                <h2>📊 Previsões do Dia</h2>
+                <h2>Previsões do Dia</h2>
                 <div class="filter-container">
-                    <label for="tournamentFilter">🏟️ Filtrar por Torneio:</label>
+                    <label for="tournamentFilter">Filtrar por Torneio:</label>
                     <select id="tournamentFilter" onchange="filterByTournament()">
                         <option value="all">Todos os Torneios</option>
                     </select>
@@ -458,7 +478,9 @@
                         
                         <div class="detail-item">
                             <div class="detail-label">Valor Aposta</div>
-                            <div class="detail-value">${(match["Valor Aposta"] * 100).toFixed(1)}%</div>
+                            <div class="detail-value ${match["Valor Aposta"] > 0 ? 'valor_positive' : 'valor-negative'}">
+                                ${match["Valor Aposta"].toFixed(1)}%
+                            </div>
                         </div>
                         
                         <div class="detail-item">
