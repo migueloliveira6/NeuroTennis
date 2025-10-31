@@ -18,12 +18,14 @@ ENV/
 
 # 🔹 Modelos treinados e dados locais
 models/
-data/
 datasets/
 logs/
 output/
 checkpoints/
-notebooks/previsoes/
+data/
+previsoes/*
+!previsoes/previsoes_tenis.csv
+notebooks/*
 
 # 🔹 Ficheiros temporários e cache
 __pycache__/

@@ -9,6 +9,12 @@ jobs:
   generate-predictions:
     runs-on: ubuntu-latest
 
+    env:
+      TOKEN_BOT: ${{ secrets.TOKEN_BOT }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+      MODEL_PATH: ${{ secrets.MODEL_PATH }}
+      PREVISOES_PATH: ${{ secrets.PREVISOES_PATH }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -20,7 +26,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run predictions script
+      - name: Run scraping
+        run: python src/bot_telegram_git.py
+
+      - name: Run predictions
         run: python src/generate_predictions.py
 
       - name: Deploy to GitHub Pages
@@ -28,3 +37,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
+          commit_message: "Atualiza previsões diárias"
