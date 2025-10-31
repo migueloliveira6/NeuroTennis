@@ -1,9 +1,24 @@
+# --- Núcleo do projeto ---
 pandas>=1.3.0
 numpy>=1.21.0
 scikit-learn>=1.0.0
 joblib>=1.0.0
 xgboost>=1.5.0
 optuna>=3.0.0
-dotenv>=0.1.0
+
+# --- Utilitários e automação ---
+python-dotenv>=1.0.0
 requests>=2.26.0
-bs4>=4.10.0
+beautifulsoup4>=4.10.0
+lxml>=4.9.0
+tqdm>=4.62.0
+
+# --- Telegram e bots ---
+python-telegram-bot>=20.0
+
+# --- Visualização e exportação (se usares gráficos ou JSON no dashboard) ---
+matplotlib>=3.5.0
+
+# --- Extra (segurança e compatibilidade com Actions) ---
+urllib3>=1.26.0
+certifi>=2021.10.8
