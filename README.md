@@ -1,96 +1,417 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
+# 🎾 NeuroTennis
 
-<h1>NeuroTennis an (Tennis-ML/AI)</h1>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![GitHub Actions](https://img.shields.io/badge/CI/CD-GitHub%20Actions-2088FF.svg)](https://github.com/features/actions)
+[![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222.svg)](https://pages.github.com/)
 
-<h2>Descrição</h2>
-<p>
-  Este projeto aplica <strong>Machine Learning</strong> e <strong>Inteligência Artificial</strong> para prever o vencedor de partidas de tênis com base em dados históricos e estatísticas de jogadores. Além disso, implementa um sistema de <strong>ratings Elo</strong> para avaliar a performance relativa dos jogadores, com suporte a <strong>visualizações temporais</strong> da evolução desses ratings.
-</p>
-<p>
-  O objetivo é fornecer uma ferramenta robusta e interpretável para análise de desempenho, combinando previsão de partidas e sistemas de ranqueamento.
-</p>
+Um sistema automatizado de previsão de resultados de ténis utilizando Machine Learning, com pipeline CI/CD completa e interface web interativa.
 
-<h2>Funcionalidades</h2>
-<ul>
-  <li><strong>🔮 Previsão de Vencedores:</strong> modelo de ML treinado com histórico de desempenho e confrontos diretos.</li>
-  <li><strong>📈 Cálculo de Elo Ratings:</strong> ranqueamento dinâmico baseado em resultados reais.</li>
-  <li><strong>📊 Visualização Temporal:</strong> gráficos da evolução dos ratings Elo dos jogadores.</li>
-</ul>
+## 📋 Índice
 
-<h2>Tecnologias Utilizadas</h2>
-<ul>
-  <li>Python</li>
-  <li>Scikit-learn</li>
-  <li>Pandas & NumPy</li>
-  <li>Matplotlib & Seaborn</li>
-  <li>Jupyter Notebooks</li>
-</ul>
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#-tecnologias)
+- [Arquitetura](#-arquitetura)
+- [Instalação](#-instalação)
+- [Uso](#-uso)
+- [Pipeline CI/CD](#-pipeline-cicd)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Modelo de Machine Learning](#-modelo-de-machine-learning)
+- [API e Dados](#-api-e-dados)
+- [Contribuir](#-contribuir)
+- [Licença](#-licença)
+- [Contacto](#-contacto)
 
-<h2>📁 Estrutura do Repositório</h2>
-<pre><code>Tennis-ML-AI/
-├── data/                # Conjuntos de dados
-├── figures/             # Gráficos gerados
-├── models/              # Modelos salvos
-├── notebooks/           # Notebooks Jupyter
+## 🎯 Sobre o Projeto
+
+O **NeuroTennis** é um sistema completo de previsão de resultados de ténis que combina:
+
+- **Machine Learning**: Modelo XGBoost com sistema de ELO dinâmico por superfície
+- **Web Scraping**: Extração automática de dados de partidas e odds
+- **Automação**: Pipeline CI/CD com GitHub Actions
+- **Interface Web**: Dashboard interativo hospedado no GitHub Pages
+- **Notificações**: Sistema de alertas via Telegram
+
+### Características Principais
+
+- ✅ Previsões diárias automáticas
+- ✅ Sistema de ELO com decaimento temporal
+- ✅ Análise por superfície (Hard, Clay, Grass)
+- ✅ Cálculo de ROI e valor esperado
+- ✅ Histórico Head-to-Head (H2H)
+- ✅ Dashboard web responsivo
+- ✅ Deploy automático via GitHub Pages
+
+## 🚀 Funcionalidades
+
+### 1. Previsões Automáticas
+
+- Scraping diário do site TennisExplorer
+- Processamento de dados com validação de superfície
+- Geração de previsões usando modelo treinado
+- Exportação para CSV e JSON
+
+### 2. Sistema de Rating ELO
+
+- **ELO dinâmico por superfície**: Hard, Clay, Grass
+- **K-Factor variável**: 
+  - ATP: 32
+  - Challenger: 20
+- **Decaimento temporal**: Partidas mais antigas têm menor impacto
+- **Fator mínimo**: 30% para jogos muito antigos
+
+### 3. Interface Web
+
+- Filtros por torneio e superfície
+- Design responsivo (mobile-friendly)
+
+### 4. Notificações Telegram
+
+- Envio automático de previsões
+- Formatação clara e concisa
+- Suporte para mensagens longas (divisão automática)
+
+## 🛠 Tecnologias
+
+### Backend
+
+- **Python 3.8+**
+  - pandas: Manipulação de dados
+  - numpy: Operações numéricas
+  - scikit-learn: Preprocessing e métricas
+  - XGBoost: Modelo de ML
+  - BeautifulSoup4: Web scraping
+  - requests: Requisições HTTP
+  - joblib: Serialização de modelos
+
+### Frontend
+
+- **HTML5/CSS3/JavaScript**
+- **Chart.js**: Visualização de dados
+- **Design Responsivo**: Mobile-first
+
+### DevOps
+
+- **GitHub Actions**: CI/CD
+- **GitHub Pages**: Hosting
+- **Python Virtual Environment**: Isolamento de dependências
+
+## 🏗 Arquitetura
+
+```
+┌─────────────────┐
+│  GitHub Actions │
+│   (Scheduler)   │
+└────────┬────────┘
+         │ Trigger diário (23:00 UTC)
+         ▼
+┌─────────────────┐
+│  Scraping Bot   │
+│  (Python)       │
+└────────┬────────┘
+         │ Extrai dados
+         ▼
+┌─────────────────┐
+│ Data Processing │
+│ (Pandas/NumPy)  │
+└────────┬────────┘
+         │ Normaliza e valida
+         ▼
+┌─────────────────┐
+│  ML Model       │
+│  (XGBoost+ELO)  │
+└────────┬────────┘
+         │ Gera previsões
+         ▼
+┌─────────────────┐
+│  Export Data    │
+│  (CSV/JSON)     │
+└────────┬────────┘
+         │ Salva em docs/predicts/
+         ▼
+┌─────────────────┐
+│  GitHub Pages   │
+│  (Web Deploy)   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Telegram Bot    │
+│ (Notifications) │
+└─────────────────┘
+```
+
+## 📦 Instalação
+
+### Pré-requisitos
+
+- Python 3.12 ou superior
+- pip (gestor de pacotes Python)
+- Git
+
+### Clonar o Repositório
+
+```bash
+git clone https://github.com/seu-usuario/neurotennis.git
+cd neurotennis
+```
+
+### Configurar Ambiente Virtual
+
+```bash
+# Criar ambiente virtual
+python -m venv venv
+
+# Ativar (Linux/Mac)
+source venv/bin/activate
+
+# Ativar (Windows)
+venv\Scripts\activate
+```
+
+### Instalar Dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### Configurar Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+# Paths
+MODEL_PATH=models/
+DATA_PATH=data/atp_chall_matches_2025_elo_temporal.csv
+RAW_DATA_ATP_PATH=data/atp_matches_
+RAW_DATA_CHALL_PATH=data/atp_matches_qual_chall_
+DATA_2025_PATH=data/dataset_2025_normalizado.csv
+OUTPUT_PATH=data/
+
+# Model Parameters
+K_FACTOR=32
+INITIAL_ELO=1500
+
+# Telegram (opcional)
+TELEGRAM_BOT_TOKEN=seu_token_aqui
+TELEGRAM_CHAT_ID=seu_chat_id_aqui
+```
+
+## 💻 Uso
+
+### Executar Scraping e Previsões
+
+```bash
+# Executar notebook principal
+jupyter notebook notebooks/scraping_bottelegram_optimized.ipynb
+```
+
+### Treinar Modelo
+
+```bash
+python src/model_elo_xgboost.py
+```
+
+### Visualizar Resultados
+
+Abra o arquivo `docs/index.html` num browser ou aceda à versão online:
+
+```
+https://seu-usuario.github.io/neurotennis/
+```
+
+## 🔄 Pipeline CI/CD
+
+O projeto utiliza GitHub Actions para automação completa:
+
+### Workflow Principal
+
+```yaml
+name: NeuroTennis Daily Predictions
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # Executa às 23:00 UTC diariamente
+  workflow_dispatch:      # Permite execução manual
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    steps:
+      - Checkout do código
+      - Configurar Python 3.8
+      - Instalar dependências
+      - Executar scraping
+      - Gerar previsões
+      - Commit e push dos resultados
+      - Deploy no GitHub Pages
+      - Enviar notificações Telegram
+```
+
+### Ativação Manual
+
+Pode executar manualmente o workflow:
+
+1. Aceda a `Actions` no GitHub
+2. Selecione o workflow "NeuroTennis Daily Predictions"
+3. Clique em "Run workflow"
+
+### GitHub Pages
+
+O deploy é automático após cada commit em `main`:
+
+- **Branch**: `gh-pages` (ou `main/docs`)
+- **Diretório**: `/docs`
+- **URL**: `https://migueloliveira6.github.io/neurotennis/`
+
+## 📁 Estrutura do Projeto
+
+```
+neurotennis/
+├── .github/
+│   └── workflows/
+│       └── predict.yml          # GitHub Actions workflow
+├── data/
+│   ├── atp_matches_*.csv        # Dados históricos ATP
+│   ├── atp_matches_qual_chall_*.csv
+│   └── dataset_2025_normalizado.csv
+├── docs/                        # GitHub Pages (Frontend)
+│   ├── index.html               # Dashboard principal
+│   ├── predicts/
+│   │   ├── predictions.json     # Previsões atuais
+│   │   ├── analytics.json       # Dados de análise
+│   │   └── previsoes_*.csv      # Histórico
+│   └── NeuroTennis.ico
+├── models/
+│   ├── tennis_surface_elo_model_xgboost.pkl
+│   ├── tennis_surface_elo_scaler_xgboost.pkl
+│   └── tennis_surface_elo_data_xgboost.pkl
+├── notebooks/
+│   ├── scraping_bottelegram_optimized.ipynb
+│   └── atp_chall_matches_2025_elo_kfactor.ipynb
 ├── src/
-│   ├── model_elo_v2.py  # Script de previsão
-│   ├── visualization.py # Geração de gráficos
-├── requirements.txt     # Dependências
-└── README.md            # Este arquivo</code></pre>
+│   ├── model_elo_xgboost.py     # Modelo principal
+│   └── utils/
+├── requirements.txt
+├── .env.example
+├── .gitignore
+└── README.md
+```
 
-<h2>Como Usar</h2>
+## 🤖 Modelo de Machine Learning
 
-<h3>1. Clonar o Repositório</h3>
-<pre><code>git clone https://github.com/migueloliveira6/Tennis-ML-AI.git
-cd Tennis-ML-AI</code></pre>
+### Sistema de ELO
 
-<h3>2. Instalar Dependências</h3>
-<pre><code>python -m venv venv
-source venv/bin/activate      # Linux/Mac
-venv\Scripts\activate         # Windows
-pip install -r requirements.txt</code></pre>
+O sistema de rating utiliza uma implementação modificada do ELO:
 
-<h3>3. Executar o Projeto</h3>
-<p><strong>Treinar modelo:</strong></p>
-<pre><code>python src/model_elo_xgboost.py</code></pre>
+```python
+ELO_novo = ELO_antigo + K × (Resultado - Probabilidade_Esperada) × Fator_Temporal
+```
 
-<p><strong>Gerar visualizações:</strong></p>
-<pre><code> notebooks/atp_chall_itf_matches_elo.ipynb</code></pre>
-<a> <img src="https://github.com/migueloliveira6/NeuroTennis/blob/main/notebooks/dashboard%20rafa%20nadal.png"/> </a>
+Onde:
+- **K**: Fator de ajuste (32 para ATP, 20 para Challenger)
+- **Fator Temporal**: Decaimento exponencial baseado na data
+- **Superfície**: ELO separado para Hard, Clay e Grass
 
-<h3>4. Explorar Notebooks</h3>
-<p>Explore os notebooks em <code>notebooks/</code> para análises e exemplos.</p>
+### XGBoost Model
 
-<h2>Conjunto de Dados</h2>
-<p>
-  Inclui resultados de partidas, estatísticas de jogadores e informações de torneios.
-</p>
-<p><em>Nota: Inclua as fontes ou instruções de obtenção dos dados, se necessário.</em></p>
+```python
+Parâmetros otimizados:
+- n_estimators: 800
+- learning_rate: 0.025
+- max_depth: 5
+- min_child_weight: 6
+- subsample: 0.8
+- colsample_bytree: 0.8
+```
 
-<h2>Exemplos de Resultados</h2>
-<ul>
-  <li><strong>Previsão:</strong> Acurracy do <code>72%</code> na previsão.</li>
-  <li><strong>Rankings Elo:</strong> Ranking atualizado dos Top 10 jogadores.</li>
-  <li><strong>Visualizações:</strong> Exemplos disponíveis na pasta <code>figures/</code>.</li>
-</ul>
+### Features Utilizadas
 
-<h2>🤝 Contribuições</h2>
-<ol>
-  <li>Faça um fork do repositório</li>
-  <li>Crie uma nova branch: <code>git checkout -b feature/nova-funcionalidade</code></li>
-  <li>Commit suas alterações: <code>git commit -m "Adiciona nova funcionalidade"</code></li>
-  <li>Envie um pull request</li>
-</ol>
+- ELO do jogador (por superfície)
+- ELO do adversário (por superfície)
+- Diferença de ELO
+- Taxa de vitória H2H
+- Número de confrontos H2H
+- Taxa de vitória na superfície
+- Número de partidas na superfície
 
-<h2>📬 Contato</h2>
-<p>Para dúvidas ou sugestões, entre em contato com <strong>Miguel Oliveira</strong>:<br>
-<a href="https://github.com/migueloliveira6">github.com/migueloliveira6</a></p>
+### Métricas de Performance
 
-</body>
-</html>
+```
+Acurácia: ~72%
+F1-Score: ~0.71
+Log Loss: ~0.58
+Brier Score: ~0.21
+```
+
+## 📊 API e Dados
+
+### Formato JSON (predictions.json)
+
+```json
+[
+  {
+    "Torneio": "Shanghai",
+    "Jogador 1": "Carlos Alcaraz",
+    "Jogador 2": "Jannik Sinner",
+    "Vencedor Previsto": "Carlos Alcaraz",
+    "Confiança (%)": 67.3,
+    "ELO Diff": 45.2,
+    "H2H": "5-3 (62% para Carlos Alcaraz)",
+    "Odd 1": 1.85,
+    "Odd 2": 2.10,
+    "Superfície": "Hard",
+    "Valor Aposta": 0.125,
+    "ROI Esperado (%)": 8.5
+  }
+]
+```
+
+### Formato CSV
+
+O mesmo formato está disponível em CSV em `docs/predicts/previsoes_YYYY-MM-DD.csv`
+
+## 🤝 Contribuir
+
+Contribuições são bem-vindas! Por favor:
+
+1. Fork o projeto
+2. Crie uma branch para a sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit as mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Guidelines
+
+- Siga PEP 8 para código Python
+- Adicione testes para novas features
+- Atualize a documentação quando necessário
+- Mantenha mensagens de commit claras e descritivas
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📧 Contacto
+
+LinkedIn: [LinkedIn](https://www.linkedin.com/in/luis-oliveira6)
+
+Link do Projeto: [https://github.com/migueloliveira6/neurotennis](https://github.com/migueloliveira6/neurotennis)
+
+Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira6.github.io/neurotennis/)
+
+---
+
+## 🙏 Agradecimentos
+
+- [TennisExplorer](https://www.tennisexplorer.com/) - Fonte de dados
+- [XGBoost](https://xgboost.readthedocs.io/) - Framework de ML
+- [Chart.js](https://www.chartjs.org/) - Visualizações
+- [GitHub Actions](https://github.com/features/actions) - CI/CD
+- Comunidade Python e Machine Learning
+- [Repositório JeffSackman](https://github.com/JeffSackmann/tennis_atp) - Fonte de dados
+
+---
+
+⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
