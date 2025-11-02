@@ -4,6 +4,7 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![GitHub Actions](https://img.shields.io/badge/CI/CD-GitHub%20Actions-2088FF.svg)](https://github.com/features/actions)
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222.svg)](https://pages.github.com/)
+[![Daily Tennis Predictions](https://github.com/migueloliveira6/NeuroTennis/actions/workflows/predictions.yml/badge.svg)](https://github.com/migueloliveira6/NeuroTennis/actions/workflows/predictions.yml)
 
 Um sistema automatizado de previsão de resultados de ténis utilizando Machine Learning, com pipeline CI/CD completa e interface web interativa.
 
@@ -415,4 +416,5 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 ---
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
