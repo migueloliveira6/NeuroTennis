@@ -16,6 +16,7 @@ jobs:
       CHAT_ID: ${{ secrets.CHAT_ID }}
       MODEL_PATH: ${{ secrets.MODEL_PATH }}
       PREVISOES_PATH: ${{ vars.PREVISOES_PATH }}
+      NAME_LOOKUP: ${{ vars.NAME_LOOKUP }}
 
     steps:
       - uses: actions/checkout@v3

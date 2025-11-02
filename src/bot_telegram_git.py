@@ -714,7 +714,8 @@ class SuperficieDetector:
                 "los cabos", "san diego", "winston salem", "new york", "flushing",
                 "australian open", "atp finals", "masters cup", "davis cup finals",
                 "laver cup", "hopman cup", "atp cup", "united cup", "doha", "dubai",
-                "chengdu", "hangzhou", "almaty", "stockholm", "brussels"
+                "chengdu", "hangzhou", "almaty", "stockholm", "brussels", "metz",
+                "rotterdam", "basel", "vienna", "paris", "athens", "sydney"
             },
             # Padrões que indicam hard
             "patterns": [
