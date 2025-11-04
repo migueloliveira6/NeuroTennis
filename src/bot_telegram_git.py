@@ -31,10 +31,9 @@ TOKEN_BOT = os.getenv('TOKEN_BOT')
 CHAT_ID = os.getenv('CHAT_ID')
 MODEL_PATH = os.getenv('MODEL_PATH')
 PREVISOES_PATH = os.getenv('PREVISOES_PATH')
-
+NAME_LOOKUP = os.getenv('NAME_LOOKUP', 'notebooks/name_lookup.csv')
 # Cache global para nomes de jogadores
 nome_cache = {}
-
 
 # ============================================================================
 # FUNÇÕES AUXILIARES
@@ -88,13 +87,14 @@ def getPlayersFullName(playerUrl: str) -> str:
         
         # Aplicar substituições personalizadas se existir
         try:
-            name_dict = pd.read_csv(r"D:/projetos/Tenis ML-AI/notebooks/name_lookup.csv")
+            if os.path.exists(NAME_LOOKUP):
+                name_dict = pd.read_csv(NAME_LOOKUP)
             for _, item in name_dict.iterrows():
                 name = name.replace(item.old, item.new)
         except FileNotFoundError:
             pass
         except Exception as e:
-            logger.debug(f"Erro ao aplicar substituições de nome: {e}")
+            logger.info(f"Erro ao aplicar substituições de nome: {e}")
         
         nome_cache[playerUrl] = name
         return name
