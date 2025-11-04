@@ -1,4 +1,4 @@
-# 🎾 NeuroTennis
+# NeuroTennis
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
@@ -8,7 +8,7 @@
 
 Um sistema automatizado de previsão de resultados de ténis utilizando Machine Learning, com pipeline CI/CD completa e interface web interativa.
 
-## 📋 Índice
+## Índice
 
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades](#-funcionalidades)
@@ -24,7 +24,7 @@ Um sistema automatizado de previsão de resultados de ténis utilizando Machine 
 - [Licença](#-licença)
 - [Contacto](#-contacto)
 
-## 🎯 Sobre o Projeto
+## Sobre o Projeto
 
 O **NeuroTennis** é um sistema completo de previsão de resultados de ténis que combina:
 
@@ -44,7 +44,7 @@ O **NeuroTennis** é um sistema completo de previsão de resultados de ténis qu
 - ✅ Dashboard web responsivo
 - ✅ Deploy automático via GitHub Pages
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 ### 1. Previsões Automáticas
 
@@ -73,7 +73,7 @@ O **NeuroTennis** é um sistema completo de previsão de resultados de ténis qu
 - Formatação clara e concisa
 - Suporte para mensagens longas (divisão automática)
 
-## 🛠 Tecnologias
+## Tecnologias
 
 ### Backend
 
@@ -98,7 +98,7 @@ O **NeuroTennis** é um sistema completo de previsão de resultados de ténis qu
 - **GitHub Pages**: Hosting
 - **Python Virtual Environment**: Isolamento de dependências
 
-## 🏗 Arquitetura
+## Arquitetura
 
 ```
 ┌─────────────────┐
@@ -143,7 +143,7 @@ O **NeuroTennis** é um sistema completo de previsão de resultados de ténis qu
 └─────────────────┘
 ```
 
-## 📦 Instalação
+## Instalação
 
 ### Pré-requisitos
 
@@ -199,7 +199,7 @@ TELEGRAM_BOT_TOKEN=seu_token_aqui
 TELEGRAM_CHAT_ID=seu_chat_id_aqui
 ```
 
-## 💻 Uso
+## Uso
 
 ### Executar Scraping e Previsões
 
@@ -250,14 +250,6 @@ jobs:
       - Enviar notificações Telegram
 ```
 
-### Ativação Manual
-
-Pode executar manualmente o workflow:
-
-1. Aceda a `Actions` no GitHub
-2. Selecione o workflow "NeuroTennis Daily Predictions"
-3. Clique em "Run workflow"
-
 ### GitHub Pages
 
 O deploy é automático após cada commit em `main`:
@@ -300,7 +292,7 @@ neurotennis/
 └── README.md
 ```
 
-## 🤖 Modelo de Machine Learning
+## Modelo de Machine Learning
 
 ### Sistema de ELO
 
@@ -319,7 +311,7 @@ Onde:
 
 ```python
 Parâmetros otimizados:
-- n_estimators: 800
+- n_estimators: 1100
 - learning_rate: 0.025
 - max_depth: 5
 - min_child_weight: 6
@@ -340,13 +332,13 @@ Parâmetros otimizados:
 ### Métricas de Performance
 
 ```
-Acurácia: ~72%
+Acurácia: ~63%
 F1-Score: ~0.71
-Log Loss: ~0.58
-Brier Score: ~0.21
+Log Loss: ~0.64
+Brier Score: ~0.22
 ```
 
-## 📊 API e Dados
+## API e Dados
 
 ### Formato JSON (predictions.json)
 
@@ -390,11 +382,11 @@ Contribuições são bem-vindas! Por favor:
 - Atualize a documentação quando necessário
 - Mantenha mensagens de commit claras e descritivas
 
-## 📝 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 📧 Contacto
+## Contacto
 
 LinkedIn: [LinkedIn](https://www.linkedin.com/in/luis-oliveira6)
 
@@ -404,7 +396,7 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 
 ---
 
-## 🙏 Agradecimentos
+## Agradecimentos
 
 - [TennisExplorer](https://www.tennisexplorer.com/) - Fonte de dados
 - [XGBoost](https://xgboost.readthedocs.io/) - Framework de ML
@@ -416,5 +408,6 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 ---
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
 
