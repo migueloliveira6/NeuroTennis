@@ -342,7 +342,7 @@ class TennisPredictor:
 
         # Parâmetros fixos otimizados
         params = {
-            'n_estimators': 800,            # Mais árvores: o dataset suporta
+            'n_estimators': 1100,            # Mais árvores: o dataset suporta
             'learning_rate': 0.025,         # Aprendizado lento → melhor generalização
             'max_depth': 5,                 # Ligeiramente mais profundo, pois há dados suficientes
             'min_child_weight': 6,          # Permite divisões mais finas sem overfit

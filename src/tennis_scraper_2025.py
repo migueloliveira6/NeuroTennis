@@ -146,6 +146,7 @@ class TennisAbstractScraper:
 
         # Dicionário com torneios, datas e superfícies
         tournament_calendar = {
+            "Paris-Masters": ("20251027", "Hard"),
             "Basel": ("20251020", "Hard"),
             "Vienna": ("20251020", "Hard"),
             "Brussels": ("20251013", "Hard"),
