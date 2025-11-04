@@ -21,7 +21,6 @@ Um sistema automatizado de previsão de resultados de ténis utilizando Machine 
 - [Modelo de Machine Learning](#-modelo-de-machine-learning)
 - [API e Dados](#-api-e-dados)
 - [Contribuir](#-contribuir)
-- [Licença](#-licença)
 - [Contacto](#-contacto)
 
 ## Sobre o Projeto
@@ -404,6 +403,7 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 ---
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
 
 
