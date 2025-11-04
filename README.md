@@ -1,6 +1,5 @@
 # NeuroTennis
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![GitHub Actions](https://img.shields.io/badge/CI/CD-GitHub%20Actions-2088FF.svg)](https://github.com/features/actions)
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222.svg)](https://pages.github.com/)
@@ -22,6 +21,16 @@ Um sistema automatizado de previsão de resultados de ténis utilizando Machine 
 - [API e Dados](#-api-e-dados)
 - [Contribuir](#-contribuir)
 - [Contacto](#-contacto)
+
+  
+## Agradecimentos
+
+- [TennisExplorer](https://www.tennisexplorer.com/) - Fonte de dados
+- [XGBoost](https://xgboost.readthedocs.io/) - Framework de ML
+- [Chart.js](https://www.chartjs.org/) - Visualizações
+- [GitHub Actions](https://github.com/features/actions) - CI/CD
+- Comunidade Python e Machine Learning
+- [Repositório JeffSackman](https://github.com/JeffSackmann/tennis_atp) - Fonte de dados
 
 ## Sobre o Projeto
 
@@ -391,18 +400,8 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 
 ---
 
-## Agradecimentos
-
-- [TennisExplorer](https://www.tennisexplorer.com/) - Fonte de dados
-- [XGBoost](https://xgboost.readthedocs.io/) - Framework de ML
-- [Chart.js](https://www.chartjs.org/) - Visualizações
-- [GitHub Actions](https://github.com/features/actions) - CI/CD
-- Comunidade Python e Machine Learning
-- [Repositório JeffSackman](https://github.com/JeffSackmann/tennis_atp) - Fonte de dados
-
----
-
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
 
 
