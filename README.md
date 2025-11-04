@@ -382,10 +382,6 @@ Contribuições são bem-vindas! Por favor:
 - Atualize a documentação quando necessário
 - Mantenha mensagens de commit claras e descritivas
 
-## Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
 ## Contacto
 
 LinkedIn: [LinkedIn](https://www.linkedin.com/in/luis-oliveira6)
@@ -408,6 +404,7 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 ---
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
 
 
