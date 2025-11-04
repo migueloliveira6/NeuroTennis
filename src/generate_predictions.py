@@ -2,8 +2,6 @@
 import os
 import json
 import pandas as pd
-from datetime import datetime
-from model_elo_xgboost import TennisPredictor
 
 # === CONFIGURAÇÕES ===
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,17 +34,6 @@ expected_cols = [
 missing_cols = [c for c in expected_cols if c not in df.columns]
 if missing_cols:
     raise ValueError(f"Colunas ausentes no CSV: {missing_cols}")
-
-# === 3️⃣ (Opcional) Validar ou recalcular previsões com o modelo ===
-# Se quiser revalidar o modelo, basta descomentar as linhas abaixo.
-# predictor = TennisPredictor()
-# predictor.load_saved_model()
-# # Exemplo: recalcular confiança com base no modelo salvo
-# for i, row in df.iterrows():
-#     winner, conf, _ = predictor.predict_match(row["Jogador 1"], row["Jogador 2"], row["Superfície"])
-#     if winner:
-#         df.at[i, "Vencedor Previsto"] = winner
-#         df.at[i, "Confiança (%)"] = round(conf * 100, 1)
 
 # === 4️⃣ Salvar como JSON para o dashboard ===
 output_json_path = os.path.join(DOCS_DATA_DIR, "predictions.json")
