@@ -383,7 +383,8 @@ class SuperficieDetector:
         "Grass": {
             "torneios": {
                 "wimbledon", "queen's club", "queens club", "halle", "stuttgart open",
-                "eastbourne", "mallorca", "newport", "birmingham", "nottingham"
+                "eastbourne", "mallorca", "newport", "birmingham", "nottingham",
+                "hertogenbosch", "libema open", "nature valley"
             },
             "patterns": [
                 r"grass\s*(court|championship)?",
@@ -394,7 +395,12 @@ class SuperficieDetector:
         "Hard": {
             "torneios": {
                 "us open", "indian wells", "miami", "shanghai", "beijing", "tokyo",
-                "toronto", "montreal", "cincinnati", "washington", "australian open"
+                "toronto", "montreal", "cincinnati", "washington", "atlanta",
+                "los cabos", "san diego", "winston salem", "new york", "flushing",
+                "australian open", "atp finals", "masters cup", "davis cup finals",
+                "laver cup", "hopman cup", "atp cup", "united cup", "doha", "dubai",
+                "chengdu", "hangzhou", "almaty", "stockholm", "brussels", "metz",
+                "rotterdam", "basel", "vienna", "paris", "athens", "sydney"
             },
             "patterns": [
                 r"hard\s*(court)?",
@@ -405,7 +411,9 @@ class SuperficieDetector:
         "Clay": {
             "torneios": {
                 "french open", "roland garros", "monte carlo", "rome", "madrid",
-                "barcelona", "hamburg", "munich"
+                "barcelona", "hamburg", "munich", "estoril", "geneva", "lyon",
+                "bucharest", "budapest", "umag", "gstaad", "bastad", "kitzbuhel",
+                "casablanca", "marrakech", "houston", "charleston", "bogota"
             },
             "patterns": [
                 r"clay\s*(court)?",
