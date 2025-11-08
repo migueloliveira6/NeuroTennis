@@ -165,8 +165,8 @@ class NeuroTennis:
     
     BLACKLIST_TORNEIO = frozenset({
         "itf", "utr", "junior", "exhibition", "boodles tennis challenge", 
-        "boodles tennis cup", "boodles tennis series", "series", "cup",
-        "pro", "match", "finals", "world university games", "challenger"
+        "boodles tennis cup", "boodles tennis series", "series",
+        "pro", "match", "world university games", "challenger"
     })
     
     BLACKLIST_NOMES = frozenset({
