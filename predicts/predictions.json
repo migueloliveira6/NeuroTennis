@@ -1,30 +1,30 @@
 [
     {
         "Torneio":"Masters Cup ATP",
-        "Jogador 1":"Carlos Alcaraz",
-        "Jogador 2":"Alex De Minaur",
-        "Vencedor Previsto":"Carlos Alcaraz",
-        "Confiança (%)":83.7,
-        "ELO Diff":90.6,
-        "H2H":"4-0 (100% para Carlos Alcaraz)",
-        "Odd 1":1.29,
-        "Odd 2":3.65,
+        "Jogador 1":"Jannik Sinner",
+        "Jogador 2":"Felix Auger Aliassime",
+        "Vencedor Previsto":"Jannik Sinner",
+        "Confiança (%)":89.7,
+        "ELO Diff":373.9,
+        "H2H":"1-3 (25% para Jannik Sinner)",
+        "Odd 1":1.07,
+        "Odd 2":8.95,
         "Superfície":"Hard",
-        "Valor Aposta":0.275000006,
-        "ROI Esperado (%)":8.0
+        "Valor Aposta":0,
+        "ROI Esperado (%)":0
     },
     {
         "Torneio":"Masters Cup ATP",
-        "Jogador 1":"Alexander Zverev",
-        "Jogador 2":"Ben Shelton",
-        "Vencedor Previsto":"Alexander Zverev",
-        "Confiança (%)":52.3,
-        "ELO Diff":119.0,
-        "H2H":"3-0 (100% para Alexander Zverev)",
-        "Odd 1":1.65,
-        "Odd 2":2.23,
+        "Jogador 1":"Lorenzo Musetti",
+        "Jogador 2":"Taylor Fritz",
+        "Vencedor Previsto":"Taylor Fritz",
+        "Confiança (%)":54.2,
+        "ELO Diff":-145.2,
+        "H2H":"3-2 (60% para Lorenzo Musetti)",
+        "Odd 1":2.73,
+        "Odd 2":1.46,
         "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
+        "Valor Aposta":0,
+        "ROI Esperado (%)":0
     }
 ]
