@@ -162,7 +162,7 @@ O **NeuroTennis** é um sistema completo de previsão de resultados de ténis qu
 ### Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/neurotennis.git
+git clone https://github.com/username/neurotennis.git
 cd neurotennis
 ```
 
@@ -227,7 +227,7 @@ python src/model_elo_xgboost.py
 Abra o arquivo `docs/index.html` num browser ou aceda à versão online:
 
 ```
-https://seu-usuario.github.io/neurotennis/
+https://migueloliveira6.github.io/neurotennis/
 ```
 
 ## 🔄 Pipeline CI/CD
@@ -401,6 +401,7 @@ Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira
 ---
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
 
 
