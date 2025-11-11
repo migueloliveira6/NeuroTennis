@@ -396,11 +396,12 @@ LinkedIn: [LinkedIn](https://www.linkedin.com/in/luis-oliveira6)
 
 Link do Projeto: [https://github.com/migueloliveira6/neurotennis](https://github.com/migueloliveira6/neurotennis)
 
-Website: [https://migueloliveira6.github.io/neurotennis/](https://migueloliveira6.github.io/neurotennis/)
+Website: [https://migueloliveira6.github.io/NeuroTennis/](https://migueloliveira6.github.io/NeuroTennis/)
 
 ---
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
+
 
 
 
