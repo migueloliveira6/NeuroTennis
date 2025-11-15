@@ -2,15 +2,15 @@
     {
         "Torneio":"Masters Cup ATP",
         "Jogador 1":"Jannik Sinner",
-        "Jogador 2":"Alex De Minaur",
+        "Jogador 2":"Carlos Alcaraz",
         "Vencedor Previsto":"Jannik Sinner",
-        "Confiança (%)":92.8,
-        "ELO Diff":304.3,
-        "H2H":"12-1 (92% para Jannik Sinner)",
-        "Odd 1":1.07,
-        "Odd 2":8.53,
+        "Confiança (%)":64.7,
+        "ELO Diff":213.8,
+        "H2H":"4-9 (31% para Jannik Sinner)",
+        "Odd 1":1.61,
+        "Odd 2":2.31,
         "Superfície":"Hard",
-        "Valor Aposta":0,
-        "ROI Esperado (%)":0
+        "Valor Aposta":0.069,
+        "ROI Esperado (%)":4.2
     }
 ]
