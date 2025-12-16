@@ -400,7 +400,7 @@ class SuperficieDetector:
                 "australian open", "atp finals", "masters cup", "davis cup finals",
                 "laver cup", "hopman cup", "atp cup", "united cup", "doha", "dubai",
                 "chengdu", "hangzhou", "almaty", "stockholm", "brussels", "metz",
-                "rotterdam", "basel", "vienna", "paris", "athens", "sydney"
+                "rotterdam", "basel", "vienna", "paris", "athens", "sydney", "next gen finals"
             },
             "patterns": [
                 r"hard\s*(court)?",
