@@ -2,29 +2,15 @@
     {
         "Torneio":"Next Gen ATP Finals",
         "Jogador 1":"Learner Tien",
-        "Jogador 2":"Nishesh Basavareddy",
+        "Jogador 2":"Alexander Blockx",
         "Vencedor Previsto":"Learner Tien",
-        "Confiança (%)":79.4,
-        "ELO Diff":162.6,
-        "H2H":"2-0 (100% para Learner Tien)",
-        "Odd 1":1.32,
-        "Odd 2":3.22,
-        "Superfície":"Hard",
-        "Valor Aposta":0.151,
-        "ROI Esperado (%)":4.8
-    },
-    {
-        "Torneio":"Next Gen ATP Finals",
-        "Jogador 1":"Alexander Blockx",
-        "Jogador 2":"Nicolai Budkov Kjaer",
-        "Vencedor Previsto":"Alexander Blockx",
-        "Confiança (%)":78.4,
-        "ELO Diff":82.0,
+        "Confiança (%)":89.2,
+        "ELO Diff":253.3,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":1.42,
-        "Odd 2":2.76,
+        "Odd 1":1.64,
+        "Odd 2":2.2,
         "Superfície":"Hard",
-        "Valor Aposta":0.271,
-        "ROI Esperado (%)":11.4
+        "Valor Aposta":0.724,
+        "ROI Esperado (%)":46.4
     }
 ]
