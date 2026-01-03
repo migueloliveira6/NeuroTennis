@@ -146,6 +146,10 @@ class TennisAbstractScraper:
 
         # Dicionário com torneios, datas e superfícies
         tournament_calendar = {
+            "Next-Gen-Finals": ("20251217", "Hard"),
+            "Tour-Finals": ("20251109", "Hard"),
+            "Athens": ("20251102", "Hard"),
+            "Metz": ("20251102", "Hard"),
             "Paris-Masters": ("20251027", "Hard"),
             "Basel": ("20251020", "Hard"),
             "Vienna": ("20251020", "Hard"),
