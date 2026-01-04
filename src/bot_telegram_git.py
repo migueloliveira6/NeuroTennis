@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 TOKEN_BOT = os.getenv('TOKEN_BOT')
 CHAT_ID = os.getenv('CHAT_ID')
-MODEL_PATH = os.getenv('MODEL_PATH')
-PREVISOES_PATH = os.getenv('PREVISOES_PATH')
+MODEL_PATH = os.getenv('MODEL_PATH', 'models')
+PREVISOES_PATH = os.getenv('PREVISOES_PATH', 'previsoes')
 NAME_LOOKUP = os.getenv('NAME_LOOKUP', 'notebooks/name_lookup.csv')
 # Cache global para nomes de jogadores
 nome_cache = {}
@@ -394,9 +394,10 @@ class SuperficieDetector:
         },
         "Hard": {
             "torneios": {
-                "us open", "indian wells", "miami", "shanghai", "beijing", "tokyo",
+                "us open", "brisbane", "hong kong", "adelaide", "auckland", "indian wells", "miami",
+                "shanghai", "beijing", "tokyo", "montpellier", "marseille", "dallas",
                 "toronto", "montreal", "cincinnati", "washington", "atlanta",
-                "los cabos", "san diego", "winston salem", "new york", "flushing",
+                "los cabos", "san diego", "winston salem", "new york", "acapulco",
                 "australian open", "atp finals", "masters cup", "davis cup finals",
                 "laver cup", "hopman cup", "atp cup", "united cup", "doha", "dubai",
                 "chengdu", "hangzhou", "almaty", "stockholm", "brussels", "metz",
@@ -413,7 +414,8 @@ class SuperficieDetector:
                 "french open", "roland garros", "monte carlo", "rome", "madrid",
                 "barcelona", "hamburg", "munich", "estoril", "geneva", "lyon",
                 "bucharest", "budapest", "umag", "gstaad", "bastad", "kitzbuhel",
-                "casablanca", "marrakech", "houston", "charleston", "bogota"
+                "casablanca", "marrakech", "houston", "charleston", "bogota", "buenos aires",
+                "santiago", "rio de janeiro"
             },
             "patterns": [
                 r"clay\s*(court)?",
@@ -461,7 +463,7 @@ class SuperficieDetector:
     def _detectar_por_sazonalidade(cls, data: datetime) -> Optional[str]:
         """Detecta superfície baseada na sazonalidade"""
         mes = data.month
-        if mes in [5, 6, 7]:
+        if mes in [6, 7]:
             return "Grass"
         if mes in [4, 5]:
             return "Clay"
@@ -875,7 +877,7 @@ def main():
         resultados_dict = [r.to_dict() for r in resultados]
         df_resultados = pd.DataFrame(resultados_dict)
         df_resultados = df_resultados.sort_values(by="Confiança (%)", ascending=False).reset_index(drop=True)
-        
+
         # Também salvar sem data no nome (para compatibilidade)
         csv_path = os.path.join(PREVISOES_PATH, "previsoes_tenis.csv")
         df_resultados.to_csv(csv_path, index=False)
