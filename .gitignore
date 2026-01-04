@@ -19,7 +19,8 @@ models/*.pkl
 !models/tennis_surface_elo_model_xgboost.pkl
 !models/tennis_surface_elo_scaler_xgboost.pkl
 !models/tennis_surface_elo_data_xgboost.pkl
-datasets/
+datasets/*.csv
+!datasets/tennis_data.db
 data/
 previsoes/*
 !previsoes/previsoes_tenis.csv
@@ -28,7 +29,6 @@ notebooks/*
 # 🔹 Dados brutos e intermediários
 src/*.csv
 src/model_claude_test.py
-src/generate_analytics.py
 
 # 🔹 Ficheiros temporários e cache
 __pycache__/

@@ -230,6 +230,31 @@ Abra o arquivo `docs/index.html` num browser ou aceda à versão online:
 https://migueloliveira6.github.io/neurotennis/
 ```
 
+### 🔎 Comparar Previsões com Resultados ✅
+
+Use o script `src/compare_predictions_results.py` para comparar as previsões geradas com os resultados reais e obter métricas simples (matched, accuracy, coverage).
+
+Comportamento padrão:
+- Se `--pred-file` não for fornecido, o script escolhe o ficheiro mais recente em `PREVISOES_PATH` (default: `previsoes/`).
+- Se a data não for fornecida em `--results-date`, o script tenta extrair uma data do nome do ficheiro (formato YYYY-MM-DD). Caso não consiga, usa a data de ontem.
+- Gera um CSV em `previsoes/comparacao_previsoes_YYYY-MM-DD.csv` com a correspondência entre previsão e resultado e flags `Matched` e `Correct`.
+
+Exemplos:
+
+```bash
+# Comparar usando o ficheiro de previsões mais recente
+python src/compare_predictions_results.py
+
+# Comparar com um ficheiro específico e data explícita
+python src/compare_predictions_results.py \
+  --pred-file previsoes/previsoes_tenis_2025-07-01.csv \
+  --results-date 2025-07-01
+```
+
+Saída:
+- `comparacao_previsoes_YYYY-MM-DD.csv` — lista de previsões com colunas `Matched` (se foi encontrado jogo correspondente) e `Correct` (se o vencedor previsto corresponde ao vencedor real).
+
+
 ## 🔄 Pipeline CI/CD
 
 O projeto utiliza GitHub Actions para automação completa:

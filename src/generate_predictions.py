@@ -13,13 +13,15 @@ DOCS_DATA_DIR = os.path.join(BASE_DIR, "docs", "predicts")
 os.makedirs(DOCS_DATA_DIR, exist_ok=True)
 
 # === 1️⃣ Localizar o CSV mais recente de previsões ===
-csv_files = [f for f in os.listdir(NOTEBOOKS_DIR) if f.startswith("previsoes_tenis") and f.endswith(".csv")]
-if not csv_files:
+csv_file = "previsoes_tenis.csv"
+csv_path = os.path.join(NOTEBOOKS_DIR, csv_file)
+if not os.path.exists(csv_path):
+    raise FileNotFoundError(f"Arquivo '{csv_file}' não encontrado em {NOTEBOOKS_DIR}")
+if not csv_file:
     raise FileNotFoundError("Nenhum arquivo de previsões encontrado em notebooks/previsoes/")
 
-# Ordena por data (caso existam vários)
-csv_files.sort(reverse=True)
-latest_csv = csv_files[0]
+# Pega o arquivo mais recente
+latest_csv = csv_file
 csv_path = os.path.join(NOTEBOOKS_DIR, latest_csv)
 
 print(f"📄 Carregando previsões do arquivo: {csv_path}")
