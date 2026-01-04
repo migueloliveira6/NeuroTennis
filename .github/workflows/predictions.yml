@@ -29,22 +29,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run comparisons (compare_predictions_results)
-        run: python src/compare_predictions_results.py
+      #- name: Run comparisons (compare_predictions_results)
+      #  run: python src/compare_predictions_results.py
 
       - name: Run scraping
         run: python src/bot_telegram_git.py
 
       - name: Run predictions
         run: python src/generate_predictions.py
-
-      - name: Compare predictions with results
-        continue-on-error: true
-        run: python src/compare_predictions_results.py
-
-      - name: Send comparison via bot
-        continue-on-error: true
-        run: python src/bot_telegram_git.py
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
