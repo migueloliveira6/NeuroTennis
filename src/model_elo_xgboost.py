@@ -24,19 +24,31 @@ class TennisPredictor:
         self.surface_stats = {}   # Estatísticas por superfície
         self.feature_columns = None  # Colunas usadas no modelo
 
-    def load_data(self):
-        """Carrega os dados das partidas"""
-        print("Carregando dados de partidas...")
-        self.matches = pd.read_csv(DATA_PATH,
-                                 parse_dates=['tourney_date'])
-        
-        # Verificar colunas essenciais
+    def load_data(self, db_path: str | None = None):
+        """Carrega os dados das partidas a partir da base de dados SQLite.
+
+        Por defeito usa o ficheiro SQLite `datasets/tennis_data.db` (ver `DB_PATH` env),
+        mas pode passar-se um `db_path` alternativo (útil para testes).
+        """
+        print("Carregando dados de partidas a partir da base de dados SQLite...")
+        try:
+            from db import get_connection, load_matches_for_training
+        except Exception:
+            # se a import falhar por caminhos relativos, tentar import local
+            from src.db import get_connection, load_matches_for_training
+
+        conn = get_connection(db_path)
+        # Carregar e normalizar colunas esperadas pelo pipeline atual
+        self.matches = load_matches_for_training(conn)
+        conn.close()
+
+        # Verificar colunas essenciais (compatibilidade com o código existente)
         required_cols = ['winner_name', 'loser_name', 'surface', 'tourney_date',
                         'winner_surface_elo', 'loser_surface_elo']
         if not all(col in self.matches.columns for col in required_cols):
-            raise ValueError("Dataset não contém todas as colunas necessárias")
-        
-        print(f"Dados carregados: {len(self.matches)} partidas")
+            raise ValueError("Dataset na BD não contém todas as colunas necessárias")
+
+        print(f"Dados carregados da BD: {len(self.matches)} partidas")
 
     def preprocess_data(self):
         """Prepara e processa os dados para treinamento"""
@@ -381,12 +393,10 @@ class TennisPredictor:
         y_proba = self.model.predict_proba(X_test)[:, 1]
 
         print("\n--- Avaliação Teste (dados mais recentes) ---")
-        print(f"Acurácia: {accuracy_score(y_test, y_pred):.3f}")
+        print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
         print(f"F1-score: {f1_score(y_test, y_pred):.3f}")
         print(f"LogLoss: {log_loss(y_test, y_proba):.3f}")
         print(f"Brier Score: {brier_score_loss(y_test, y_proba):.3f}")
-        print(f"MAE (probabilidade): {mean_absolute_error(y_test, y_proba):.3f}")
-        print(f"R² (probabilidade): {r2_score(y_test, y_proba):.3f}")
         print("Relatório de classificação:")
         print(classification_report(y_test, y_pred))
 
