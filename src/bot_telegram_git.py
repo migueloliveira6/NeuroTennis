@@ -709,6 +709,7 @@ def enviar_resultados_telegram(df: pd.DataFrame, token: str, chat_id: str) -> bo
             linha = (
                 f"Jogo: {row['Jogador 1']} vs {row['Jogador 2']}\n"
                 f"🎯 Previsto: {row['Vencedor Previsto']} ({row['Confiança (%)']}%)\n"
+                f"🎯 Previsto: {row['Vencedor Previsto']} ({row['Confiança (%)']:.1f}%)\n"
                 f"ELO Diff: {row['ELO Diff']} | H2H: {row['H2H']}\n"
                 f"Valor Aposta: {valor_aposta}\n"
                 f"ROI Esperado: {roi_esperado}\n"
