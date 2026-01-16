@@ -1,44 +1,30 @@
 [
     {
         "Torneio":"Auckland",
-        "Jogador 1":"Ben Shelton",
-        "Jogador 2":"Sebastian Baez",
-        "Vencedor Previsto":"Ben Shelton",
-        "Confiança (%)":92.6,
-        "ELO Diff":371.4,
-        "H2H":"1-0 (100% para Ben Shelton)",
-        "Odd 1":1.24,
-        "Odd 2":4.05,
+        "Jogador 1":"Sebastian Baez",
+        "Jogador 2":"Jakub Mensik",
+        "Vencedor Previsto":"Jakub Mensik",
+        "Confiança (%)":93.7,
+        "ELO Diff":-321.3,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":2.78,
+        "Odd 2":1.44,
         "Superfície":"Hard",
-        "Valor Aposta":0.6159999967,
-        "ROI Esperado (%)":14.8000001907
+        "Valor Aposta":0.794,
+        "ROI Esperado (%)":34.9
     },
     {
         "Torneio":"Adelaide",
-        "Jogador 1":"Tomas Machac",
-        "Jogador 2":"Tommy Paul",
-        "Vencedor Previsto":"Tommy Paul",
-        "Confiança (%)":55.4,
-        "ELO Diff":-79.1,
-        "H2H":"2-1 (67% para Tomas Machac)",
-        "Odd 1":2.32,
-        "Odd 2":1.6,
-        "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
-    },
-    {
-        "Torneio":"Adelaide",
-        "Jogador 1":"Alejandro Davidovich Fokina",
-        "Jogador 2":"Ugo Humbert",
+        "Jogador 1":"Ugo Humbert",
+        "Jogador 2":"Tomas Machac",
         "Vencedor Previsto":"Ugo Humbert",
-        "Confiança (%)":52.4,
-        "ELO Diff":-100.3,
-        "H2H":"3-1 (75% para Alejandro Davidovich Fokina)",
-        "Odd 1":2.06,
-        "Odd 2":1.76,
+        "Confiança (%)":66.7,
+        "ELO Diff":152.1,
+        "H2H":"1-0 (100% para Ugo Humbert)",
+        "Odd 1":1.72,
+        "Odd 2":2.12,
         "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
+        "Valor Aposta":0.203,
+        "ROI Esperado (%)":14.6
     }
 ]
