@@ -2,7 +2,7 @@ name: Daily Tennis Predictions
 
 on:
   schedule:
-    - cron: '30 22 * * *'  # Executa às 22h30 UTC diariamente
+    - cron: '15 21 * * *'  # Executa às 21h15 UTC diariamente
 
 permissions:
   contents: write
