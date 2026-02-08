@@ -14,6 +14,7 @@ import argparse
 from datetime import datetime, timedelta
 import unicodedata
 import pandas as pd
+import requests
 from typing import Optional
 
 # Importar função do scraper local
@@ -83,8 +84,14 @@ def match_prediction(pred_row: pd.Series, results_df: pd.DataFrame) -> Optional[
     return None
 
 
-def compare(pred_file: str, results_date: datetime, out_dir: str = 'previsoes'):
-    df_pred = pd.read_csv(pred_file)
+def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'previsoes', df_pred: Optional[pd.DataFrame] = None, pred_file_label: Optional[str] = None):
+    if df_pred is None:
+        if not pred_file:
+            raise ValueError("pred_file é obrigatório quando df_pred não é fornecido")
+        df_pred = pd.read_csv(pred_file)
+        pred_file_label = pred_file_label or os.path.basename(pred_file)
+    else:
+        pred_file_label = pred_file_label or (os.path.basename(pred_file) if pred_file else "predictions.json")
 
     # Scrape results for the results_date
     scraper = ResultsScraper()
@@ -121,7 +128,7 @@ def compare(pred_file: str, results_date: datetime, out_dir: str = 'previsoes'):
             is_correct = False
 
         out_rows.append({
-            'Pred_File': os.path.basename(pred_file),
+            'Pred_File': pred_file_label,
             'Pred_Date': results_date.strftime('%Y-%m-%d'),
             'Pred_Torneio': pred.get('Torneio'),
             'Jogador 1': pred.get('Jogador 1'),
@@ -153,8 +160,8 @@ def compare(pred_file: str, results_date: datetime, out_dir: str = 'previsoes'):
     df_out.to_csv(out_path, index=False)
 
     print('\n✅ Comparação concluída')
-    print(f"Total previsões: {total}")
-    print(f"Matches encontrados: {matched}")
+    print(f"Total matches: {total}")
+    print(f"Previsões encontradas: {matched}")
     print(f"Previsões corretas: {correct}")
     if summary['accuracy'] is not None:
         print(f"Accuracy (sobre matched): {summary['accuracy']:.2%}")
@@ -166,41 +173,70 @@ def compare(pred_file: str, results_date: datetime, out_dir: str = 'previsoes'):
     return df_out, summary
 
 
+def _load_predictions_from_json_url(pred_json_url: str) -> pd.DataFrame:
+    res = requests.get(pred_json_url, timeout=30)
+    res.raise_for_status()
+    data = res.json()
+    if not isinstance(data, list):
+        raise ValueError("JSON de previsões inválido: esperado uma lista")
+    return pd.DataFrame(data)
+
+
+def _load_predictions_from_json_file(pred_json_file: str) -> pd.DataFrame:
+    df = pd.read_json(pred_json_file)
+    if df.empty:
+        raise ValueError("JSON de previsões vazio")
+    return df
+
+
 def main():
     parser = argparse.ArgumentParser(description='Comparar previsões com resultados reais')
     parser.add_argument('--pred-file', type=str, help='Arquivo de previsões CSV (se não fornecido, pega o mais recente em PREVISOES_PATH)')
     parser.add_argument('--preds-path', type=str, default=os.getenv('PREVISOES_PATH', 'previsoes'), help='Pasta onde estão as previsões')
     parser.add_argument('--results-date', type=str, help='Data dos resultados (YYYY-MM-DD). Se omitido, tenta extrair do nome do ficheiro de previsões ou usa ontem')
     parser.add_argument('--out-dir', type=str, default='previsoes', help='Diretório para salvar o CSV de comparação')
+    parser.add_argument('--pred-json-url', type=str, help='URL do predictions.json (ex: gh-pages)')
+    parser.add_argument('--pred-json-file', type=str, help='Caminho local para predictions.json')
 
     args = parser.parse_args()
 
+    pred_json_url = args.pred_json_url or os.getenv('PREDICTIONS_JSON_URL')
+    pred_json_file = args.pred_json_file
+
     pred_file = args.pred_file
-    if not pred_file:
-        pred_file = find_latest_prediction_file(args.preds_path)
+    df_pred = None
+    pred_file_label = None
+
+    if pred_json_url:
+        df_pred = _load_predictions_from_json_url(pred_json_url)
+        pred_file_label = pred_json_url
+    elif pred_json_file:
+        df_pred = _load_predictions_from_json_file(pred_json_file)
+        pred_file_label = os.path.basename(pred_json_file)
+    else:
         if not pred_file:
-            raise FileNotFoundError(f'Nenhum arquivo de previsões encontrado em {args.preds_path}')
+            pred_file = find_latest_prediction_file(args.preds_path)
+            if not pred_file:
+                raise FileNotFoundError(f'Nenhum arquivo de previsões encontrado em {args.preds_path}')
 
     # Se results-date explícito
     if args.results_date:
         results_date = datetime.strptime(args.results_date, '%Y-%m-%d')
     else:
-        # Tentar extrair data do nome do ficheiro de previsões
-        dt = extract_date_from_filename(os.path.basename(pred_file))
+        # Tentar extrair data do nome do ficheiro de previsões (quando existir)
+        dt = extract_date_from_filename(os.path.basename(pred_file)) if pred_file else None
         if dt:
             results_date = dt
         else:
-            # Default: ontem (as previsões normalmente são para o dia seguinte)
-            results_date = datetime.now().date() - timedelta(days=0)
+            # Default: hoje
+            results_date = datetime.now().date()
             results_date = datetime.combine(results_date, datetime.min.time())
 
-    result = compare(pred_file, results_date, args.out_dir)
+    result = compare(pred_file, results_date, args.out_dir, df_pred=df_pred, pred_file_label=pred_file_label)
     if not result:
         return
 
     df_out, summary = result
-
-    # Observação: envio por Telegram é tratado pelo `bot_telegram_git.py --send-comparison` para centralizar notificações.
 
 if __name__ == '__main__':
     main()

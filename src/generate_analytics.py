@@ -69,41 +69,34 @@ global_stats = {
 
 print(f"   ✓ Taxa de acerto global: {accuracy_global:.1f}%")
 
-# === 6️⃣ Extrair data do nome do arquivo ===
-def extract_date_from_filename(filename):
-    """Extrai data do formato comparacao_previsoes_YYYY-MM-DD.csv"""
-    import re
-    match = re.search(r'(\d{4}-\d{2}-\d{2})', filename)
-    if match:
-        return match.group(1)
-    return None
+# === 6️⃣ Agregação por data (usar data atual e atualizar histórico existente) ===
+today = datetime.now().strftime("%Y-%m-%d")
+total = len(df_matched)
+correct = df_matched['Correct'].sum()
+wrong = total - correct
+acc = (correct / total * 100) if total > 0 else 0
 
-# Adicionar coluna de data ao DataFrame
-if 'Pred_Date' in df_matched.columns:
-    # Use explicit Pred_Date coluna se disponível
-    df_matched['date'] = df_matched['Pred_Date'].astype(str)
+new_entry = {
+    "date": today,
+    "total_predictions": int(total),
+    "correct": int(correct),
+    "wrong": int(wrong),
+    "accuracy": round(acc, 2)
+}
+
+accuracy_by_date_path = os.path.join(DOCS_DATA_DIR, "accuracy_by_date.json")
+if os.path.exists(accuracy_by_date_path):
+    try:
+        with open(accuracy_by_date_path, 'r', encoding='utf-8') as f:
+            accuracy_by_date = json.load(f) or []
+    except Exception:
+        accuracy_by_date = []
 else:
-    df_matched['date'] = df_matched['Pred_File'].apply(extract_date_from_filename)
+    accuracy_by_date = []
 
-# === 7️⃣ Agregação por data ===
-accuracy_by_date = []
-for date in df_matched['date'].dropna().unique():
-    df_date = df_matched[df_matched['date'] == date]
-    total = len(df_date)
-    correct = df_date['Correct'].sum()
-    wrong = total - correct
-    acc = (correct / total * 100) if total > 0 else 0
-    
-    accuracy_by_date.append({
-        "date": date,
-        "total_predictions": int(total),
-        "correct": int(correct),
-        "wrong": int(wrong),
-        "accuracy": round(acc, 2)
-    })
-
-# Ordenar por data
-accuracy_by_date.sort(key=lambda x: x['date'])
+# Adicionar entrada do dia ao histórico
+accuracy_by_date.append(new_entry)
+accuracy_by_date.sort(key=lambda x: x.get('date', ''))
 
 print(f"   ✓ {len(accuracy_by_date)} dias com dados")
 

@@ -2,7 +2,7 @@ name: Daily Tennis Predictions
 
 on:
   schedule:
-    - cron: '00 21 * * *'  # Executa às 21h00 UTC diariamente
+    - cron: '15 22 * * *'  # Executa às 22h15 UTC diariamente
 
 permissions:
   contents: write
@@ -17,6 +17,7 @@ jobs:
       MODEL_PATH: ${{ secrets.MODEL_PATH }}
       PREVISOES_PATH: ${{ vars.PREVISOES_PATH }}
       NAME_LOOKUP: ${{ vars.NAME_LOOKUP }}
+      PREDICTIONS_JSON_URL: ${{ vars.PREDICTIONS_JSON_URL }}
 
     steps:
       - uses: actions/checkout@v3
@@ -29,11 +30,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      #- name: Run comparisons (compare_predictions_results)
-      #  run: python src/compare_predictions_results.py
+      - name: Run comparisons (using gh-pages JSON)
+        continue-on-error: true
+        run: python src/compare_predictions_results.py --pred-json-url "$PREDICTIONS_JSON_URL"
 
       - name: Run scraping
-        run: python src/bot_telegram_git.py
+        run: python src/engine.py
 
       - name: Run predictions
         run: python src/generate_predictions.py

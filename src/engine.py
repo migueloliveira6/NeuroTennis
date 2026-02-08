@@ -766,6 +766,99 @@ def enviar_resultados_telegram(df: pd.DataFrame, token: str, chat_id: str) -> bo
         return False
 
 
+def enviar_estatisticas_telegram(estatisticas: Dict[str, Any], token: str, chat_id: str) -> bool:
+    """Envia estatísticas via Telegram"""
+    try:
+        total = estatisticas.get('predictions_total', 'N/A')
+        matched = estatisticas.get('matched', 'N/A')
+        correct = estatisticas.get('correct', 'N/A')
+        accuracy = estatisticas.get('accuracy', None)
+        coverage = estatisticas.get('coverage', None)
+
+        linhas = [
+            "📊 *Resumo das Comparações de Previsões*",
+            f"Total previsões: {total}",
+            f"Matches encontrados: {matched}",
+            f"Previsões corretas: {correct}",
+        ]
+
+        if accuracy is not None:
+            try:
+                linhas.append(f"Accuracy (sobre matched): {accuracy:.2%}")
+            except Exception:
+                linhas.append(f"Accuracy (sobre matched): {accuracy}")
+        else:
+            linhas.append("Accuracy (sobre matched): N/A")
+
+        if coverage is not None:
+            try:
+                linhas.append(f"Cobertura (matched/total): {coverage:.2%}")
+            except Exception:
+                linhas.append(f"Cobertura (matched/total): {coverage}")
+        else:
+            linhas.append("Cobertura (matched/total): N/A")
+
+        linhas.append(f"Enviado em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        mensagem = "\n".join(linhas)
+
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        res = requests.post(url, data={"chat_id": chat_id, "text": mensagem, "parse_mode": "Markdown"})
+
+        if res.status_code == 200:
+            logger.info("✅ Estatísticas enviadas com sucesso via Telegram")
+            return True
+
+        logger.error(f"❌ Falha ao enviar estatísticas (status {res.status_code}): {res.text}")
+        return False
+
+    except Exception as e:
+        logger.error(f"❌ Erro ao enviar estatísticas via Telegram: {e}")
+        return False
+
+def find_latest_comparacao_file(previsoes_path: str = PREVISOES_PATH) -> Optional[str]:
+    """Retorna o caminho do arquivo `comparacao_previsoes_YYYY-MM-DD.csv` mais recente em `previsoes_path` ou None se não existir."""
+    try:
+        files = [f for f in os.listdir(previsoes_path) if f.startswith('comparacao_previsoes_') and f.endswith('.csv')]
+        if not files:
+            return None
+        files_full = [os.path.join(previsoes_path, f) for f in files]
+        files_full.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+        return files_full[0]
+    except Exception as e:
+        logger.error(f"Erro ao listar arquivos de comparacao: {e}")
+        return None
+
+
+def enviar_comparacao_telegram(file_path: Optional[str], token: str, chat_id: str, previsoes_path: str = PREVISOES_PATH) -> bool:
+    """Lê o CSV de comparação, calcula resumo e envia por Telegram usando `enviar_estatisticas_telegram`."""
+    try:
+        path = file_path or find_latest_comparacao_file(previsoes_path)
+        if not path:
+            logger.warning("⚠️ Nenhum arquivo de comparação encontrado para enviar.")
+            return False
+
+        df = pd.read_csv(path)
+        total = len(df)
+        matched = int(df['Matched'].astype(bool).sum()) if 'Matched' in df.columns else 0
+        correct = int(df['Correct'].astype(bool).sum()) if 'Correct' in df.columns else 0
+        accuracy = (correct / matched) if matched else None
+        coverage = (matched / total) if total else None
+
+        summary = {
+            'predictions_total': total,
+            'matched': matched,
+            'correct': correct,
+            'accuracy': accuracy,
+            'coverage': coverage
+        }
+
+        logger.info(f"📤 Enviando resumo da comparação ({os.path.basename(path)}) via Telegram")
+        return enviar_estatisticas_telegram(summary, token, chat_id)
+    except Exception as e:
+        logger.error(f"❌ Erro ao processar arquivo de comparação: {e}")
+        return False
+
 # ============================================================================
 # FUNÇÃO PRINCIPAL
 # ============================================================================
@@ -879,7 +972,8 @@ def main():
         df_resultados = df_resultados.sort_values(by="Confiança (%)", ascending=False).reset_index(drop=True)
 
         # Também salvar sem data no nome (para compatibilidade)
-        csv_path = os.path.join(PREVISOES_PATH, "previsoes_tenis.csv")
+        data_str = (datetime.today() + timedelta(days=1)).strftime("%Y%m%d")
+        csv_path = os.path.join(PREVISOES_PATH, f"previsoes_tenis_{data_str}.csv")
         df_resultados.to_csv(csv_path, index=False)
         logger.info(f"📁 Previsões salvas em '{csv_path}'")
         
@@ -894,6 +988,10 @@ def main():
         # Enviar resultados detalhados
         if enviar_resultados_telegram(df_resultados, TOKEN_BOT, CHAT_ID):
             logger.info("✅ Resultados detalhados enviados!")
+        
+        # Enviar resumo da comparação de previsões anteriores
+        if enviar_comparacao_telegram(None, TOKEN_BOT, CHAT_ID, PREVISOES_PATH):
+            logger.info("✅ Resumo da comparação enviado!")
         
         logger.info("\n" + "=" * 60)
         logger.info("✅ Processo concluído com sucesso!")
