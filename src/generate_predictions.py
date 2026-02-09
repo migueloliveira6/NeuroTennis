@@ -1,7 +1,10 @@
 # scripts/generate_predictions.py
+import datetime
 import os
 import json
 import pandas as pd
+from glob import glob
+import re
 
 # === CONFIGURAÇÕES ===
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,16 +16,25 @@ DOCS_DATA_DIR = os.path.join(BASE_DIR, "docs", "predicts")
 os.makedirs(DOCS_DATA_DIR, exist_ok=True)
 
 # === 1️⃣ Localizar o CSV mais recente de previsões ===
-csv_file = "previsoes_tenis.csv"
-csv_path = os.path.join(NOTEBOOKS_DIR, csv_file)
-if not os.path.exists(csv_path):
-    raise FileNotFoundError(f"Arquivo '{csv_file}' não encontrado em {NOTEBOOKS_DIR}")
-if not csv_file:
-    raise FileNotFoundError("Nenhum arquivo de previsões encontrado em notebooks/previsoes/")
+pattern = os.path.join(NOTEBOOKS_DIR, "previsoes_tenis_*.csv")
+files = glob(pattern)
+if not files:
+    raise FileNotFoundError("Nenhum arquivo de previsões encontrado em previsoes/")
 
-# Pega o arquivo mais recente
-latest_csv = csv_file
-csv_path = os.path.join(NOTEBOOKS_DIR, latest_csv)
+date_pattern = re.compile(r"^previsoes_tenis_(\d{4}-\d{2}-\d{2})\.csv$")
+dated_files = []
+for path in files:
+    base = os.path.basename(path)
+    match = date_pattern.match(base)
+    if not match:
+        continue
+    date_str = match.group(1)
+    dated_files.append((datetime.datetime.strptime(date_str, "%Y-%m-%d"), path))
+
+if not dated_files:
+    raise FileNotFoundError("Nenhum arquivo de previsões com data válido encontrado em previsoes/")
+
+csv_path = max(dated_files, key=lambda item: item[0])[1]
 
 print(f"📄 Carregando previsões do arquivo: {csv_path}")
 df = pd.read_csv(csv_path)

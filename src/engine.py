@@ -972,7 +972,7 @@ def main():
         df_resultados = df_resultados.sort_values(by="Confiança (%)", ascending=False).reset_index(drop=True)
 
         # Também salvar sem data no nome (para compatibilidade)
-        data_str = (datetime.today() + timedelta(days=1)).strftime("%Y%m%d")
+        data_str = (datetime.today() + timedelta(days=1)).strftime("%Y-%m-%d")
         csv_path = os.path.join(PREVISOES_PATH, f"previsoes_tenis_{data_str}.csv")
         df_resultados.to_csv(csv_path, index=False)
         logger.info(f"📁 Previsões salvas em '{csv_path}'")

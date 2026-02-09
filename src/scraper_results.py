@@ -104,7 +104,7 @@ class ResultsScraper:
     BLACKLIST_TORNEIO = frozenset({
         "itf", "utr", "junior", "exhibition", "boodles tennis challenge", 
         "boodles tennis cup", "boodles tennis series", "series",
-        "world university games", "olympic", "youth olympic", "davis cup",
+        "world university games", "olympic", "youth olympic",
         "fed cup", "hopman cup", "laver cup", "atp cup", "league", "challenger", "chall."
     })
 
