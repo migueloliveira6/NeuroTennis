@@ -6,6 +6,7 @@ from datetime import datetime
 from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss, mean_absolute_error, r2_score
 from difflib import get_close_matches
 from xgboost import XGBClassifier
+import optuna
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -318,7 +319,7 @@ class TennisPredictor:
         return max(dates) if dates else None
 
     def train_model(self, df):
-        """Treina modelo XGBoost com parâmetros fixos e validação temporal"""
+        """Treina modelo XGBoost com validação temporal e busca de hiperparâmetros com Optuna"""
         
         # Ordenar por data
         df = df.sort_values('date').reset_index(drop=True)
@@ -352,40 +353,86 @@ class TennisPredictor:
         # Salvar colunas
         self.feature_columns = X_train.columns
 
-        # Parâmetros fixos otimizados
-        params = {
-            'n_estimators': 1100,            # Mais árvores: o dataset suporta
-            'learning_rate': 0.025,         # Aprendizado lento → melhor generalização
-            'max_depth': 5,                 # Ligeiramente mais profundo, pois há dados suficientes
-            'min_child_weight': 6,          # Permite divisões mais finas sem overfit
-            'subsample': 0.8,               # Mantém diversidade entre árvores
-            'colsample_bytree': 0.8,        # Usa 80% das features em cada árvore
-            'gamma': 0.1,                   # Penaliza splits fracos
-            'reg_lambda': 2.0,              # Regularização L2 padrão
-            'reg_alpha': 0.1,               # Regularização L1 leve
-            'max_delta_step': 1,            # Melhora estabilidade da probabilidade
-            'scale_pos_weight': 1,          # Dataset equilibrado 0/1
-            'tree_method': 'hist',          # Muito mais rápido em datasets grandes
+        # Busca de hiperparâmetros com Optuna (rápida: 10 trials)
+        print("\nIniciando busca de hiperparâmetros com Optuna (10 trials)...")
+        optuna.logging.set_verbosity(optuna.logging.WARNING)
+
+        base_params = {
+            'objective': 'binary:logistic',
+            'eval_metric': 'logloss',
+            'n_estimators': 1500,
+            'scale_pos_weight': 1,
+            'tree_method': 'hist',
             'random_state': 42,
-            'early_stopping_rounds' : 50,    # Early stopping para evitar overfitting
             'n_jobs': -1,
             'use_label_encoder': False
         }
 
-        print("Parâmetros utilizados:", params)
+        def objective(trial):
+            trial_params = {
+                'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.08, log=True),
+                'max_depth': trial.suggest_int('max_depth', 3, 8),
+                'min_child_weight': trial.suggest_int('min_child_weight', 2, 10),
+                'subsample': trial.suggest_float('subsample', 0.65, 1.0),
+                'colsample_bytree': trial.suggest_float('colsample_bytree', 0.65, 1.0),
+                'gamma': trial.suggest_float('gamma', 0.0, 0.4),
+                'reg_lambda': trial.suggest_float('reg_lambda', 0.5, 5.0),
+                'reg_alpha': trial.suggest_float('reg_alpha', 0.0, 1.0),
+                'max_delta_step': trial.suggest_int('max_delta_step', 0, 2)
+            }
+
+            model = XGBClassifier(**base_params, **trial_params)
+            try:
+                model.fit(
+                    X_train,
+                    y_train,
+                    eval_set=[(X_val, y_val)],
+                    early_stopping_rounds=50,
+                    verbose=False
+                )
+            except TypeError:
+                model.set_params(early_stopping_rounds=50)
+                model.fit(
+                    X_train,
+                    y_train,
+                    eval_set=[(X_val, y_val)],
+                    verbose=False
+                )
+            y_val_proba = model.predict_proba(X_val)[:, 1]
+            return log_loss(y_val, y_val_proba)
+
+        study = optuna.create_study(
+            direction='minimize',
+            sampler=optuna.samplers.TPESampler(seed=42)
+        )
+        study.optimize(objective, n_trials=10, show_progress_bar=False)
+
+        params = {**base_params, **study.best_params}
+        print("Melhores parâmetros encontrados:", study.best_params)
+        print(f"Melhor logloss de validação (Optuna): {study.best_value:.5f}")
 
         # Treinar modelo final em train+val
         X_train_val = pd.concat([X_train, X_val])
         y_train_val = pd.concat([y_train, y_val])
 
         self.model = XGBClassifier(**params)
-        self.model.fit(X_train_val, y_train_val, 
-                       eval_set=[(X_val, y_val)],
-                        verbose=50)
+        try:
+            self.model.fit(X_train_val, y_train_val, 
+                           eval_set=[(X_val, y_val)],
+                           early_stopping_rounds=50,
+                            verbose=50)
+        except TypeError:
+            self.model.set_params(early_stopping_rounds=50)
+            self.model.fit(X_train_val, y_train_val, 
+                           eval_set=[(X_val, y_val)],
+                            verbose=50)
                         
-        best_iteration = self.model.best_iteration
-        self.model.set_params(n_estimators=best_iteration)
-        print(f"\nMelhor número de estimadores após early stopping: {best_iteration}")
+        best_iteration = getattr(self.model, 'best_iteration', None)
+        if best_iteration is not None and best_iteration >= 0:
+            self.model.set_params(n_estimators=best_iteration + 1)
+            print(f"\nMelhor número de estimadores após early stopping: {best_iteration + 1}")
+        else:
+            print("\nEarly stopping não retornou best_iteration; mantendo n_estimators atual.")
 
         # Avaliação no conjunto de teste
         X_test, y_test = prepare_Xy(test)
