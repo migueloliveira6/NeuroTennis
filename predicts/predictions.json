@@ -1,58 +1,16 @@
 [
     {
-        "Torneio":"Doha",
-        "Jogador 1":"Carlos Alcaraz",
-        "Jogador 2":"Arthur Fils",
-        "Vencedor Previsto":"Carlos Alcaraz",
-        "Confiança (%)":83.2,
-        "ELO Diff":225.6,
-        "H2H":"2-0 (100% para Carlos Alcaraz)",
-        "Odd 1":1.14,
-        "Odd 2":5.55,
-        "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
-    },
-    {
         "Torneio":"Delray Beach",
-        "Jogador 1":"Learner Tien",
-        "Jogador 2":"Frances Tiafoe",
+        "Jogador 1":"Tommy Paul",
+        "Jogador 2":"Learner Tien",
         "Vencedor Previsto":"Learner Tien",
-        "Confiança (%)":76.7,
-        "ELO Diff":109.0,
-        "H2H":"0-1 (0% para Learner Tien)",
-        "Odd 1":1.54,
-        "Odd 2":2.45,
+        "Confiança (%)":65.4,
+        "ELO Diff":-15.0,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.56,
+        "Odd 2":2.4,
         "Superfície":"Hard",
-        "Valor Aposta":0.3370000124,
-        "ROI Esperado (%)":18.2000007629
-    },
-    {
-        "Torneio":"Rio de Janeiro",
-        "Jogador 1":"Thiago Agustin Tirante",
-        "Jogador 2":"Alejandro Tabilo",
-        "Vencedor Previsto":"Alejandro Tabilo",
-        "Confiança (%)":66.5,
-        "ELO Diff":-80.1,
-        "H2H":"0-1 (0% para Thiago Agustin Tirante)",
-        "Odd 1":2.38,
-        "Odd 2":1.57,
-        "Superfície":"Clay",
-        "Valor Aposta":0.0769999996,
-        "ROI Esperado (%)":4.4000000954
-    },
-    {
-        "Torneio":"Delray Beach",
-        "Jogador 1":"Taylor Fritz",
-        "Jogador 2":"Tommy Paul",
-        "Vencedor Previsto":"Taylor Fritz",
-        "Confiança (%)":60.4,
-        "ELO Diff":70.0,
-        "H2H":"4-3 (57% para Taylor Fritz)",
-        "Odd 1":1.7,
-        "Odd 2":2.13,
-        "Superfície":"Hard",
-        "Valor Aposta":0.0390000008,
-        "ROI Esperado (%)":2.7000000477
+        "Valor Aposta":0.408,
+        "ROI Esperado (%)":57.1
     }
 ]
