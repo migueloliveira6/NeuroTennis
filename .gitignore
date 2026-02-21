@@ -48,7 +48,7 @@ build/
 dist/
 *.egg-info/
 *.spec
-docs/
+#docs/
 
 # 🔹 Configurações de IDEs
 .vscode/

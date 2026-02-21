@@ -776,7 +776,7 @@ def enviar_estatisticas_telegram(estatisticas: Dict[str, Any], token: str, chat_
         coverage = estatisticas.get('coverage', None)
 
         linhas = [
-            "📊 *Resumo das Comparações de Previsões*",
+            "*Resumo das Comparações de Previsões*",
             f"Total previsões: {total}",
             f"Matches encontrados: {matched}",
             f"Previsões corretas: {correct}",
@@ -797,8 +797,6 @@ def enviar_estatisticas_telegram(estatisticas: Dict[str, Any], token: str, chat_
                 linhas.append(f"Cobertura (matched/total): {coverage}")
         else:
             linhas.append("Cobertura (matched/total): N/A")
-
-        linhas.append(f"Enviado em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
         mensagem = "\n".join(linhas)
 

@@ -2,7 +2,7 @@ name: Daily Tennis Predictions
 
 on:
   schedule:
-    - cron: '15 22 * * *'  # Executa às 22h15 UTC diariamente
+    - cron: '20 22 * * *'  # Executa às 22h15 UTC diariamente
 
 permissions:
   contents: write
@@ -39,6 +39,10 @@ jobs:
 
       - name: Run predictions
         run: python src/generate_predictions.py
+
+      - name: Generate analytics from latest comparison
+        continue-on-error: true
+        run: python src/generate_analytics.py
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

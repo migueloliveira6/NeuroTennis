@@ -2,6 +2,7 @@
 
 import os
 import json
+import re
 import pandas as pd
 from datetime import datetime
 from collections import defaultdict
@@ -14,24 +15,49 @@ DOCS_DATA_DIR = os.path.join(BASE_DIR, "docs", "analytics")
 # Cria pastas se não existirem
 os.makedirs(DOCS_DATA_DIR, exist_ok=True)
 
-# === 1️⃣ Localizar CSVs de comparação ===
-csv_files = [f for f in os.listdir(COMPARISONS_DIR) if f.startswith("comparacao_previsoes") and f.endswith(".csv")]
 
-if not csv_files:
+def find_latest_comparison_file(comparisons_dir):
+    csv_files = [
+        f for f in os.listdir(comparisons_dir)
+        if f.startswith("comparacao_previsoes_") and f.endswith(".csv")
+    ]
+
+    if not csv_files:
+        return None, None
+
+    dated_files = []
+    undated_files = []
+    for filename in csv_files:
+        match = re.match(r"comparacao_previsoes_(\d{4}-\d{2}-\d{2})\.csv$", filename)
+        full_path = os.path.join(comparisons_dir, filename)
+        if match:
+            dated_files.append((match.group(1), full_path))
+        else:
+            undated_files.append(full_path)
+
+    if dated_files:
+        dated_files.sort(key=lambda item: item[0], reverse=True)
+        latest_date, latest_file = dated_files[0]
+        return latest_file, latest_date
+
+    undated_files.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+    latest_file = undated_files[0]
+    latest_date = datetime.fromtimestamp(os.path.getmtime(latest_file)).strftime("%Y-%m-%d")
+    return latest_file, latest_date
+
+# === 1️⃣ Localizar CSVs de comparação ===
+latest_csv_path, comparison_date = find_latest_comparison_file(COMPARISONS_DIR)
+
+if not latest_csv_path:
     print("⚠️  Nenhum arquivo de comparação encontrado. Execute compare_predictions_results.py primeiro.")
     exit(0)
 
-print(f"📊 Encontrados {len(csv_files)} arquivo(s) de comparação")
+latest_csv_name = os.path.basename(latest_csv_path)
+print(f"Usando arquivo de comparação mais recente: {latest_csv_name}")
 
-# === 2️⃣ Carregar e consolidar todos os CSVs ===
-all_data = []
-for csv_file in csv_files:
-    csv_path = os.path.join(COMPARISONS_DIR, csv_file)
-    df_temp = pd.read_csv(csv_path)
-    all_data.append(df_temp)
-    print(f"   ✓ {csv_file}")
-
-df = pd.concat(all_data, ignore_index=True)
+# === 2️⃣ Carregar CSV mais recente ===
+df = pd.read_csv(latest_csv_path)
+print(f"   ✓ {latest_csv_name}")
 
 # === 3️⃣ Validar colunas esperadas ===
 expected_cols = [
@@ -64,20 +90,22 @@ global_stats = {
     "correct": int(total_correct),
     "wrong": int(total_wrong),
     "accuracy": round(accuracy_global, 2),
+    "comparison_file": latest_csv_name,
+    "comparison_date": comparison_date,
     "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 }
 
 print(f"   ✓ Taxa de acerto global: {accuracy_global:.1f}%")
 
-# === 6️⃣ Agregação por data (usar data atual e atualizar histórico existente) ===
-today = datetime.now().strftime("%Y-%m-%d")
+# === 6️⃣ Agregação por data (usar data do arquivo de comparação e atualizar histórico existente) ===
+reference_date = comparison_date or datetime.now().strftime("%Y-%m-%d")
 total = len(df_matched)
 correct = df_matched['Correct'].sum()
 wrong = total - correct
 acc = (correct / total * 100) if total > 0 else 0
 
 new_entry = {
-    "date": today,
+    "date": reference_date,
     "total_predictions": int(total),
     "correct": int(correct),
     "wrong": int(wrong),
@@ -95,6 +123,7 @@ else:
     accuracy_by_date = []
 
 # Adicionar entrada do dia ao histórico
+accuracy_by_date = [entry for entry in accuracy_by_date if entry.get("date") != reference_date]
 accuracy_by_date.append(new_entry)
 accuracy_by_date.sort(key=lambda x: x.get('date', ''))
 

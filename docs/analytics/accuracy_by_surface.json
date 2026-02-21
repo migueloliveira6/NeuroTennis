@@ -1,0 +1,20 @@
+[
+  {
+    "surface": "United Cup",
+    "total_predictions": 4,
+    "correct": 4,
+    "accuracy": 100.0
+  },
+  {
+    "surface": "Hong Kong ATP",
+    "total_predictions": 7,
+    "correct": 6,
+    "accuracy": 85.71
+  },
+  {
+    "surface": "Brisbane",
+    "total_predictions": 8,
+    "correct": 3,
+    "accuracy": 37.5
+  }
+]
