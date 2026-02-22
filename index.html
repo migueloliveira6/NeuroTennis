@@ -25,6 +25,7 @@
             color: #333;
             min-height: 100vh;
             padding: 20px;
+            cursor: url(https://cdn.custom-cursor.com/db/pointer/32/Tennis_Pointer.png), auto;
         }
 
         .container {
@@ -37,6 +38,183 @@
             color: white;
             margin-bottom: 40px;
             font-family: 'Sakana', sans-serif;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 2px solid rgba(118, 75, 162, 0.3);
+        }
+
+        .nav-brand h1 {
+            font-size: 2em;
+            color: #a466ea;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 14px 20px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Sakana', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            background: rgba(118, 75, 162, 0.2);
+            color: #ffffff;
+            border-color: #764ba2;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border-color: #a466ea;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+        }
+
+        .tab-icon {
+            font-size: 1.2em;
+        }
+
+        /* ==================== TABS CONTENT ==================== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== STATS HEADER ==================== */
+        .stats-header {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .stats-header h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #a466ea;
+        }
+
+        /* ==================== STAT VALUES ==================== */
+        .stat-positive {
+            color: #00c853 !important;
+        }
+
+        .stat-negative {
+            color: #ff5252 !important;
+        }
+
+        /* ==================== PROGRESS BAR ==================== */
+        .accuracy-progress-card {
+            margin: 20px 0 30px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #764ba2;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00c853, #69f0ae);
+            transition: width 0.8s ease-out;
+            box-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
+        }
+
+        /* ==================== CHARTS ==================== */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #764ba2;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            /* Fix height to avoid charts growing indefinitely */
+            min-height: 240px;
+            max-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 15px;
+            color: #a466ea;
+            font-size: 1.3em;
+        }
+
+        /* Ensure canvas has fixed visual height and does not expand layout */
+        .chart-card canvas {
+            width: 100% !important;
+            height: 200px !important;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* ==================== FUTURE PLACEHOLDER ==================== */
+        .future-features-placeholder {
+            margin-top: 30px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            font-style: italic;
         }
 
         h1 {
@@ -319,46 +497,123 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>NeuroTennis</h1>
-            <p class="subtitle">Um modelo criado para previsões de Ténis com Machine Learning</p>
-        </header>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="previsoes">
+                    <span class="tab-icon"></span>
+                    Previsões
+                </button>
+                <button class="nav-tab" data-tab="estatisticas">
+                    <span class="tab-icon"></span>
+                    Estatísticas
+                </button>
+                <!-- Futuro: ELO & Rankings -->
+                <!-- <button class="nav-tab" data-tab="elo">
+                    <span class="tab-icon">🏆</span>
+                    ELO & Rankings
+                </button> -->
+            </div>
+        </nav>
+        <div id="tab-previsoes" class="tab-content active">
+            <header>
+                <h1>NeuroTennis</h1>
+                <p class="subtitle">Um modelo criado para previsões de Ténis com Machine Learning</p>
+            </header>
 
-        <div class="stats-grid" id="stats">
-            <div class="stat-card">
-                <div class="stat-value" id="totalMatches">-</div>
-                <div class="stat-label">Total de Jogos</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="avgConfidence">-</div>
-                <div class="stat-label">Confiança Média</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="tournaments">-</div>
-                <div class="stat-label">Torneios</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="avgRoi">-</div>
-                <div class="stat-label">ROI Médio</div>
-            </div>
-        </div>
-
-        <div class="predictions-container">
-            <div class="predictions-header">
-                <h2>Previsões do Dia</h2>
-                <div class="filter-container">
-                    <label for="tournamentFilter">Filtrar por Torneio:</label>
-                    <select id="tournamentFilter" onchange="filterByTournament()">
-                        <option value="all">Todos os Torneios</option>
-                    </select>
+            <div class="stats-grid" id="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMatches">-</div>
+                    <div class="stat-label">Total de Jogos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgConfidence">-</div>
+                    <div class="stat-label">Confiança Média</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="tournaments">-</div>
+                    <div class="stat-label">Torneios</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgRoi">-</div>
+                    <div class="stat-label">ROI Médio</div>
                 </div>
             </div>
-            <div id="predictions" class="loading">
-                Carregando previsões...
+
+            <div class="predictions-container">
+                <div class="predictions-header">
+                    <h2>Previsões do Dia</h2>
+                    <div class="filter-container">
+                        <label for="tournamentFilter">Filtrar por Torneio:</label>
+                        <select id="tournamentFilter" onchange="filterByTournament()">
+                            <option value="all">Todos os Torneios</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="predictions" class="loading">
+                    Carregando previsões...
+                </div>
+            </div>
+        </div>
+         <!-- TAB: ESTATÍSTICAS (nova) -->
+        <div id="tab-estatisticas" class="tab-content">
+            <header class="stats-header">
+                <h2>Estatísticas de Acertos</h2>
+                <p class="subtitle">Performance das previsões ao longo do tempo</p>
+            </header>
+
+            <!-- KPIs -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Taxa de Acerto</div>
+                    <div id="kpi-accuracy" class="stat-value">--%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total de Previsões</div>
+                    <div id="kpi-total-preds" class="stat-value">--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">✅ Acertos</div>
+                    <div id="kpi-correct" class="stat-value stat-positive">--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">❌ Erros</div>
+                    <div id="kpi-wrong" class="stat-value stat-negative">--</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="accuracy-progress-card">
+                <div class="progress-header">
+                    <span>Taxa de Acerto Global</span>
+                    <span id="accuracy-progress-label">--%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="accuracy-progress-bar" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <h3>📈 Evolução da Taxa de Acerto</h3>
+                    <canvas id="accuracyTrendChart" height="80"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <h3>🎯 Acerto por Faixa de Confiança</h3>
+                    <canvas id="confidenceChart" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- Placeholder futuro -->
+            <div class="future-features-placeholder">
+                <!-- 🔮 Futuro: Top 10 por ELO, Histórico de ELO, Rankings -->
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         let allMatches = []; // Armazena todos os jogos
         let currentFilter = 'all'; // Filtro atual
@@ -491,6 +746,189 @@
             `).join('');
             
             container.innerHTML = html;
+        }
+        // ==================== SISTEMA DE TABS ====================
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // Remove active de todos
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Ativa o selecionado
+                tab.classList.add('active');
+                document.getElementById(`tab-${targetTab}`).classList.add('active');
+                
+                // Se for tab de estatísticas, carrega os dados
+                if (targetTab === 'estatisticas' && !window.statsLoaded) {
+                    loadStatistics();
+                }
+            });
+        });
+
+        // ==================== CARREGAR ESTATÍSTICAS ====================
+        let accuracyTrendChart = null;
+        let confidenceChart = null;
+
+        async function loadStatistics() {
+            console.debug('loadStatistics: starting');
+            try {
+                // Carregar dados
+                const [globalStats, byDate, byConfidence] = await Promise.all([
+                    fetch('analytics/global_stats.json').then(r => r.json()),
+                    fetch('analytics/accuracy_by_date.json').then(r => r.json()),
+                    fetch('analytics/accuracy_by_confidence.json').then(r => r.json())
+                ]);
+
+                console.debug('loadStatistics: fetched data', { globalStats, byDateLength: byDate.length, byConfidenceLength: byConfidence.length });
+
+                // Atualizar KPIs
+                document.getElementById('kpi-accuracy').textContent = `${globalStats.accuracy}%`;
+                document.getElementById('kpi-total-preds').textContent = globalStats.total_predictions;
+                document.getElementById('kpi-correct').textContent = globalStats.correct;
+                document.getElementById('kpi-wrong').textContent = globalStats.wrong;
+
+                // Atualizar progress bar
+                const progressBar = document.getElementById('accuracy-progress-bar');
+                const progressLabel = document.getElementById('accuracy-progress-label');
+                progressBar.style.width = `${globalStats.accuracy}%`;
+                progressLabel.textContent = `${globalStats.accuracy}%`;
+
+                // Se não houver dados temporais, mostrar mensagem e evitar criar gráficos vazios
+                if (!byDate || byDate.length === 0) {
+                    document.querySelector('#tab-estatisticas .charts-section').insertAdjacentHTML('afterbegin',
+                        `<div style="color: #ffb86b; text-align:center; padding: 20px;">⚠️ Sem dados de evolução por data.</div>`
+                    );
+                } else {
+                    // Verificar se Chart foi carregado
+                    if (typeof Chart === 'undefined') throw new Error('Chart.js não carregado (Chart is undefined)');
+
+                    // Gráfico de evolução temporal
+                    const ctxTrend = document.getElementById('accuracyTrendChart').getContext('2d');
+                    if (accuracyTrendChart) { accuracyTrendChart.destroy(); }
+                    accuracyTrendChart = new Chart(ctxTrend, {
+                        type: 'line',
+                        data: {
+                            labels: byDate.map(d => d.date),
+                            datasets: [{
+                                label: 'Taxa de Acerto (%)',
+                                data: byDate.map(d => Number(d.accuracy) || 0),
+                                borderColor: '#00c853',
+                                backgroundColor: 'rgba(0, 200, 83, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                pointRadius: 4,
+                                pointHoverRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: { duration: 400 },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    min: 0,
+                                    max: 100,
+                                    ticks: { 
+                                        color: '#ffffff',
+                                        callback: function(value) { return value + '%'; }
+                                    },
+                                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                                },
+                                x: {
+                                    ticks: { color: '#ffffff' },
+                                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                                }
+                            },
+                            plugins: {
+                                legend: { labels: { color: '#ffffff' } },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const y = context.parsed && typeof context.parsed.y === 'number' ? context.parsed.y : (context.raw || 0);
+                                            return `${Number(y).toFixed(1)}%`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Gráfico por faixa de confiança
+                if (!byConfidence || byConfidence.length === 0) {
+                    document.querySelector('#tab-estatisticas .charts-section').insertAdjacentHTML('beforeend',
+                        `<div style="color: #ffb86b; text-align:center; padding: 20px;">⚠️ Sem dados por faixa de confiança.</div>`
+                    );
+                } else {
+                    console.debug('render confidence data', byConfidence.map(d => ({ range: d.confidence_range, accuracy: d.accuracy })));
+                    const ctxConf = document.getElementById('confidenceChart').getContext('2d');
+                    if (confidenceChart) { confidenceChart.destroy(); }
+                    confidenceChart = new Chart(ctxConf, {
+                        type: 'bar',
+                        data: {
+                            labels: byConfidence.map(d => d.confidence_range),
+                            datasets: [{
+                                label: 'Taxa de Acerto (%)',
+                                data: byConfidence.map(d => Number(d.accuracy) || 0),
+                                backgroundColor: byConfidence.map((_, i) => ['rgba(164, 102, 234, 0.8)', 'rgba(102, 126, 234, 0.8)', 'rgba(118, 75, 162, 0.8)', 'rgba(103, 58, 183, 0.8)', 'rgba(81, 45, 168, 0.8)'][i % 5]),
+                                borderColor: '#a466ea',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: { duration: 400 },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    min: 0,
+                                    max: 100,
+                                    ticks: { 
+                                        color: '#ffffff',
+                                        callback: function(value) { return value + '%'; }
+                                    },
+                                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                                },
+                                x: {
+                                    ticks: { color: '#ffffff' },
+                                    grid: { display: false }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const y = context.parsed && typeof context.parsed.y === 'number' ? context.parsed.y : (context.raw || 0);
+                                            const idx = context.dataIndex || 0;
+                                            const bc = byConfidence[idx] || {};
+                                            const correct = bc.correct || 0;
+                                            const total = bc.total_predictions || 0;
+                                            return `${Number(y).toFixed(1)}% (${correct}/${total})`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Marcar como carregado com sucesso
+                window.statsLoaded = true;
+
+            } catch (error) {
+                console.error('Erro ao carregar estatísticas:', error);
+                document.querySelector('#tab-estatisticas .stats-header').insertAdjacentHTML('afterend', 
+                    `<div style="color: #ff5252; text-align: center; padding: 20px;">⚠️ Erro ao carregar estatísticas: ${error.message || error}. Verifique se os arquivos JSON existem.</div>`
+                );
+                // Permitir re-tentar no próximo clique
+                window.statsLoaded = false;
+                return;
+            }
         }
     </script>
 </body>
