@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "surface": "Dubai",
+    "total_predictions": 4,
+    "correct": 4,
+    "accuracy": 100.0
+  },
+  {
+    "surface": "Acapulco",
+    "total_predictions": 4,
+    "correct": 3,
+    "accuracy": 75.0
+  }
+]
