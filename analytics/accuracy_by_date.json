@@ -7,10 +7,10 @@
     "accuracy": 68.42
   },
   {
-    "date": "2026-02-23",
-    "total_predictions": 10,
-    "correct": 9,
-    "wrong": 1,
-    "accuracy": 90.0
+    "date": "2026-02-24",
+    "total_predictions": 21,
+    "correct": 13,
+    "wrong": 8,
+    "accuracy": 61.9
   }
 ]
