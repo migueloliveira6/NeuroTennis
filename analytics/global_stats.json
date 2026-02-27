@@ -1,9 +1,9 @@
 {
-  "total_predictions": 14,
-  "correct": 8,
-  "wrong": 6,
-  "accuracy": 57.14,
-  "comparison_file": "comparacao_previsoes_2026-02-26.csv",
-  "comparison_date": "2026-02-26",
-  "last_updated": "2026-02-26 22:56:12"
+  "total_predictions": 8,
+  "correct": 4,
+  "wrong": 4,
+  "accuracy": 50.0,
+  "comparison_file": "comparacao_previsoes_2026-02-27.csv",
+  "comparison_date": "2026-02-27",
+  "last_updated": "2026-02-27 22:46:20"
 }

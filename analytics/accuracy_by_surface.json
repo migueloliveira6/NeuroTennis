@@ -1,12 +1,6 @@
 [
   {
     "surface": "Acapulco",
-    "total_predictions": 8,
-    "correct": 5,
-    "accuracy": 62.5
-  },
-  {
-    "surface": "Dubai",
     "total_predictions": 4,
     "correct": 2,
     "accuracy": 50.0
