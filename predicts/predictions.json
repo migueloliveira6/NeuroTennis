@@ -1,58 +1,16 @@
 [
     {
-        "Torneio":"Santiago",
-        "Jogador 1":"Alejandro Tabilo",
-        "Jogador 2":"Sebastian Baez",
-        "Vencedor Previsto":"Sebastian Baez",
-        "Confiança (%)":68.1,
-        "ELO Diff":-81.4,
-        "H2H":"1-2 (33% para Alejandro Tabilo)",
-        "Odd 1":2.01,
-        "Odd 2":1.78,
-        "Superfície":"Clay",
-        "Valor Aposta":0.2720000148,
-        "ROI Esperado (%)":21.2999992371
-    },
-    {
-        "Torneio":"Dubai",
-        "Jogador 1":"Daniil Medvedev",
-        "Jogador 2":"Tallon Griekspoor",
-        "Vencedor Previsto":"Daniil Medvedev",
-        "Confiança (%)":61.3,
-        "ELO Diff":153.8,
-        "H2H":"0-1 (0% para Daniil Medvedev)",
-        "Odd 1":1.17,
-        "Odd 2":4.93,
-        "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
-    },
-    {
         "Torneio":"Acapulco",
-        "Jogador 1":"Frances Tiafoe",
-        "Jogador 2":"Brandon Nakashima",
-        "Vencedor Previsto":"Brandon Nakashima",
-        "Confiança (%)":56.5,
-        "ELO Diff":-2.5,
-        "H2H":"6-1 (86% para Frances Tiafoe)",
-        "Odd 1":1.86,
-        "Odd 2":1.92,
+        "Jogador 1":"Flavio Cobolli",
+        "Jogador 2":"Frances Tiafoe",
+        "Vencedor Previsto":"Frances Tiafoe",
+        "Confiança (%)":57.9,
+        "ELO Diff":-110.8,
+        "H2H":"0-1 (0% para Flavio Cobolli)",
+        "Odd 1":2.0,
+        "Odd 2":1.8,
         "Superfície":"Hard",
-        "Valor Aposta":0.0920000002,
-        "ROI Esperado (%)":8.5
-    },
-    {
-        "Torneio":"Acapulco",
-        "Jogador 1":"Miomir Kecmanovic",
-        "Jogador 2":"Flavio Cobolli",
-        "Vencedor Previsto":"Flavio Cobolli",
-        "Confiança (%)":56.4,
-        "ELO Diff":12.0,
-        "H2H":"1-0 (100% para Miomir Kecmanovic)",
-        "Odd 1":1.61,
-        "Odd 2":2.3,
-        "Superfície":"Hard",
-        "Valor Aposta":0.2280000001,
-        "ROI Esperado (%)":29.7000007629
+        "Valor Aposta":0.054,
+        "ROI Esperado (%)":4.3
     }
 ]

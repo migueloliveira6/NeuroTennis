@@ -1,21 +1,9 @@
 [
   {
-    "confidence_range": "80-100%",
-    "total_predictions": 1,
-    "correct": 1,
-    "accuracy": 100.0
-  },
-  {
-    "confidence_range": "70-79%",
-    "total_predictions": 1,
-    "correct": 0,
-    "accuracy": 0.0
-  },
-  {
     "confidence_range": "60-69%",
-    "total_predictions": 4,
+    "total_predictions": 2,
     "correct": 2,
-    "accuracy": 50.0
+    "accuracy": 100.0
   },
   {
     "confidence_range": "50-59%",
