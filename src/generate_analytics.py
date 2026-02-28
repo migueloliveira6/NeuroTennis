@@ -5,7 +5,6 @@ import json
 import re
 import pandas as pd
 from datetime import datetime
-from collections import defaultdict
 
 # === CONFIGURAÇÕES ===
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,6 +13,46 @@ DOCS_DATA_DIR = os.path.join(BASE_DIR, "docs", "analytics")
 
 # Cria pastas se não existirem
 os.makedirs(DOCS_DATA_DIR, exist_ok=True)
+
+
+def load_json_file(path, default):
+    if not os.path.exists(path):
+        return default
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return data if data is not None else default
+    except Exception:
+        return default
+
+
+def save_json_file(path, data):
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def upsert_count_entry(existing_items, key_name, key_value, delta_total, delta_correct):
+    items_by_key = {str(item.get(key_name)): dict(item) for item in existing_items if key_name in item}
+
+    current = items_by_key.get(str(key_value), {
+        key_name: key_value,
+        "total_predictions": 0,
+        "correct": 0,
+        "accuracy": 0.0
+    })
+
+    current_total = int(current.get("total_predictions", 0)) + int(delta_total)
+    current_correct = int(current.get("correct", 0)) + int(delta_correct)
+
+    if current_total <= 0:
+        items_by_key.pop(str(key_value), None)
+    else:
+        current["total_predictions"] = current_total
+        current["correct"] = current_correct
+        current["accuracy"] = round((current_correct / current_total) * 100, 2)
+        items_by_key[str(key_value)] = current
+
+    return list(items_by_key.values())
 
 
 def find_latest_comparison_file(comparisons_dir):
@@ -79,25 +118,18 @@ if df_matched.empty:
 
 print(f"\n📈 Total de previsões matched: {len(df_matched)}")
 
-# === 5️⃣ Calcular estatísticas globais ===
-total_predictions = len(df_matched)
-total_correct = df_matched['Correct'].sum()
-total_wrong = total_predictions - total_correct
-accuracy_global = (total_correct / total_predictions * 100) if total_predictions > 0 else 0
+# === 5️⃣ Preparar paths e estado persistente ===
+global_stats_path = os.path.join(DOCS_DATA_DIR, "global_stats.json")
+accuracy_by_date_path = os.path.join(DOCS_DATA_DIR, "accuracy_by_date.json")
+accuracy_by_surface_path = os.path.join(DOCS_DATA_DIR, "accuracy_by_surface.json")
+accuracy_by_confidence_path = os.path.join(DOCS_DATA_DIR, "accuracy_by_confidence.json")
+analytics_state_path = os.path.join(DOCS_DATA_DIR, "analytics_state.json")
 
-global_stats = {
-    "total_predictions": int(total_predictions),
-    "correct": int(total_correct),
-    "wrong": int(total_wrong),
-    "accuracy": round(accuracy_global, 2),
-    "comparison_file": latest_csv_name,
-    "comparison_date": comparison_date,
-    "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-}
+analytics_state = load_json_file(analytics_state_path, {"processed_comparison_files": []})
+processed_files = set(analytics_state.get("processed_comparison_files", []))
+already_processed = latest_csv_name in processed_files
 
-print(f"   ✓ Taxa de acerto global: {accuracy_global:.1f}%")
-
-# === 6️⃣ Agregação por data (usar data do arquivo de comparação e atualizar histórico existente) ===
+# === 6️⃣ Agregação por data (patch em cima do histórico existente) ===
 reference_date = comparison_date or datetime.now().strftime("%Y-%m-%d")
 total = len(df_matched)
 correct = df_matched['Correct'].sum()
@@ -112,15 +144,7 @@ new_entry = {
     "accuracy": round(acc, 2)
 }
 
-accuracy_by_date_path = os.path.join(DOCS_DATA_DIR, "accuracy_by_date.json")
-if os.path.exists(accuracy_by_date_path):
-    try:
-        with open(accuracy_by_date_path, 'r', encoding='utf-8') as f:
-            accuracy_by_date = json.load(f) or []
-    except Exception:
-        accuracy_by_date = []
-else:
-    accuracy_by_date = []
+accuracy_by_date = load_json_file(accuracy_by_date_path, [])
 
 # Adicionar entrada do dia ao histórico
 accuracy_by_date = [entry for entry in accuracy_by_date if entry.get("date") != reference_date]
@@ -129,21 +153,41 @@ accuracy_by_date.sort(key=lambda x: x.get('date', ''))
 
 print(f"   ✓ {len(accuracy_by_date)} dias com dados")
 
+# === 7️⃣ Calcular estatísticas globais cumulativas ===
+total_predictions_cumulative = sum(int(item.get("total_predictions", 0)) for item in accuracy_by_date)
+total_correct_cumulative = sum(int(item.get("correct", 0)) for item in accuracy_by_date)
+total_wrong_cumulative = total_predictions_cumulative - total_correct_cumulative
+accuracy_global = (total_correct_cumulative / total_predictions_cumulative * 100) if total_predictions_cumulative > 0 else 0
+
+global_stats = {
+    "total_predictions": int(total_predictions_cumulative),
+    "correct": int(total_correct_cumulative),
+    "wrong": int(total_wrong_cumulative),
+    "accuracy": round(accuracy_global, 2),
+    "comparison_file": latest_csv_name,
+    "comparison_date": comparison_date,
+    "runs_processed": int(len(processed_files) + (0 if already_processed else 1)),
+    "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+}
+
+print(f"   ✓ Taxa de acerto global acumulada: {accuracy_global:.1f}%")
+
 # === 8️⃣ Agregação por superfície ===
-accuracy_by_surface = []
+accuracy_by_surface = load_json_file(accuracy_by_surface_path, [])
 for surface in df_matched['Pred_Torneio'].dropna().unique():
     df_surface = df_matched[df_matched['Pred_Torneio'] == surface]
     total = len(df_surface)
     correct = df_surface['Correct'].sum()
-    acc = (correct / total * 100) if total > 0 else 0
-    
-    if total >= 3:  # Apenas superfícies com pelo menos 3 previsões
-        accuracy_by_surface.append({
-            "surface": surface,
-            "total_predictions": int(total),
-            "correct": int(correct),
-            "accuracy": round(acc, 2)
-        })
+    if not already_processed and total > 0:
+        accuracy_by_surface = upsert_count_entry(
+            accuracy_by_surface,
+            "surface",
+            surface,
+            int(total),
+            int(correct)
+        )
+
+accuracy_by_surface = [item for item in accuracy_by_surface if int(item.get("total_predictions", 0)) >= 3]
 
 accuracy_by_surface.sort(key=lambda x: x['accuracy'], reverse=True)
 
@@ -162,37 +206,51 @@ def get_confidence_bucket(conf):
     else:
         return "<50%"
 
-df_matched['confidence_bucket'] = df_matched['Confiança (%)'].apply(get_confidence_bucket)
+df_matched['confidence_bucket'] = pd.to_numeric(df_matched['Confiança (%)'], errors='coerce').fillna(0).apply(get_confidence_bucket)
 
-accuracy_by_confidence = []
+accuracy_by_confidence = load_json_file(accuracy_by_confidence_path, [])
 for bucket in ["80-100%", "70-79%", "60-69%", "50-59%", "<50%"]:
     df_bucket = df_matched[df_matched['confidence_bucket'] == bucket]
     total = len(df_bucket)
-    if total > 0:
+    if total > 0 and not already_processed:
         correct = df_bucket['Correct'].sum()
-        acc = (correct / total * 100) if total > 0 else 0
-        
-        accuracy_by_confidence.append({
-            "confidence_range": bucket,
-            "total_predictions": int(total),
-            "correct": int(correct),
-            "accuracy": round(acc, 2)
-        })
+        accuracy_by_confidence = upsert_count_entry(
+            accuracy_by_confidence,
+            "confidence_range",
+            bucket,
+            int(total),
+            int(correct)
+        )
+
+bucket_order = {"80-100%": 0, "70-79%": 1, "60-69%": 2, "50-59%": 3, "<50%": 4}
+accuracy_by_confidence.sort(key=lambda x: bucket_order.get(x.get("confidence_range"), 999))
 
 print(f"   ✓ Análise por faixa de confiança concluída")
+
+if already_processed:
+    print(f"   ↺ {latest_csv_name} já estava processado. Mantido comportamento idempotente para superfícies/confiança.")
+else:
+    processed_files.add(latest_csv_name)
+
+analytics_state = {
+    "processed_comparison_files": sorted(processed_files),
+    "last_processed_file": latest_csv_name,
+    "last_processed_date": reference_date,
+    "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+}
 
 # === 🔟 Salvar JSONs ===
 output_files = {
     "global_stats.json": global_stats,
     "accuracy_by_date.json": accuracy_by_date,
     "accuracy_by_surface.json": accuracy_by_surface,
-    "accuracy_by_confidence.json": accuracy_by_confidence
+    "accuracy_by_confidence.json": accuracy_by_confidence,
+    "analytics_state.json": analytics_state
 }
 
 for filename, data in output_files.items():
     output_path = os.path.join(DOCS_DATA_DIR, filename)
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    save_json_file(output_path, data)
     print(f"   ✓ {filename}")
 
 print(f"\n✅ Análise concluída! Arquivos salvos em {DOCS_DATA_DIR}")

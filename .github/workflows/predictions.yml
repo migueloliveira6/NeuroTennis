@@ -22,6 +22,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Checkout gh-pages branch (analytics state)
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-prev
+
+      - name: Restore previous analytics JSONs
+        run: |
+          mkdir -p docs/analytics
+          if [ -d "gh-pages-prev/analytics" ]; then
+            cp -f gh-pages-prev/analytics/*.json docs/analytics/ 2>/dev/null || true
+          elif [ -d "gh-pages-prev/docs/analytics" ]; then
+            cp -f gh-pages-prev/docs/analytics/*.json docs/analytics/ 2>/dev/null || true
+          fi
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
