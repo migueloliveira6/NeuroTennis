@@ -363,16 +363,6 @@
             padding: 0 5px;
         }
 
-        .trophy {
-            margin-left: 8px;
-            animation: bounce 1s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
         .winner-badge {
             background: linear-gradient(90deg, #000000 20%, #7c51a8 100%);
             color: rgb(255, 255, 255);
@@ -694,12 +684,10 @@
                     <div class="players-section">
                         <div class="player-name ${match["Vencedor Previsto"] === match["Jogador 1"] ? 'predicted-winner' : ''}">
                             ${match["Jogador 1"]}
-                            ${match["Vencedor Previsto"] === match["Jogador 1"] ? '<span class="trophy">🏆</span>' : ''}
                         </div>
                         <div class="vs-divider">VS</div>
                         <div class="player-name ${match["Vencedor Previsto"] === match["Jogador 2"] ? 'predicted-winner' : ''}">
                             ${match["Jogador 2"]}
-                            ${match["Vencedor Previsto"] === match["Jogador 2"] ? '<span class="trophy">🏆</span>' : ''}
                         </div>
                     </div>
                     
