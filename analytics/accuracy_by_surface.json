@@ -1,8 +1,8 @@
 [
   {
     "surface": "Indian Wells",
-    "total_predictions": 7,
-    "correct": 4,
-    "accuracy": 57.14
+    "total_predictions": 15,
+    "correct": 11,
+    "accuracy": 73.33
   }
 ]
