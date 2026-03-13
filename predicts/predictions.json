@@ -1,30 +1,30 @@
 [
     {
         "Torneio":"Indian Wells",
-        "Jogador 1":"Carlos Alcaraz",
-        "Jogador 2":"Cameron Norrie",
-        "Vencedor Previsto":"Carlos Alcaraz",
-        "Confiança (%)":94.9,
-        "ELO Diff":304.0,
-        "H2H":"4-3 (57% para Carlos Alcaraz)",
-        "Odd 1":1.04,
-        "Odd 2":11.62,
+        "Jogador 1":"Alexander Zverev",
+        "Jogador 2":"Jannik Sinner",
+        "Vencedor Previsto":"Jannik Sinner",
+        "Confiança (%)":93.5,
+        "ELO Diff":-282.5,
+        "H2H":"4-6 (40% para Alexander Zverev)",
+        "Odd 1":5.22,
+        "Odd 2":1.16,
         "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
+        "Valor Aposta":0.531,
+        "ROI Esperado (%)":8.5
     },
     {
         "Torneio":"Indian Wells",
-        "Jogador 1":"Jack Draper",
+        "Jogador 1":"Carlos Alcaraz",
         "Jogador 2":"Daniil Medvedev",
-        "Vencedor Previsto":"Jack Draper",
-        "Confiança (%)":78.8,
-        "ELO Diff":61.8,
-        "H2H":"0-1 (0% para Jack Draper)",
-        "Odd 1":2.48,
-        "Odd 2":1.54,
+        "Vencedor Previsto":"Carlos Alcaraz",
+        "Confiança (%)":86.7,
+        "ELO Diff":127.7,
+        "H2H":"6-2 (75% para Carlos Alcaraz)",
+        "Odd 1":1.2,
+        "Odd 2":4.57,
         "Superfície":"Hard",
-        "Valor Aposta":0.6439999938,
-        "ROI Esperado (%)":95.3000030518
+        "Valor Aposta":0.202,
+        "ROI Esperado (%)":4.0
     }
 ]
