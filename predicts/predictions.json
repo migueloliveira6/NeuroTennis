@@ -1,30 +1,16 @@
 [
     {
         "Torneio":"Indian Wells",
-        "Jogador 1":"Alexander Zverev",
+        "Jogador 1":"Daniil Medvedev",
         "Jogador 2":"Jannik Sinner",
         "Vencedor Previsto":"Jannik Sinner",
-        "Confiança (%)":93.5,
-        "ELO Diff":-282.5,
-        "H2H":"4-6 (40% para Alexander Zverev)",
-        "Odd 1":5.22,
-        "Odd 2":1.16,
+        "Confiança (%)":90.8,
+        "ELO Diff":-351.8,
+        "H2H":"7-8 (47% para Daniil Medvedev)",
+        "Odd 1":4.05,
+        "Odd 2":1.24,
         "Superfície":"Hard",
-        "Valor Aposta":0.531,
-        "ROI Esperado (%)":8.5
-    },
-    {
-        "Torneio":"Indian Wells",
-        "Jogador 1":"Carlos Alcaraz",
-        "Jogador 2":"Daniil Medvedev",
-        "Vencedor Previsto":"Carlos Alcaraz",
-        "Confiança (%)":86.7,
-        "ELO Diff":127.7,
-        "H2H":"6-2 (75% para Carlos Alcaraz)",
-        "Odd 1":1.2,
-        "Odd 2":4.57,
-        "Superfície":"Hard",
-        "Valor Aposta":0.202,
-        "ROI Esperado (%)":4.0
+        "Valor Aposta":0.524,
+        "ROI Esperado (%)":12.6
     }
 ]
