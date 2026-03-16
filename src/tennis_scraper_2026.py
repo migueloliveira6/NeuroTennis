@@ -146,6 +146,13 @@ class TennisAbstractScraper:
 
         # Dicionário com torneios, datas e superfícies
         tournament_calendar = {
+            "Indian-Wells-Masters": ("20260304", "Hard"),
+            "Dubai": ("20260223", "Hard"),
+            "Acapulco": ("20260223", "Hard"),
+            "Santiago": ("20260223", "Clay"),
+            "Delray-Beach": ("20260216", "Hard"),
+            "Rio-de-Janeiro": ("20260216", "Clay"),
+            "Doha": ("20260216", "Hard"),
             "Dallas": ("20260209", "Hard"),
             "Rotterdam": ("20260209", "Hard"),
             "Buenos-Aires": ("20260209", "Clay"),
@@ -248,7 +255,7 @@ if __name__ == "__main__":
     matches = scraper.scrape_all_from_file(LINKS_2026)
     
     # Salvar dados
-    df = scraper.save_to_csv('tennis_2026_data_v1.csv')
+    df = scraper.save_to_csv('tennis_2026_data_v2.csv')
     
     if df is not None:
         print("\nPrimeiras 5 linhas do dataset:")
