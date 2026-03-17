@@ -4,5 +4,11 @@
     "total_predictions": 75,
     "correct": 57,
     "accuracy": 76.0
+  },
+  {
+    "surface": "Miami",
+    "total_predictions": 14,
+    "correct": 10,
+    "accuracy": 71.43
   }
 ]
