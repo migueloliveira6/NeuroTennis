@@ -1,6 +1,20 @@
 [
     {
         "Torneio":"Miami",
+        "Jogador 1":"Moise Kouame",
+        "Jogador 2":"Zachary Svajda",
+        "Vencedor Previsto":"Zachary Svajda",
+        "Confiança (%)":89.1,
+        "ELO Diff":-135.7,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":4.56,
+        "Odd 2":1.2,
+        "Superfície":"Hard",
+        "Valor Aposta":0.3429999948,
+        "ROI Esperado (%)":6.9000000954
+    },
+    {
+        "Torneio":"Miami",
         "Jogador 1":"Darwin Blanch",
         "Jogador 2":"Jan Lennard Struff",
         "Vencedor Previsto":"Jan Lennard Struff",
@@ -8,10 +22,24 @@
         "ELO Diff":-163.1,
         "H2H":"Igual (sem confrontos anteriores)",
         "Odd 1":2.48,
-        "Odd 2":1.53,
+        "Odd 2":1.54,
         "Superfície":"Hard",
-        "Valor Aposta":0.59799999,
-        "ROI Esperado (%)":31.7000007629
+        "Valor Aposta":0.6029999852,
+        "ROI Esperado (%)":32.5999984741
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Arthur Cazaux",
+        "Jogador 2":"Tomas Barrios Vera",
+        "Vencedor Previsto":"Arthur Cazaux",
+        "Confiança (%)":84.5,
+        "ELO Diff":189.9,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.53,
+        "Odd 2":2.51,
+        "Superfície":"Hard",
+        "Valor Aposta":0.55400002,
+        "ROI Esperado (%)":29.2999992371
     },
     {
         "Torneio":"Miami",
@@ -21,7 +49,7 @@
         "Confiança (%)":83.6,
         "ELO Diff":-231.6,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":2.79,
+        "Odd 1":2.8,
         "Odd 2":1.43,
         "Superfície":"Hard",
         "Valor Aposta":0.4530000091,
@@ -35,11 +63,11 @@
         "Confiança (%)":75.6,
         "ELO Diff":115.3,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":1.62,
-        "Odd 2":2.28,
+        "Odd 1":1.6,
+        "Odd 2":2.32,
         "Superfície":"Hard",
-        "Valor Aposta":0.3630000055,
-        "ROI Esperado (%)":22.5
+        "Valor Aposta":0.3490000069,
+        "ROI Esperado (%)":21.0
     },
     {
         "Torneio":"Miami",
@@ -49,11 +77,25 @@
         "Confiança (%)":75.0,
         "ELO Diff":-168.6,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":4.0,
-        "Odd 2":1.24,
+        "Odd 1":4.3,
+        "Odd 2":1.21,
         "Superfície":"Hard",
         "Valor Aposta":0.0,
         "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Alex Michelsen",
+        "Jogador 2":"Mattia Bellucci",
+        "Vencedor Previsto":"Alex Michelsen",
+        "Confiança (%)":73.3,
+        "ELO Diff":99.8,
+        "H2H":"1-0 (100% para Alex Michelsen)",
+        "Odd 1":1.44,
+        "Odd 2":2.76,
+        "Superfície":"Hard",
+        "Valor Aposta":0.125,
+        "ROI Esperado (%)":5.5
     },
     {
         "Torneio":"Miami",
@@ -63,8 +105,8 @@
         "Confiança (%)":67.6,
         "ELO Diff":-54.5,
         "H2H":"1-0 (100% para Fabian Marozsan)",
-        "Odd 1":3.12,
-        "Odd 2":1.36,
+        "Odd 1":2.99,
+        "Odd 2":1.39,
         "Superfície":"Hard",
         "Valor Aposta":0.0,
         "ROI Esperado (%)":0.0
@@ -77,11 +119,25 @@
         "Confiança (%)":64.9,
         "ELO Diff":-267.6,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":2.18,
-        "Odd 2":1.68,
+        "Odd 1":2.11,
+        "Odd 2":1.74,
         "Superfície":"Hard",
-        "Valor Aposta":0.1330000013,
-        "ROI Esperado (%)":9.1000003815
+        "Valor Aposta":0.174999997,
+        "ROI Esperado (%)":12.8999996185
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Stefanos Tsitsipas",
+        "Jogador 2":"Arthur Fery",
+        "Vencedor Previsto":"Stefanos Tsitsipas",
+        "Confiança (%)":62.2,
+        "ELO Diff":198.9,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.35,
+        "Odd 2":3.18,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0,
+        "ROI Esperado (%)":0.0
     },
     {
         "Torneio":"Miami",
@@ -91,11 +147,11 @@
         "Confiança (%)":62.1,
         "ELO Diff":52.2,
         "H2H":"2-0 (100% para Matteo Arnaldi)",
-        "Odd 1":1.94,
-        "Odd 2":1.84,
+        "Odd 1":2.03,
+        "Odd 2":1.77,
         "Superfície":"Hard",
-        "Valor Aposta":0.2169999927,
-        "ROI Esperado (%)":20.3999996185
+        "Valor Aposta":0.2520000041,
+        "ROI Esperado (%)":26.0
     },
     {
         "Torneio":"Miami",
@@ -105,25 +161,11 @@
         "Confiança (%)":62.0,
         "ELO Diff":-182.2,
         "H2H":"1-0 (100% para Ethan Quinn)",
-        "Odd 1":2.07,
-        "Odd 2":1.74,
+        "Odd 1":2.13,
+        "Odd 2":1.73,
         "Superfície":"Hard",
-        "Valor Aposta":0.1070000008,
-        "ROI Esperado (%)":7.9000000954
-    },
-    {
-        "Torneio":"Miami",
-        "Jogador 1":"Denis Shapovalov",
-        "Jogador 2":"Botic Van De Zandschulp",
-        "Vencedor Previsto":"Denis Shapovalov",
-        "Confiança (%)":61.8,
-        "ELO Diff":83.6,
-        "H2H":"1-1 (50% para Denis Shapovalov)",
-        "Odd 1":1.47,
-        "Odd 2":2.67,
-        "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
+        "Valor Aposta":0.1000000015,
+        "ROI Esperado (%)":7.3000001907
     },
     {
         "Torneio":"Miami",
@@ -133,25 +175,11 @@
         "Confiança (%)":61.5,
         "ELO Diff":-33.3,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":1.99,
-        "Odd 2":1.81,
+        "Odd 1":2.04,
+        "Odd 2":1.77,
         "Superfície":"Hard",
-        "Valor Aposta":0.1389999986,
-        "ROI Esperado (%)":11.1999998093
-    },
-    {
-        "Torneio":"Miami",
-        "Jogador 1":"Giovanni Mpetshi Perricard",
-        "Jogador 2":"Camilo Ugo Carabelli",
-        "Vencedor Previsto":"Giovanni Mpetshi Perricard",
-        "Confiança (%)":61.1,
-        "ELO Diff":140.8,
-        "H2H":"1-0 (100% para Giovanni Mpetshi Perricard)",
-        "Odd 1":1.54,
-        "Odd 2":2.47,
-        "Superfície":"Hard",
-        "Valor Aposta":0.0,
-        "ROI Esperado (%)":0.0
+        "Valor Aposta":0.1140000001,
+        "ROI Esperado (%)":8.8000001907
     },
     {
         "Torneio":"Miami",
@@ -162,10 +190,38 @@
         "ELO Diff":142.6,
         "H2H":"1-0 (100% para Alejandro Tabilo)",
         "Odd 1":1.42,
-        "Odd 2":2.85,
+        "Odd 2":2.87,
         "Superfície":"Hard",
         "Valor Aposta":0.0,
         "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Marcos Giron",
+        "Jogador 2":"Martin Landaluce",
+        "Vencedor Previsto":"Martin Landaluce",
+        "Confiança (%)":60.5,
+        "ELO Diff":147.8,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.51,
+        "Odd 2":2.57,
+        "Superfície":"Hard",
+        "Valor Aposta":0.3529999852,
+        "ROI Esperado (%)":55.4000015259
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Nikoloz Basilashvili",
+        "Jogador 2":"Mariano Navone",
+        "Vencedor Previsto":"Nikoloz Basilashvili",
+        "Confiança (%)":59.0,
+        "ELO Diff":100.1,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.96,
+        "Odd 2":1.85,
+        "Superfície":"Hard",
+        "Valor Aposta":0.1620000005,
+        "ROI Esperado (%)":15.5
     },
     {
         "Torneio":"Miami",
@@ -175,11 +231,11 @@
         "Confiança (%)":59.0,
         "ELO Diff":-32.5,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":1.5,
-        "Odd 2":2.58,
+        "Odd 1":1.49,
+        "Odd 2":2.62,
         "Superfície":"Hard",
-        "Valor Aposta":0.3310000002,
-        "ROI Esperado (%)":52.2999992371
+        "Valor Aposta":0.3370000124,
+        "ROI Esperado (%)":54.5999984741
     },
     {
         "Torneio":"Miami",
@@ -189,11 +245,11 @@
         "Confiança (%)":58.5,
         "ELO Diff":28.9,
         "H2H":"2-1 (67% para Marin Cilic)",
-        "Odd 1":1.61,
-        "Odd 2":2.3,
+        "Odd 1":1.59,
+        "Odd 2":2.35,
         "Superfície":"Hard",
-        "Valor Aposta":0.2669999897,
-        "ROI Esperado (%)":34.7000007629
+        "Valor Aposta":0.2779999971,
+        "ROI Esperado (%)":37.5999984741
     },
     {
         "Torneio":"Miami",
@@ -203,11 +259,11 @@
         "Confiança (%)":58.2,
         "ELO Diff":-26.7,
         "H2H":"1-0 (100% para Zhizhen Zhang)",
-        "Odd 1":1.79,
-        "Odd 2":2.01,
+        "Odd 1":1.86,
+        "Odd 2":1.94,
         "Superfície":"Hard",
-        "Valor Aposta":0.0520000011,
-        "ROI Esperado (%)":4.0999999046
+        "Valor Aposta":0.0949999988,
+        "ROI Esperado (%)":8.1999998093
     },
     {
         "Torneio":"Miami",
@@ -217,11 +273,11 @@
         "Confiança (%)":57.8,
         "ELO Diff":-18.6,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":1.9,
-        "Odd 2":1.89,
+        "Odd 1":1.78,
+        "Odd 2":2.04,
         "Superfície":"Hard",
-        "Valor Aposta":0.1040000021,
-        "ROI Esperado (%)":9.3000001907
+        "Valor Aposta":0.172999993,
+        "ROI Esperado (%)":18.0
     },
     {
         "Torneio":"Miami",
@@ -231,11 +287,25 @@
         "Confiança (%)":57.6,
         "ELO Diff":-14.3,
         "H2H":"0-1 (0% para Zizou Bergs)",
-        "Odd 1":2.18,
-        "Odd 2":1.67,
+        "Odd 1":2.44,
+        "Odd 2":1.56,
         "Superfície":"Hard",
         "Valor Aposta":0.0,
         "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Rafael Jodar",
+        "Jogador 2":"Yannick Hanfmann",
+        "Vencedor Previsto":"Yannick Hanfmann",
+        "Confiança (%)":56.9,
+        "ELO Diff":-141.7,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.59,
+        "Odd 2":2.35,
+        "Superfície":"Hard",
+        "Valor Aposta":0.248999998,
+        "ROI Esperado (%)":33.7000007629
     },
     {
         "Torneio":"Miami",
@@ -245,8 +315,22 @@
         "Confiança (%)":54.8,
         "ELO Diff":1.4,
         "H2H":"2-0 (100% para James Duckworth)",
-        "Odd 1":2.28,
-        "Odd 2":1.62,
+        "Odd 1":2.3,
+        "Odd 2":1.63,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0,
+        "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Ignacio Buse",
+        "Jogador 2":"Damir Dzumhur",
+        "Vencedor Previsto":"Ignacio Buse",
+        "Confiança (%)":54.5,
+        "ELO Diff":-3.3,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.53,
+        "Odd 2":2.5,
         "Superfície":"Hard",
         "Valor Aposta":0.0,
         "ROI Esperado (%)":0.0
@@ -259,10 +343,66 @@
         "Confiança (%)":54.3,
         "ELO Diff":-42.3,
         "H2H":"1-4 (20% para Kamil Majchrzak)",
-        "Odd 1":2.54,
+        "Odd 1":2.56,
         "Odd 2":1.51,
         "Superfície":"Hard",
         "Valor Aposta":0.0,
         "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Adam Walton",
+        "Jogador 2":"Sebastian Baez",
+        "Vencedor Previsto":"Sebastian Baez",
+        "Confiança (%)":52.8,
+        "ELO Diff":23.7,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":2.1,
+        "Odd 2":1.73,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0,
+        "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Christopher Oconnell",
+        "Jogador 2":"Marton Fucsovics",
+        "Vencedor Previsto":"Christopher Oconnell",
+        "Confiança (%)":50.9,
+        "ELO Diff":-27.4,
+        "H2H":"0-2 (0% para Christopher Oconnell)",
+        "Odd 1":2.6,
+        "Odd 2":1.49,
+        "Superfície":"Hard",
+        "Valor Aposta":0.2029999942,
+        "ROI Esperado (%)":32.4000015259
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Quentin Halys",
+        "Jogador 2":"Liam Draxl",
+        "Vencedor Previsto":"Quentin Halys",
+        "Confiança (%)":50.7,
+        "ELO Diff":104.8,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.47,
+        "Odd 2":2.67,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0,
+        "ROI Esperado (%)":0.0
+    },
+    {
+        "Torneio":"Miami",
+        "Jogador 1":"Valentin Royer",
+        "Jogador 2":"Thiago Agustin Tirante",
+        "Vencedor Previsto":"Thiago Agustin Tirante",
+        "Confiança (%)":50.4,
+        "ELO Diff":1.6,
+        "H2H":"Igual (sem confrontos anteriores)",
+        "Odd 1":1.78,
+        "Odd 2":2.03,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0219999999,
+        "ROI Esperado (%)":2.2999999523
     }
 ]
