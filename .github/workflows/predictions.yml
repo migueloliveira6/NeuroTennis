@@ -2,7 +2,7 @@ name: Daily Tennis Predictions
 
 on:
   schedule:
-    - cron: '20 22 * * *'  # Executa às 22h15 UTC diariamente
+    - cron: '30 22 * * *'  # Executa às 22h15 UTC diariamente
 
 permissions:
   contents: write
@@ -46,9 +46,23 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run comparisons (using gh-pages JSON)
+      - name: Run comparisons (using yesterday snapshot when available)
         continue-on-error: true
-        run: python src/compare_predictions_results.py --pred-json-url "$PREDICTIONS_JSON_URL"
+        run: |
+          YESTERDAY_UTC=$(date -u -d 'yesterday' +%F)
+          SNAPSHOT_PATH="gh-pages-prev/predicts/history/predictions_${YESTERDAY_UTC}.json"
+          LEGACY_SNAPSHOT_PATH="gh-pages-prev/docs/predicts/history/predictions_${YESTERDAY_UTC}.json"
+
+          if [ -f "$SNAPSHOT_PATH" ]; then
+            echo "Usando snapshot de ontem: $SNAPSHOT_PATH"
+            python src/compare_predictions_results.py --pred-json-file "$SNAPSHOT_PATH" --results-date "$YESTERDAY_UTC"
+          elif [ -f "$LEGACY_SNAPSHOT_PATH" ]; then
+            echo "Usando snapshot legado de ontem: $LEGACY_SNAPSHOT_PATH"
+            python src/compare_predictions_results.py --pred-json-file "$LEGACY_SNAPSHOT_PATH" --results-date "$YESTERDAY_UTC"
+          else
+            echo "Snapshot de ontem não encontrado. Fallback para URL atual."
+            python src/compare_predictions_results.py --pred-json-url "$PREDICTIONS_JSON_URL"
+          fi
 
       - name: Run scraping
         run: python src/engine.py
@@ -59,6 +73,13 @@ jobs:
       - name: Generate analytics from latest comparison
         continue-on-error: true
         run: python src/generate_analytics.py
+
+      - name: Create dated predictions snapshot
+        run: |
+          TODAY_UTC=$(date -u +%F)
+          mkdir -p docs/predicts/history
+          cp docs/predicts/predictions.json "docs/predicts/history/predictions_${TODAY_UTC}.json"
+          echo "Snapshot criado: docs/predicts/history/predictions_${TODAY_UTC}.json"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
