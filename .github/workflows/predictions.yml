@@ -38,6 +38,15 @@ jobs:
             cp -f gh-pages-prev/docs/analytics/*.json docs/analytics/ 2>/dev/null || true
           fi
 
+      - name: Restore previous predictions history
+        run: |
+          mkdir -p docs/predicts/history
+          if [ -d "gh-pages-prev/predicts/history" ]; then
+            cp -Rf gh-pages-prev/predicts/history/. docs/predicts/history/ 2>/dev/null || true
+          elif [ -d "gh-pages-prev/docs/predicts/history" ]; then
+            cp -Rf gh-pages-prev/docs/predicts/history/. docs/predicts/history/ 2>/dev/null || true
+          fi
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -46,33 +55,39 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run comparisons (prefer 2-day snapshot, fallback to yesterday)
+      - name: Run comparisons (use yesterday snapshot)
         continue-on-error: true
         run: |
           YESTERDAY_UTC=$(date -u -d 'yesterday' +%F)
-          TWO_DAYS_AGO_UTC=$(date -u -d '2 days ago' +%F)
 
-          SNAPSHOT_PATH_2D="gh-pages-prev/predicts/history/predictions_${TWO_DAYS_AGO_UTC}.json"
-          LEGACY_SNAPSHOT_PATH_2D="gh-pages-prev/docs/predicts/history/predictions_${TWO_DAYS_AGO_UTC}.json"
+          echo "========================================"
+          echo "🔄 Comparação de Previsões vs Resultados"
+          echo "========================================"
+          echo "📅 Resultados da data: $YESTERDAY_UTC"
+          echo "📦 Snapshot esperado:  predictions_${YESTERDAY_UTC}.json"
+          echo ""
+
           SNAPSHOT_PATH="gh-pages-prev/predicts/history/predictions_${YESTERDAY_UTC}.json"
           LEGACY_SNAPSHOT_PATH="gh-pages-prev/docs/predicts/history/predictions_${YESTERDAY_UTC}.json"
 
-          if [ -f "$SNAPSHOT_PATH_2D" ]; then
-            echo "Usando snapshot de 2 dias atrás (mais provável para resultados de ontem): $SNAPSHOT_PATH_2D"
-            python src/compare_predictions_results.py --pred-json-file "$SNAPSHOT_PATH_2D" --results-date "$YESTERDAY_UTC"
-          elif [ -f "$LEGACY_SNAPSHOT_PATH_2D" ]; then
-            echo "Usando snapshot legado de 2 dias atrás: $LEGACY_SNAPSHOT_PATH_2D"
-            python src/compare_predictions_results.py --pred-json-file "$LEGACY_SNAPSHOT_PATH_2D" --results-date "$YESTERDAY_UTC"
-          elif [ -f "$SNAPSHOT_PATH" ]; then
-            echo "Usando snapshot de ontem: $SNAPSHOT_PATH"
+          echo "📋 Snapshots disponíveis:"
+          ls -1 gh-pages-prev/predicts/history/predictions_*.json 2>/dev/null | head -5 || echo "   (nenhum encontrado)"
+          echo ""
+
+          if [ -f "$SNAPSHOT_PATH" ]; then
+            echo "✅ Snapshot encontrado em: $SNAPSHOT_PATH"
+            echo "🚀 Executando compare com snapshot oficial de $YESTERDAY_UTC..."
             python src/compare_predictions_results.py --pred-json-file "$SNAPSHOT_PATH" --results-date "$YESTERDAY_UTC"
           elif [ -f "$LEGACY_SNAPSHOT_PATH" ]; then
-            echo "Usando snapshot legado de ontem: $LEGACY_SNAPSHOT_PATH"
+            echo "✅ Snapshot encontrado em (legado): $LEGACY_SNAPSHOT_PATH"
+            echo "🚀 Executando compare com snapshot legado de $YESTERDAY_UTC..."
             python src/compare_predictions_results.py --pred-json-file "$LEGACY_SNAPSHOT_PATH" --results-date "$YESTERDAY_UTC"
           else
-            echo "Snapshot de ontem não encontrado. Fallback para URL atual."
-            python src/compare_predictions_results.py --pred-json-url "$PREDICTIONS_JSON_URL"
+            echo "⚠️  Snapshot de $YESTERDAY_UTC não encontrado."
+            echo "🚀 Fallback: Usando URL predictions.json atual com results-date=$YESTERDAY_UTC..."
+            python src/compare_predictions_results.py --pred-json-url "$PREDICTIONS_JSON_URL" --results-date "$YESTERDAY_UTC"
           fi
+          echo "✅ Comparação concluída"
 
       - name: Run scraping
         run: python src/engine.py
@@ -86,10 +101,28 @@ jobs:
 
       - name: Create dated predictions snapshot
         run: |
-          TODAY_UTC=$(date -u +%F)
+          echo ""
+          echo "========================================"
+          echo "💾 Guardando Snapshot de Previsões"
+          echo "========================================"
+          
+          PREV_PATH="${PREVISOES_PATH%/}"
+          LATEST_PRED_CSV=$(find "$PREV_PATH" -maxdepth 1 -type f -name 'previsoes_tenis_*.csv' | sort | tail -n1)
+
+          if [ -n "$LATEST_PRED_CSV" ] && [[ "$(basename "$LATEST_PRED_CSV")" =~ previsoes_tenis_([0-9]{4}-[0-9]{2}-[0-9]{2})\.csv ]]; then
+            SNAPSHOT_DATE="${BASH_REMATCH[1]}"
+            echo "📅 Data extraída do CSV: $(basename "$LATEST_PRED_CSV")"
+            echo "📦 Snapshot será salvo como: predictions_${SNAPSHOT_DATE}.json"
+          else
+            SNAPSHOT_DATE=$(date -u +%F)
+            echo "⚠️  CSV de previsões não encontrado com padrão esperado."
+            echo "📅 Fallback: Usando UTC de hoje como data: $SNAPSHOT_DATE"
+          fi
+
           mkdir -p docs/predicts/history
-          cp docs/predicts/predictions.json "docs/predicts/history/predictions_${TODAY_UTC}.json"
-          echo "Snapshot criado: docs/predicts/history/predictions_${TODAY_UTC}.json"
+          cp docs/predicts/predictions.json "docs/predicts/history/predictions_${SNAPSHOT_DATE}.json"
+          echo "✅ Snapshot salvo: docs/predicts/history/predictions_${SNAPSHOT_DATE}.json"
+          echo "   (Este snapshot será usado no compare de amanhã)"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
