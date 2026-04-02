@@ -2,7 +2,7 @@ name: Daily Tennis Predictions
 
 on:
   schedule:
-    - cron: '30 22 * * *'  # Executa às 22h15 UTC diariamente
+    - cron: '00 22 * * *'  # Executa às 22h15 UTC diariamente
 
 permissions:
   contents: write
@@ -46,14 +46,24 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run comparisons (using yesterday snapshot when available)
+      - name: Run comparisons (prefer 2-day snapshot, fallback to yesterday)
         continue-on-error: true
         run: |
           YESTERDAY_UTC=$(date -u -d 'yesterday' +%F)
+          TWO_DAYS_AGO_UTC=$(date -u -d '2 days ago' +%F)
+
+          SNAPSHOT_PATH_2D="gh-pages-prev/predicts/history/predictions_${TWO_DAYS_AGO_UTC}.json"
+          LEGACY_SNAPSHOT_PATH_2D="gh-pages-prev/docs/predicts/history/predictions_${TWO_DAYS_AGO_UTC}.json"
           SNAPSHOT_PATH="gh-pages-prev/predicts/history/predictions_${YESTERDAY_UTC}.json"
           LEGACY_SNAPSHOT_PATH="gh-pages-prev/docs/predicts/history/predictions_${YESTERDAY_UTC}.json"
 
-          if [ -f "$SNAPSHOT_PATH" ]; then
+          if [ -f "$SNAPSHOT_PATH_2D" ]; then
+            echo "Usando snapshot de 2 dias atrás (mais provável para resultados de ontem): $SNAPSHOT_PATH_2D"
+            python src/compare_predictions_results.py --pred-json-file "$SNAPSHOT_PATH_2D" --results-date "$YESTERDAY_UTC"
+          elif [ -f "$LEGACY_SNAPSHOT_PATH_2D" ]; then
+            echo "Usando snapshot legado de 2 dias atrás: $LEGACY_SNAPSHOT_PATH_2D"
+            python src/compare_predictions_results.py --pred-json-file "$LEGACY_SNAPSHOT_PATH_2D" --results-date "$YESTERDAY_UTC"
+          elif [ -f "$SNAPSHOT_PATH" ]; then
             echo "Usando snapshot de ontem: $SNAPSHOT_PATH"
             python src/compare_predictions_results.py --pred-json-file "$SNAPSHOT_PATH" --results-date "$YESTERDAY_UTC"
           elif [ -f "$LEGACY_SNAPSHOT_PATH" ]; then

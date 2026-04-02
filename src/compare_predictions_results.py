@@ -27,6 +27,15 @@ except Exception:
     from scraper_results import ResultsScraper
 
 
+PREDICTION_COLUMN_ALIASES = {
+    'Torneio': ['Torneio', 'tourney', 'tournament', 'Tournament', 'torneio'],
+    'Jogador 1': ['Jogador 1', 'player1', 'player_1', 'Player 1', 'jogador1', 'jogador_1'],
+    'Jogador 2': ['Jogador 2', 'player2', 'player_2', 'Player 2', 'jogador2', 'jogador_2'],
+    'Vencedor Previsto': ['Vencedor Previsto', 'winner_pred', 'predicted_winner', 'winner_prediction', 'predictedWinner'],
+    'Confiança (%)': ['Confiança (%)', 'confidence', 'Confidence', 'confidence_pct', 'probability']
+}
+
+
 def find_latest_prediction_file(previsoes_path: str) -> Optional[str]:
     files = [f for f in os.listdir(previsoes_path) if f.startswith('previsoes_tenis') and f.endswith('.csv')]
     if not files:
@@ -71,10 +80,34 @@ def normalize_name(name: str) -> str:
     s = name.strip().lower()
     s = unicodedata.normalize('NFKD', s)
     s = ''.join(ch for ch in s if not unicodedata.combining(ch))
+    # Normalize all whitespace (including newlines/tabs) before filtering punctuation.
+    s = re.sub(r'\s+', ' ', s)
     # Keep letters, numbers and spaces
     s = re.sub(r'[^a-z0-9 ]+', '', s)
     s = re.sub(r'\s+', ' ', s)
     return s.strip()
+
+
+def normalize_prediction_dataframe(df_pred: pd.DataFrame) -> pd.DataFrame:
+    """Map known column aliases to canonical names used by comparison logic."""
+    if df_pred is None or df_pred.empty:
+        return df_pred
+
+    rename_map = {}
+    columns_set = set(df_pred.columns)
+
+    for canonical, aliases in PREDICTION_COLUMN_ALIASES.items():
+        if canonical in columns_set:
+            continue
+        for alias in aliases:
+            if alias in columns_set:
+                rename_map[alias] = canonical
+                break
+
+    if rename_map:
+        df_pred = df_pred.rename(columns=rename_map)
+
+    return df_pred
 
 
 def match_prediction(pred_row: pd.Series, results_df: pd.DataFrame) -> Optional[pd.Series]:
@@ -111,6 +144,15 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
         pred_file_label = pred_file_label or os.path.basename(pred_file)
     else:
         pred_file_label = pred_file_label or (os.path.basename(pred_file) if pred_file else "predictions.json")
+
+    df_pred = normalize_prediction_dataframe(df_pred)
+
+    missing_core_cols = [c for c in ['Jogador 1', 'Jogador 2'] if c not in df_pred.columns]
+    if missing_core_cols:
+        raise ValueError(
+            "Colunas essenciais ausentes nas previsões: "
+            f"{missing_core_cols}. Colunas disponíveis: {list(df_pred.columns)}"
+        )
 
     # Scrape results for the results_date
     scraper = ResultsScraper()
@@ -198,14 +240,14 @@ def _load_predictions_from_json_url(pred_json_url: str) -> pd.DataFrame:
     data = res.json()
     if not isinstance(data, list):
         raise ValueError("JSON de previsões inválido: esperado uma lista")
-    return pd.DataFrame(data)
+    return normalize_prediction_dataframe(pd.DataFrame(data))
 
 
 def _load_predictions_from_json_file(pred_json_file: str) -> pd.DataFrame:
     df = pd.read_json(pred_json_file)
     if df.empty:
         raise ValueError("JSON de previsões vazio")
-    return df
+    return normalize_prediction_dataframe(df)
 
 
 def main():
