@@ -10,5 +10,17 @@
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
+  },
+  {
+    "surface": "Marrakech",
+    "total_predictions": 4,
+    "correct": 2,
+    "accuracy": 50.0
+  },
+  {
+    "surface": "Bucharest",
+    "total_predictions": 6,
+    "correct": 3,
+    "accuracy": 50.0
   }
 ]
