@@ -7,9 +7,9 @@
   },
   {
     "surface": "Monte Carlo",
-    "total_predictions": 44,
-    "correct": 28,
-    "accuracy": 63.64
+    "total_predictions": 55,
+    "correct": 34,
+    "accuracy": 61.82
   },
   {
     "surface": "Bucharest",
