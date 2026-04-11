@@ -194,5 +194,12 @@
     "correct": 4,
     "wrong": 3,
     "accuracy": 57.14
+  },
+  {
+    "date": "2026-04-10",
+    "total_predictions": 4,
+    "correct": 3,
+    "wrong": 1,
+    "accuracy": 75.0
   }
 ]
