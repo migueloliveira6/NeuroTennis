@@ -7,9 +7,9 @@
   },
   {
     "surface": "Monte Carlo",
-    "total_predictions": 66,
-    "correct": 41,
-    "accuracy": 62.12
+    "total_predictions": 68,
+    "correct": 43,
+    "accuracy": 63.24
   },
   {
     "surface": "Bucharest",
@@ -18,10 +18,22 @@
     "accuracy": 55.56
   },
   {
+    "surface": "Barcelona",
+    "total_predictions": 11,
+    "correct": 6,
+    "accuracy": 54.55
+  },
+  {
     "surface": "Miami",
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
+  },
+  {
+    "surface": "Munich",
+    "total_predictions": 6,
+    "correct": 2,
+    "accuracy": 33.33
   },
   {
     "surface": "Marrakech",
