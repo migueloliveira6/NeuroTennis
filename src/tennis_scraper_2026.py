@@ -146,6 +146,11 @@ class TennisAbstractScraper:
 
         # Dicionário com torneios, datas e superfícies
         tournament_calendar = {
+            "Monte-Carlo-Masters": ("20260405", "Clay"),
+            "Houston": ("20260330", "Clay"),
+            "Marrakech": ("20260330", "Clay"),
+            "Bucharest": ("20260330", "Clay"),
+            "Miami-Masters": ("20260318", "Hard"),
             "Indian-Wells-Masters": ("20260304", "Hard"),
             "Dubai": ("20260223", "Hard"),
             "Acapulco": ("20260223", "Hard"),
@@ -170,12 +175,30 @@ class TennisAbstractScraper:
             tourney_name, ("", "Hard")  # default caso não encontre
         )
 
+        tourney_name_lower = tourney_name.lower()
+        grand_slam_keywords = [
+            "australian-open",
+            "roland-garros",
+            "french-open",
+            "wimbledon",
+            "us-open",
+            "u.s.-open",
+            "usopen",
+        ]
+
+        if any(keyword in tourney_name_lower for keyword in grand_slam_keywords):
+            tourney_level = "W"
+        elif "masters" in tourney_name_lower:
+            tourney_level = "M"
+        else:
+            tourney_level = "A"
+
         # Valores padrão
         defaults = {
             "surface": surface,
             "tourney_date": date,
             "draw_size": 128,
-            "tourney_level": "ATP",
+            "tourney_level": tourney_level,
             "best_of": 3,
             "w_df": "",
             "w_svpt": "",
@@ -255,7 +278,7 @@ if __name__ == "__main__":
     matches = scraper.scrape_all_from_file(LINKS_2026)
     
     # Salvar dados
-    df = scraper.save_to_csv('tennis_2026_data_v2.csv')
+    df = scraper.save_to_csv('tennis_2026_data_v3.csv')
     
     if df is not None:
         print("\nPrimeiras 5 linhas do dataset:")

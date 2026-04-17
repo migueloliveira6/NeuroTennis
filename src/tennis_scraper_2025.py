@@ -207,12 +207,30 @@ class TennisAbstractScraper:
             tourney_name, ("", "Hard")  # default caso não encontre
         )
 
+        tourney_name_lower = tourney_name.lower()
+        grand_slam_keywords = [
+            "australian-open",
+            "roland-garros",
+            "french-open",
+            "wimbledon",
+            "us-open",
+            "u.s.-open",
+            "usopen",
+        ]
+
+        if any(keyword in tourney_name_lower for keyword in grand_slam_keywords):
+            tourney_level = "W"
+        elif "masters" in tourney_name_lower:
+            tourney_level = "M"
+        else:
+            tourney_level = "A"
+
         # Valores padrão
         defaults = {
             "surface": surface,
             "tourney_date": date,
             "draw_size": 128,
-            "tourney_level": "ATP",
+            "tourney_level": tourney_level,
             "best_of": 3,
             "w_df": "",
             "w_svpt": "",
@@ -239,7 +257,7 @@ class TennisAbstractScraper:
             matches = self.extract_match_data(soup, tournament)
             self.all_matches.extend(matches)
             print(f"   ✅ {len(matches)} partidas extraídas")
-            time.sleep(2)
+            time.sleep(4)
         except Exception as e:
             print(f"   ❌ Erro {tournament['tourney_name']}: {e}")
     
@@ -292,7 +310,7 @@ if __name__ == "__main__":
     matches = scraper.scrape_all_from_file(LINKS_2025)
     
     # Salvar dados
-    df = scraper.save_to_csv('tennis_2025_data_v3.csv')
+    df = scraper.save_to_csv('tennis_2025_data_v1.csv')
     
     if df is not None:
         print("\nPrimeiras 5 linhas do dataset:")
