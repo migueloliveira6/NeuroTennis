@@ -13,21 +13,21 @@
   },
   {
     "surface": "Munich",
-    "total_predictions": 38,
+    "total_predictions": 39,
     "correct": 23,
-    "accuracy": 60.53
+    "accuracy": 58.97
+  },
+  {
+    "surface": "Barcelona",
+    "total_predictions": 43,
+    "correct": 24,
+    "accuracy": 55.81
   },
   {
     "surface": "Bucharest",
     "total_predictions": 9,
     "correct": 5,
     "accuracy": 55.56
-  },
-  {
-    "surface": "Barcelona",
-    "total_predictions": 42,
-    "correct": 23,
-    "accuracy": 54.76
   },
   {
     "surface": "Miami",
