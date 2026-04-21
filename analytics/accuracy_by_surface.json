@@ -6,6 +6,12 @@
     "accuracy": 76.0
   },
   {
+    "surface": "Madrid",
+    "total_predictions": 20,
+    "correct": 13,
+    "accuracy": 65.0
+  },
+  {
     "surface": "Monte Carlo",
     "total_predictions": 69,
     "correct": 43,
