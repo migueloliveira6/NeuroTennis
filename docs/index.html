@@ -758,6 +758,42 @@
         // ==================== CARREGAR ESTATÍSTICAS ====================
         let accuracyTrendChart = null;
         let confidenceChart = null;
+        const TREND_GRANULARITY = 'daily'; // trocar para 'monthly' quando quiseres ver por mes
+
+        function buildTrendSeries(byDate, granularity = 'daily') {
+            if (granularity !== 'monthly') {
+                return {
+                    labels: byDate.map(d => d.date),
+                    data: byDate.map(d => Number(d.accuracy) || 0)
+                };
+            }
+
+            const monthMap = new Map();
+            byDate.forEach(item => {
+                const dateKey = String(item.date || '');
+                const monthKey = dateKey.slice(0, 7);
+                if (!monthKey || monthKey.length !== 7) return;
+
+                const total = Number(item.total_predictions) || 0;
+                const correct = Number(item.correct) || 0;
+                if (!monthMap.has(monthKey)) {
+                    monthMap.set(monthKey, { total: 0, correct: 0 });
+                }
+
+                const current = monthMap.get(monthKey);
+                current.total += total;
+                current.correct += correct;
+            });
+
+            const labels = Array.from(monthMap.keys()).sort();
+            const data = labels.map(month => {
+                const item = monthMap.get(month);
+                if (!item || item.total <= 0) return 0;
+                return Number(((item.correct / item.total) * 100).toFixed(2));
+            });
+
+            return { labels, data };
+        }
 
         async function loadStatistics() {
             console.debug('loadStatistics: starting');
@@ -791,6 +827,7 @@
                 } else {
                     // Verificar se Chart foi carregado
                     if (typeof Chart === 'undefined') throw new Error('Chart.js não carregado (Chart is undefined)');
+                    const trendSeries = buildTrendSeries(byDate, TREND_GRANULARITY);
 
                     // Gráfico de evolução temporal
                     const ctxTrend = document.getElementById('accuracyTrendChart').getContext('2d');
@@ -798,10 +835,10 @@
                     accuracyTrendChart = new Chart(ctxTrend, {
                         type: 'line',
                         data: {
-                            labels: byDate.map(d => d.date),
+                            labels: trendSeries.labels,
                             datasets: [{
                                 label: 'Taxa de Acerto (%)',
-                                data: byDate.map(d => Number(d.accuracy) || 0),
+                                data: trendSeries.data,
                                 borderColor: '#00c853',
                                 backgroundColor: 'rgba(0, 200, 83, 0.1)',
                                 tension: 0.4,
@@ -826,7 +863,10 @@
                                     grid: { color: 'rgba(255, 255, 255, 0.1)' }
                                 },
                                 x: {
-                                    ticks: { color: '#ffffff' },
+                                    ticks: {
+                                        color: '#ffffff',
+                                        autoSkip: false
+                                    },
                                     grid: { color: 'rgba(255, 255, 255, 0.1)' }
                                 }
                             },
