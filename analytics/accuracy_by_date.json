@@ -271,5 +271,12 @@
     "correct": 13,
     "wrong": 7,
     "accuracy": 65.0
+  },
+  {
+    "date": "2026-04-21",
+    "total_predictions": 10,
+    "correct": 8,
+    "wrong": 2,
+    "accuracy": 80.0
   }
 ]
