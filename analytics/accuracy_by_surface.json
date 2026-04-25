@@ -13,9 +13,9 @@
   },
   {
     "surface": "Madrid",
-    "total_predictions": 58,
-    "correct": 35,
-    "accuracy": 60.34
+    "total_predictions": 72,
+    "correct": 44,
+    "accuracy": 61.11
   },
   {
     "surface": "Munich",
