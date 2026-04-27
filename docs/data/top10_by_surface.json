@@ -1,0 +1,158 @@
+{
+  "hard": [
+    {
+      "name": "Jannik Sinner",
+      "elo": 2281.74300948925,
+      "player_id": 10
+    },
+    {
+      "name": "Carlos Alcaraz",
+      "elo": 2115.0676989836497,
+      "player_id": 94
+    },
+    {
+      "name": "Novak Djokovic",
+      "elo": 2076.5608343877384,
+      "player_id": 75
+    },
+    {
+      "name": "Alexander Zverev",
+      "elo": 2020.8707258720935,
+      "player_id": 2
+    },
+    {
+      "name": "Daniil Medvedev",
+      "elo": 1989.548678359413,
+      "player_id": 13
+    },
+    {
+      "name": "Jack Draper",
+      "elo": 1964.5952215451903,
+      "player_id": 140
+    },
+    {
+      "name": "Alex De Minaur",
+      "elo": 1945.2151866652532,
+      "player_id": 3
+    },
+    {
+      "name": "Felix Auger Aliassime",
+      "elo": 1940.0641915103504,
+      "player_id": 7
+    },
+    {
+      "name": "Ben Shelton",
+      "elo": 1916.9926882300495,
+      "player_id": 11
+    },
+    {
+      "name": "Arthur Fils",
+      "elo": 1910.053007705807,
+      "player_id": 126
+    }
+  ],
+  "clay": [
+    {
+      "name": "Carlos Alcaraz",
+      "elo": 2123.456364773512,
+      "player_id": 94
+    },
+    {
+      "name": "Novak Djokovic",
+      "elo": 1998.334335437487,
+      "player_id": 75
+    },
+    {
+      "name": "Jannik Sinner",
+      "elo": 1997.7021066694401,
+      "player_id": 10
+    },
+    {
+      "name": "Lorenzo Musetti",
+      "elo": 1962.0726603329613,
+      "player_id": 43
+    },
+    {
+      "name": "Alexander Zverev",
+      "elo": 1925.4529129981781,
+      "player_id": 2
+    },
+    {
+      "name": "Casper Ruud",
+      "elo": 1922.1663285401678,
+      "player_id": 32
+    },
+    {
+      "name": "Francisco Cerundolo",
+      "elo": 1869.0717512358372,
+      "player_id": 16
+    },
+    {
+      "name": "Tommy Paul",
+      "elo": 1868.7249625087072,
+      "player_id": 138
+    },
+    {
+      "name": "Arthur Fils",
+      "elo": 1865.4526132205042,
+      "player_id": 126
+    },
+    {
+      "name": "Stefanos Tsitsipas",
+      "elo": 1863.0864109792237,
+      "player_id": 139
+    }
+  ],
+  "grass": [
+    {
+      "name": "Novak Djokovic",
+      "elo": 1865.6697838212233,
+      "player_id": 75
+    },
+    {
+      "name": "Carlos Alcaraz",
+      "elo": 1772.5201783005027,
+      "player_id": 94
+    },
+    {
+      "name": "Taylor Fritz",
+      "elo": 1727.3677760498178,
+      "player_id": 12
+    },
+    {
+      "name": "Matteo Berrettini",
+      "elo": 1709.0955814298081,
+      "player_id": 45
+    },
+    {
+      "name": "Alexander Zverev",
+      "elo": 1696.7707691049213,
+      "player_id": 2
+    },
+    {
+      "name": "Marin Cilic",
+      "elo": 1693.4593248744056,
+      "player_id": 38
+    },
+    {
+      "name": "Daniil Medvedev",
+      "elo": 1682.6116485449643,
+      "player_id": 13
+    },
+    {
+      "name": "Alexander Bublik",
+      "elo": 1681.276815842047,
+      "player_id": 5
+    },
+    {
+      "name": "Lleyton Hewitt",
+      "elo": 1676.0496696322382,
+      "player_id": 1906
+    },
+    {
+      "name": "Jannik Sinner",
+      "elo": 1675.041782168447,
+      "player_id": 10
+    }
+  ]
+}
