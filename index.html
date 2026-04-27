@@ -205,16 +205,107 @@
             object-fit: contain;
         }
 
-        /* ==================== FUTURE PLACEHOLDER ==================== */
-        .future-features-placeholder {
-            margin-top: 30px;
-            padding: 15px 20px;
+        /* ==================== TOP 10 E TENDÊNCIAS ==================== */
+        .surface-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .surface-tab {
+            padding: 12px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
-            border: 1px dashed rgba(255, 255, 255, 0.15);
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Sakana', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .surface-tab:hover {
+            background: rgba(118, 75, 162, 0.2);
+            border-color: #764ba2;
+            color: #ffffff;
+        }
+
+        .surface-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border-color: #a466ea;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+        }
+
+        .top10-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(118, 75, 162, 0.3);
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
-            font-style: italic;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            background: rgba(118, 75, 162, 0.15);
+            border-color: #764ba2;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.2);
+        }
+
+        .player-rank {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            line-height: 35px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .player-name-card {
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 10px 0;
+            word-break: break-word;
+        }
+
+        .player-elo {
+            color: #a466ea;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        .player-elo-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin: 30px 0 20px 0;
+            font-size: 1.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(118, 75, 162, 0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
         }
 
         h1 {
@@ -596,9 +687,25 @@
                 </div>
             </div>
 
-            <!-- Placeholder futuro -->
-            <div class="future-features-placeholder">
-                <!-- 🔮 Futuro: Top 10 por ELO, Histórico de ELO, Rankings -->
+            <!-- Top 10 por Superfície -->
+            <div class="section">
+                <h2>🏆 Top 10 Jogadores por Superfície</h2>
+                
+                <div class="surface-tabs">
+                    <button class="surface-tab active" data-surface="hard">🔵 Hard</button>
+                    <button class="surface-tab" data-surface="clay">🟠 Clay</button>
+                    <button class="surface-tab" data-surface="grass">🟢 Grass</button>
+                </div>
+                
+                <div id="top10-container" class="top10-grid"></div>
+            </div>
+
+            <!-- Tendências de ELO -->
+            <div class="section">
+                <h2>📈 Evolução de ELO - Top 5 Jogadores</h2>
+                <div class="chart-card">
+                    <canvas id="eloTrendsChart" height="150"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -758,7 +865,7 @@
         // ==================== CARREGAR ESTATÍSTICAS ====================
         let accuracyTrendChart = null;
         let confidenceChart = null;
-        const TREND_GRANULARITY = 'daily'; // trocar para 'monthly' quando quiseres ver por mes
+        const TREND_GRANULARITY = 'monthly'; // trocar para 'daily' para granularidade diária
 
         function buildTrendSeries(byDate, granularity = 'daily') {
             if (granularity !== 'monthly') {
@@ -865,7 +972,6 @@
                                 x: {
                                     ticks: {
                                         color: '#ffffff',
-                                        autoSkip: false
                                     },
                                     grid: { color: 'rgba(255, 255, 255, 0.1)' }
                                 }
@@ -947,6 +1053,9 @@
 
                 // Marcar como carregado com sucesso
                 window.statsLoaded = true;
+                
+                // Carregar Top 10 e Tendências de ELO
+                await loadTop10AndTrends();
 
             } catch (error) {
                 console.error('Erro ao carregar estatísticas:', error);
@@ -957,6 +1066,162 @@
                 window.statsLoaded = false;
                 return;
             }
+        }
+
+        // ==================== TOP 10 E TENDÊNCIAS DE ELO ====================
+        let eloTrendsChart = null;
+        let currentSurface = 'hard';
+
+        async function loadTop10AndTrends() {
+            try {
+                // Carregar dados
+                const [top10Data, eloTrendsData] = await Promise.all([
+                    fetch('data/top10_by_surface.json').then(r => r.json()),
+                    fetch('data/elo_trends.json').then(r => r.json())
+                ]);
+
+                // Renderizar Top 10
+                renderTop10(top10Data, currentSurface);
+                
+                // Renderizar Tendências de ELO
+                renderEloTrends(eloTrendsData);
+                
+                // Event listeners para abas de superfície
+                document.querySelectorAll('.surface-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.surface-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        currentSurface = tab.getAttribute('data-surface');
+                        renderTop10(top10Data, currentSurface);
+                    });
+                });
+            } catch (error) {
+                console.error('Erro ao carregar top 10 e tendências:', error);
+                const container = document.getElementById('top10-container');
+                if (container) {
+                    container.innerHTML = `<p style="color: #ff5252; text-align: center;">⚠️ Erro ao carregar dados: ${error.message}</p>`;
+                }
+            }
+        }
+
+        function renderTop10(top10Data, surface) {
+            const container = document.getElementById('top10-container');
+            if (!container) return;
+
+            const players = top10Data[surface] || [];
+            
+            if (players.length === 0) {
+                container.innerHTML = '<p style="color: #999;">Sem dados disponíveis para esta superfície</p>';
+                return;
+            }
+
+            const html = players.map((player, index) => `
+                <div class="player-card">
+                    <div class="player-rank">${index + 1}</div>
+                    <div class="player-name-card">${player.name}</div>
+                    <div class="player-elo">${Number(player.elo).toFixed(0)}</div>
+                    <div class="player-elo-label">ELO Rating</div>
+                </div>
+            `).join('');
+
+            container.innerHTML = html;
+        }
+
+        function renderEloTrends(eloTrendsData) {
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js não carregado');
+                return;
+            }
+
+            const canvas = document.getElementById('eloTrendsChart');
+            if (!canvas) return;
+
+            // Preparar dados para o gráfico
+            const datasets = [];
+            const colors = ['#667eea', '#764ba2', '#a466ea', '#ff6b9d', '#feca57'];
+            let allDates = new Set();
+
+            // Recolher todas as datas
+            Object.values(eloTrendsData).forEach(player => {
+                if (player.dates) {
+                    player.dates.forEach(date => allDates.add(date));
+                }
+            });
+
+            const sortedDates = Array.from(allDates).sort();
+
+            // Criar dataset para cada jogador
+            Object.entries(eloTrendsData).forEach(([playerName, data], index) => {
+                if (data.dates && data.elos) {
+                    const eloByDate = {};
+                    data.dates.forEach((date, i) => {
+                        eloByDate[date] = data.elos[i];
+                    });
+
+                    const eloData = sortedDates.map(date => eloByDate[date] || null);
+
+                    datasets.push({
+                        label: playerName,
+                        data: eloData,
+                        borderColor: colors[index % colors.length],
+                        backgroundColor: 'transparent',
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        borderWidth: 2
+                    });
+                }
+            });
+
+            // Destruir gráfico anterior se existir
+            if (eloTrendsChart) {
+                eloTrendsChart.destroy();
+            }
+
+            // Criar novo gráfico
+            const ctx = canvas.getContext('2d');
+            eloTrendsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sortedDates.map(d => new Date(d).toLocaleDateString('pt-PT')),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ffffff',
+                                maxRotation: 45,
+                                minRotation: 0
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' },
+                            position: 'top'
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#764ba2',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
