@@ -13,9 +13,9 @@
   },
   {
     "surface": "Rome",
-    "total_predictions": 59,
-    "correct": 38,
-    "accuracy": 64.41
+    "total_predictions": 75,
+    "correct": 48,
+    "accuracy": 64.0
   },
   {
     "surface": "Monte Carlo",
