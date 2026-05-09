@@ -21,6 +21,7 @@ models/*.pkl
 !models/tennis_surface_elo_data_xgboost.pkl
 datasets/*.csv
 !datasets/tennis_data.db
+data/
 previsoes/*
 !previsoes/previsoes_tenis.csv
 notebooks/*

@@ -146,6 +146,9 @@ class TennisAbstractScraper:
 
         # Dicionário com torneios, datas e superfícies
         tournament_calendar = {
+            "Madrid-Masters": ("20260422", "Clay"),
+            "Munich": ("20260413", "Clay"),
+            "Barcelona": ("20260413", "Clay"),
             "Monte-Carlo-Masters": ("20260405", "Clay"),
             "Houston": ("20260330", "Clay"),
             "Marrakech": ("20260330", "Clay"),
@@ -278,7 +281,7 @@ if __name__ == "__main__":
     matches = scraper.scrape_all_from_file(LINKS_2026)
     
     # Salvar dados
-    df = scraper.save_to_csv('tennis_2026_data_v3.csv')
+    df = scraper.save_to_csv('tennis_2026_data_v4.csv')
     
     if df is not None:
         print("\nPrimeiras 5 linhas do dataset:")
