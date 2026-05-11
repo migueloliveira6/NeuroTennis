@@ -1,10 +1,10 @@
 {
-  "total_predictions": 539,
-  "correct": 338,
-  "wrong": 201,
+  "total_predictions": 547,
+  "correct": 343,
+  "wrong": 204,
   "accuracy": 62.71,
-  "comparison_file": "comparacao_previsoes_2026-05-09.csv",
-  "comparison_date": "2026-05-09",
-  "runs_processed": 54,
-  "last_updated": "2026-05-10 22:35:01"
+  "comparison_file": "comparacao_previsoes_2026-05-10.csv",
+  "comparison_date": "2026-05-10",
+  "runs_processed": 55,
+  "last_updated": "2026-05-11 22:44:37"
 }
