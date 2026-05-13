@@ -19,9 +19,9 @@
   },
   {
     "surface": "Rome",
-    "total_predictions": 104,
-    "correct": 64,
-    "accuracy": 61.54
+    "total_predictions": 111,
+    "correct": 68,
+    "accuracy": 61.26
   },
   {
     "surface": "Munich",
