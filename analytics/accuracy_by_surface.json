@@ -6,6 +6,18 @@
     "accuracy": 76.0
   },
   {
+    "surface": "Geneva",
+    "total_predictions": 4,
+    "correct": 3,
+    "accuracy": 75.0
+  },
+  {
+    "surface": "Hamburg",
+    "total_predictions": 6,
+    "correct": 4,
+    "accuracy": 66.67
+  },
+  {
     "surface": "Madrid",
     "total_predictions": 110,
     "correct": 71,
@@ -13,9 +25,9 @@
   },
   {
     "surface": "Rome",
-    "total_predictions": 117,
-    "correct": 74,
-    "accuracy": 63.25
+    "total_predictions": 118,
+    "correct": 75,
+    "accuracy": 63.56
   },
   {
     "surface": "Monte Carlo",
