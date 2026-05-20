@@ -1,6 +1,6 @@
 [
   {
-    "surface": "Hamburg",
+    "surface": "Geneva",
     "total_predictions": 13,
     "correct": 10,
     "accuracy": 76.92
@@ -12,16 +12,16 @@
     "accuracy": 76.0
   },
   {
-    "surface": "Geneva",
-    "total_predictions": 9,
-    "correct": 6,
-    "accuracy": 66.67
+    "surface": "Hamburg",
+    "total_predictions": 19,
+    "correct": 13,
+    "accuracy": 68.42
   },
   {
     "surface": "French Open",
-    "total_predictions": 24,
-    "correct": 16,
-    "accuracy": 66.67
+    "total_predictions": 52,
+    "correct": 35,
+    "accuracy": 67.31
   },
   {
     "surface": "Madrid",
