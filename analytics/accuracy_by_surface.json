@@ -1,27 +1,15 @@
 [
   {
-    "surface": "Geneva",
-    "total_predictions": 13,
-    "correct": 10,
-    "accuracy": 76.92
-  },
-  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
     "accuracy": 76.0
   },
   {
-    "surface": "Hamburg",
-    "total_predictions": 19,
-    "correct": 13,
-    "accuracy": 68.42
-  },
-  {
-    "surface": "French Open",
-    "total_predictions": 52,
-    "correct": 35,
-    "accuracy": 67.31
+    "surface": "Geneva",
+    "total_predictions": 21,
+    "correct": 15,
+    "accuracy": 71.43
   },
   {
     "surface": "Madrid",
@@ -40,6 +28,18 @@
     "total_predictions": 69,
     "correct": 43,
     "accuracy": 62.32
+  },
+  {
+    "surface": "French Open",
+    "total_predictions": 79,
+    "correct": 48,
+    "accuracy": 60.76
+  },
+  {
+    "surface": "Hamburg",
+    "total_predictions": 25,
+    "correct": 15,
+    "accuracy": 60.0
   },
   {
     "surface": "Munich",
