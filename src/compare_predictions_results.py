@@ -32,7 +32,9 @@ PREDICTION_COLUMN_ALIASES = {
     'Jogador 1': ['Jogador 1', 'player1', 'player_1', 'Player 1', 'jogador1', 'jogador_1'],
     'Jogador 2': ['Jogador 2', 'player2', 'player_2', 'Player 2', 'jogador2', 'jogador_2'],
     'Vencedor Previsto': ['Vencedor Previsto', 'winner_pred', 'predicted_winner', 'winner_prediction', 'predictedWinner'],
-    'Confiança (%)': ['Confiança (%)', 'confidence', 'Confidence', 'confidence_pct', 'probability']
+    'Confiança (%)': ['Confiança (%)', 'confidence', 'Confidence', 'confidence_pct', 'probability'],
+    'Valor Aposta': ['Valor Aposta', 'valor_aposta', 'stake', 'bet_value'],
+    'ROI Esperado (%)': ['ROI Esperado (%)', 'roi_esperado', 'expected_roi', 'roi_expected']
 }
 
 
@@ -167,10 +169,29 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
     total = 0
     correct = 0
     matched = 0
+    bets_placed = 0
+    bets_won = 0
+    bets_lost = 0
+    stake_total = 0.0
+    return_total = 0.0
+    profit_total = 0.0
+
+    def _safe_float(value) -> float:
+        try:
+            if value is None or pd.isna(value):
+                return 0.0
+            return float(value)
+        except (TypeError, ValueError):
+            return 0.0
 
     for _, pred in df_pred.iterrows():
         total += 1
         matched_row = match_prediction(pred, results_df)
+        stake = _safe_float(pred.get('Valor Aposta'))
+        bet_placed = stake > 0
+        bet_result = 'NO_BET'
+        bet_return = 0.0
+        bet_profit = 0.0
 
         if matched_row is not None:
             matched += 1
@@ -181,12 +202,40 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
             is_correct = normalize_name(pred.get('Vencedor Previsto', '')) == normalize_name(actual_winner)
             if is_correct:
                 correct += 1
+
+            if bet_placed:
+                bets_placed += 1
+                if is_correct:
+                    bets_won += 1
+                    odd_vencedor = _safe_float(
+                        pred.get('Odd 1')
+                        if normalize_name(pred.get('Jogador 1', '')) == normalize_name(actual_winner)
+                        else pred.get('Odd 2')
+                    )
+                    if odd_vencedor > 0:
+                        bet_return = round(stake * odd_vencedor, 3)
+                        bet_profit = round(bet_return - stake, 3)
+                    else:
+                        bet_return = round(stake, 3)
+                        bet_profit = 0.0
+                    bet_result = 'WIN'
+                else:
+                    bets_lost += 1
+                    bet_return = 0.0
+                    bet_profit = round(-stake, 3)
+                    bet_result = 'LOSS'
+
+                stake_total += stake
+                return_total += bet_return
+                profit_total += bet_profit
         else:
             actual_winner = None
             actual_loser = None
             score = None
             tourney = None
             is_correct = False
+            if bet_placed:
+                bet_result = 'UNMATCHED'
 
         out_rows.append({
             'Pred_File': pred_file_label,
@@ -196,6 +245,11 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
             'Jogador 2': pred.get('Jogador 2'),
             'Vencedor Previsto': pred.get('Vencedor Previsto'),
             'Confiança (%)': pred.get('Confiança (%)'),
+            'Valor Aposta': stake,
+            'Aposta Realizada': bool(bet_placed),
+            'Resultado Aposta': bet_result,
+            'Retorno Aposta': round(bet_return, 3),
+            'Lucro Aposta': round(bet_profit, 3),
             'Actual_Winner': actual_winner,
             'Actual_Loser': actual_loser,
             'Score': score,
@@ -211,7 +265,15 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
         'matched': matched,
         'correct': correct,
         'accuracy': (correct / matched) if matched else None,
-        'coverage': (matched / total) if total else None
+        'coverage': (matched / total) if total else None,
+        'bets_placed': bets_placed,
+        'bets_won': bets_won,
+        'bets_lost': bets_lost,
+        'stake_total': round(stake_total, 3),
+        'return_total': round(return_total, 3),
+        'profit_total': round(profit_total, 3),
+        'bet_accuracy': (bets_won / bets_placed) if bets_placed else None,
+        'bet_roi': (profit_total / stake_total) if stake_total else None
     }
 
     # Salvar CSV
@@ -228,6 +290,17 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
         print(f"Accuracy (sobre matched): {summary['accuracy']:.2%}")
     if summary['coverage'] is not None:
         print(f"Cobertura (matched/total): {summary['coverage']:.2%}")
+    if summary['bets_placed']:
+        print(f"Apostas feitas: {summary['bets_placed']}")
+        print(f"Apostas ganhas: {summary['bets_won']}")
+        print(f"Apostas perdidas: {summary['bets_lost']}")
+        print(f"Valor apostado: {summary['stake_total']:.3f}")
+        print(f"Retorno total: {summary['return_total']:.3f}")
+        print(f"Lucro/prejuízo: {summary['profit_total']:.3f}")
+        if summary['bet_accuracy'] is not None:
+            print(f"Acurácia das apostas: {summary['bet_accuracy']:.2%}")
+        if summary['bet_roi'] is not None:
+            print(f"ROI das apostas: {summary['bet_roi']:.2%}")
 
     print(f"CSV salvo em: {out_path}\n")
 

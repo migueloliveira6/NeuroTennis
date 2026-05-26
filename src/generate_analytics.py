@@ -31,6 +31,12 @@ def save_json_file(path, data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
+def numeric_series(df, column_name, default=0.0):
+    if column_name not in df.columns:
+        return pd.Series([default] * len(df), index=df.index, dtype=float)
+    return pd.to_numeric(df[column_name], errors='coerce').fillna(default)
+
+
 def upsert_count_entry(existing_items, key_name, key_value, delta_total, delta_correct):
     items_by_key = {str(item.get(key_name)): dict(item) for item in existing_items if key_name in item}
 
@@ -118,6 +124,32 @@ if df_matched.empty:
 
 print(f"\n📈 Total de previsões matched: {len(df_matched)}")
 
+stake_series = numeric_series(df_matched, 'Valor Aposta', 0.0)
+bet_mask = stake_series > 0
+
+if 'Resultado Aposta' in df_matched.columns:
+    bet_result_series = df_matched['Resultado Aposta'].fillna('NO_BET').astype(str).str.upper()
+else:
+    bet_result_series = pd.Series(
+        [
+            'WIN' if bool(correct) and bool(bet) else 'LOSS' if bool(bet) else 'NO_BET'
+            for correct, bet in zip(df_matched['Correct'].fillna(False), bet_mask)
+        ],
+        index=df_matched.index,
+        dtype=str,
+    )
+
+bet_wins_series = bet_mask & (bet_result_series == 'WIN')
+bet_losses_series = bet_mask & (bet_result_series == 'LOSS')
+bet_stake_total = float(stake_series[bet_mask].sum())
+bet_return_total = float(numeric_series(df_matched, 'Retorno Aposta', 0.0)[bet_mask].sum())
+bet_profit_total = float(numeric_series(df_matched, 'Lucro Aposta', 0.0)[bet_mask].sum())
+bet_bets_total = int(bet_mask.sum())
+bet_wins_total = int(bet_wins_series.sum())
+bet_losses_total = int(bet_losses_series.sum())
+bet_accuracy = (bet_wins_total / bet_bets_total * 100) if bet_bets_total > 0 else 0
+bet_roi = (bet_profit_total / bet_stake_total * 100) if bet_stake_total > 0 else 0
+
 # === 5️⃣ Preparar paths e estado persistente ===
 global_stats_path = os.path.join(DOCS_DATA_DIR, "global_stats.json")
 accuracy_by_date_path = os.path.join(DOCS_DATA_DIR, "accuracy_by_date.json")
@@ -141,7 +173,15 @@ new_entry = {
     "total_predictions": int(total),
     "correct": int(correct),
     "wrong": int(wrong),
-    "accuracy": round(acc, 2)
+    "accuracy": round(acc, 2),
+    "bet_bets": bet_bets_total,
+    "bet_wins": bet_wins_total,
+    "bet_losses": bet_losses_total,
+    "bet_stake_total": round(bet_stake_total, 3),
+    "bet_return_total": round(bet_return_total, 3),
+    "bet_profit_total": round(bet_profit_total, 3),
+    "bet_accuracy": round(bet_accuracy, 2),
+    "bet_roi": round(bet_roi, 2)
 }
 
 accuracy_by_date = load_json_file(accuracy_by_date_path, [])
@@ -158,12 +198,28 @@ total_predictions_cumulative = sum(int(item.get("total_predictions", 0)) for ite
 total_correct_cumulative = sum(int(item.get("correct", 0)) for item in accuracy_by_date)
 total_wrong_cumulative = total_predictions_cumulative - total_correct_cumulative
 accuracy_global = (total_correct_cumulative / total_predictions_cumulative * 100) if total_predictions_cumulative > 0 else 0
+bet_bets_cumulative = sum(int(item.get("bet_bets", 0)) for item in accuracy_by_date)
+bet_wins_cumulative = sum(int(item.get("bet_wins", 0)) for item in accuracy_by_date)
+bet_losses_cumulative = sum(int(item.get("bet_losses", 0)) for item in accuracy_by_date)
+bet_stake_cumulative = sum(float(item.get("bet_stake_total", 0)) for item in accuracy_by_date)
+bet_return_cumulative = sum(float(item.get("bet_return_total", 0)) for item in accuracy_by_date)
+bet_profit_cumulative = sum(float(item.get("bet_profit_total", 0)) for item in accuracy_by_date)
+bet_accuracy_global = (bet_wins_cumulative / bet_bets_cumulative * 100) if bet_bets_cumulative > 0 else 0
+bet_roi_global = (bet_profit_cumulative / bet_stake_cumulative * 100) if bet_stake_cumulative > 0 else 0
 
 global_stats = {
     "total_predictions": int(total_predictions_cumulative),
     "correct": int(total_correct_cumulative),
     "wrong": int(total_wrong_cumulative),
     "accuracy": round(accuracy_global, 2),
+    "bet_bets": int(bet_bets_cumulative),
+    "bet_wins": int(bet_wins_cumulative),
+    "bet_losses": int(bet_losses_cumulative),
+    "bet_stake_total": round(bet_stake_cumulative, 3),
+    "bet_return_total": round(bet_return_cumulative, 3),
+    "bet_profit_total": round(bet_profit_cumulative, 3),
+    "bet_accuracy": round(bet_accuracy_global, 2),
+    "bet_roi": round(bet_roi_global, 2),
     "comparison_file": latest_csv_name,
     "comparison_date": comparison_date,
     "runs_processed": int(len(processed_files) + (0 if already_processed else 1)),
@@ -171,6 +227,11 @@ global_stats = {
 }
 
 print(f"   ✓ Taxa de acerto global acumulada: {accuracy_global:.1f}%")
+if bet_bets_cumulative > 0:
+    print(f"   ✓ Apostas acumuladas: {bet_bets_cumulative} | Ganhas: {bet_wins_cumulative} | Perdidas: {bet_losses_cumulative}")
+    print(f"   ✓ Stake acumulado: {bet_stake_cumulative:.3f} | Retorno acumulado: {bet_return_cumulative:.3f} | Lucro acumulado: {bet_profit_cumulative:.3f}")
+    print(f"   ✓ Acurácia das apostas acumulada: {bet_accuracy_global:.1f}%")
+    print(f"   ✓ ROI das apostas acumulado: {bet_roi_global:.1f}%")
 
 # === 8️⃣ Agregação por superfície ===
 accuracy_by_surface = load_json_file(accuracy_by_surface_path, [])

@@ -774,6 +774,14 @@ def enviar_estatisticas_telegram(estatisticas: Dict[str, Any], token: str, chat_
         correct = estatisticas.get('correct', 'N/A')
         accuracy = estatisticas.get('accuracy', None)
         coverage = estatisticas.get('coverage', None)
+        bets_placed = estatisticas.get('bets_placed', None)
+        bets_won = estatisticas.get('bets_won', None)
+        bets_lost = estatisticas.get('bets_lost', None)
+        stake_total = estatisticas.get('stake_total', None)
+        return_total = estatisticas.get('return_total', None)
+        profit_total = estatisticas.get('profit_total', None)
+        bet_accuracy = estatisticas.get('bet_accuracy', None)
+        bet_roi = estatisticas.get('bet_roi', None)
 
         linhas = [
             "*Resumo das Comparações de Previsões*",
@@ -797,6 +805,24 @@ def enviar_estatisticas_telegram(estatisticas: Dict[str, Any], token: str, chat_
                 linhas.append(f"Cobertura (matched/total): {coverage}")
         else:
             linhas.append("Cobertura (matched/total): N/A")
+
+        if bets_placed is not None:
+            linhas.append("")
+            linhas.append("*Resumo das Apostas*")
+            linhas.append(f"Apostas feitas: {bets_placed}")
+            linhas.append(f"Apostas ganhas: {bets_won if bets_won is not None else 'N/A'}")
+            linhas.append(f"Apostas perdidas: {bets_lost if bets_lost is not None else 'N/A'}")
+            linhas.append(f"Valor apostado: {stake_total:.3f}" if isinstance(stake_total, (int, float)) else "Valor apostado: N/A")
+            linhas.append(f"Retorno total: {return_total:.3f}" if isinstance(return_total, (int, float)) else "Retorno total: N/A")
+            linhas.append(f"Lucro/prejuízo: {profit_total:.3f}" if isinstance(profit_total, (int, float)) else "Lucro/prejuízo: N/A")
+            if bet_accuracy is not None:
+                linhas.append(f"Acurácia das apostas: {bet_accuracy:.2%}")
+            else:
+                linhas.append("Acurácia das apostas: N/A")
+            if bet_roi is not None:
+                linhas.append(f"ROI das apostas: {bet_roi:.2%}")
+            else:
+                linhas.append("ROI das apostas: N/A")
 
         mensagem = "\n".join(linhas)
 
@@ -842,13 +868,37 @@ def enviar_comparacao_telegram(file_path: Optional[str], token: str, chat_id: st
         correct = int(df['Correct'].astype(bool).sum()) if 'Correct' in df.columns else 0
         accuracy = (correct / matched) if matched else None
         coverage = (matched / total) if total else None
+        stake_series = pd.to_numeric(df['Valor Aposta'], errors='coerce').fillna(0) if 'Valor Aposta' in df.columns else pd.Series([0] * len(df))
+        bet_mask = stake_series > 0
+
+        if 'Resultado Aposta' in df.columns:
+            bet_result_series = df['Resultado Aposta'].fillna('NO_BET').astype(str).str.upper()
+        else:
+            bet_result_series = pd.Series(['NO_BET'] * len(df))
+
+        bets_placed = int(bet_mask.sum())
+        bets_won = int((bet_mask & (bet_result_series == 'WIN')).sum())
+        bets_lost = int((bet_mask & (bet_result_series == 'LOSS')).sum())
+        stake_total = float(stake_series[bet_mask].sum())
+        return_total = float(pd.to_numeric(df['Retorno Aposta'], errors='coerce').fillna(0)[bet_mask].sum()) if 'Retorno Aposta' in df.columns else 0.0
+        profit_total = float(pd.to_numeric(df['Lucro Aposta'], errors='coerce').fillna(0)[bet_mask].sum()) if 'Lucro Aposta' in df.columns else 0.0
+        bet_accuracy = (bets_won / bets_placed) if bets_placed else None
+        bet_roi = (profit_total / stake_total) if stake_total else None
 
         summary = {
             'predictions_total': total,
             'matched': matched,
             'correct': correct,
             'accuracy': accuracy,
-            'coverage': coverage
+            'coverage': coverage,
+            'bets_placed': bets_placed,
+            'bets_won': bets_won,
+            'bets_lost': bets_lost,
+            'stake_total': stake_total,
+            'return_total': return_total,
+            'profit_total': profit_total,
+            'bet_accuracy': bet_accuracy,
+            'bet_roi': bet_roi
         }
 
         logger.info(f"📤 Enviando resumo da comparação ({os.path.basename(path)}) via Telegram")
