@@ -12,6 +12,12 @@
     "accuracy": 64.55
   },
   {
+    "surface": "French Open",
+    "total_predictions": 135,
+    "correct": 87,
+    "accuracy": 64.44
+  },
+  {
     "surface": "Geneva",
     "total_predictions": 28,
     "correct": 18,
@@ -28,12 +34,6 @@
     "total_predictions": 69,
     "correct": 43,
     "accuracy": 62.32
-  },
-  {
-    "surface": "French Open",
-    "total_predictions": 112,
-    "correct": 68,
-    "accuracy": 60.71
   },
   {
     "surface": "Hamburg",

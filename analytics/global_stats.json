@@ -1,10 +1,18 @@
 {
-  "total_predictions": 740,
-  "correct": 462,
-  "wrong": 278,
-  "accuracy": 62.43,
-  "comparison_file": "comparacao_previsoes_2026-05-24.csv",
-  "comparison_date": "2026-05-24",
-  "runs_processed": 69,
-  "last_updated": "2026-05-25 22:50:53"
+  "total_predictions": 763,
+  "correct": 481,
+  "wrong": 282,
+  "accuracy": 63.04,
+  "bet_bets": 12,
+  "bet_wins": 9,
+  "bet_losses": 3,
+  "bet_stake_total": 2.268,
+  "bet_return_total": 2.775,
+  "bet_profit_total": 0.507,
+  "bet_accuracy": 75.0,
+  "bet_roi": 22.35,
+  "comparison_file": "comparacao_previsoes_2026-05-25.csv",
+  "comparison_date": "2026-05-25",
+  "runs_processed": 70,
+  "last_updated": "2026-05-26 23:00:21"
 }

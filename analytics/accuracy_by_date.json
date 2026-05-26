@@ -495,5 +495,20 @@
     "correct": 12,
     "wrong": 6,
     "accuracy": 66.67
+  },
+  {
+    "date": "2026-05-25",
+    "total_predictions": 23,
+    "correct": 19,
+    "wrong": 4,
+    "accuracy": 82.61,
+    "bet_bets": 12,
+    "bet_wins": 9,
+    "bet_losses": 3,
+    "bet_stake_total": 2.268,
+    "bet_return_total": 2.775,
+    "bet_profit_total": 0.507,
+    "bet_accuracy": 75.0,
+    "bet_roi": 22.35
   }
 ]
