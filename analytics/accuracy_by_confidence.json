@@ -13,14 +13,14 @@
   },
   {
     "confidence_range": "60-69%",
-    "total_predictions": 213,
-    "correct": 130,
-    "accuracy": 61.03
+    "total_predictions": 214,
+    "correct": 131,
+    "accuracy": 61.21
   },
   {
     "confidence_range": "50-59%",
-    "total_predictions": 213,
+    "total_predictions": 214,
     "correct": 112,
-    "accuracy": 52.58
+    "accuracy": 52.34
   }
 ]
