@@ -1,5 +1,11 @@
 [
   {
+    "surface": "Stuttgart",
+    "total_predictions": 5,
+    "correct": 5,
+    "accuracy": 100.0
+  },
+  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
