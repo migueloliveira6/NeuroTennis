@@ -1,9 +1,15 @@
 [
   {
-    "surface": "Stuttgart",
-    "total_predictions": 5,
-    "correct": 5,
+    "surface": "Hertogenbosch",
+    "total_predictions": 3,
+    "correct": 3,
     "accuracy": 100.0
+  },
+  {
+    "surface": "Stuttgart",
+    "total_predictions": 9,
+    "correct": 7,
+    "accuracy": 77.78
   },
   {
     "surface": "Indian Wells",
@@ -13,9 +19,9 @@
   },
   {
     "surface": "French Open",
-    "total_predictions": 204,
-    "correct": 134,
-    "accuracy": 65.69
+    "total_predictions": 205,
+    "correct": 135,
+    "accuracy": 65.85
   },
   {
     "surface": "Madrid",
