@@ -298,7 +298,7 @@ def compare(pred_file: Optional[str], results_date: datetime, out_dir: str = 'pr
         print(f"Retorno total: {summary['return_total']:.3f}")
         print(f"Lucro/prejuízo: {summary['profit_total']:.3f}")
         if summary['bet_accuracy'] is not None:
-            print(f"Acurácia das apostas: {summary['bet_accuracy']:.2%}")
+            print(f"Acerto das apostas: {summary['bet_accuracy']:.2%}")
         if summary['bet_roi'] is not None:
             print(f"ROI das apostas: {summary['bet_roi']:.2%}")
 

@@ -4,7 +4,6 @@ import numpy as np
 import joblib
 from datetime import datetime
 from sklearn.metrics import accuracy_score, f1_score, classification_report, log_loss, brier_score_loss, mean_absolute_error, r2_score, balanced_accuracy_score
-from difflib import get_close_matches
 from xgboost import XGBClassifier
 import optuna
 from dotenv import load_dotenv

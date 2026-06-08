@@ -25,6 +25,9 @@ data/
 previsoes/*
 !previsoes/previsoes_tenis.csv
 notebooks/*
+src/
+metrics/*
+outputs/
 
 # 🔹 Dados brutos e intermediários
 src/*.csv
