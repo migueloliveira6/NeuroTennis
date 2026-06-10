@@ -1,9 +1,9 @@
 [
   {
     "surface": "Hertogenbosch",
-    "total_predictions": 7,
+    "total_predictions": 9,
     "correct": 7,
-    "accuracy": 100.0
+    "accuracy": 77.78
   },
   {
     "surface": "Indian Wells",
@@ -42,6 +42,12 @@
     "accuracy": 62.32
   },
   {
+    "surface": "Stuttgart",
+    "total_predictions": 20,
+    "correct": 12,
+    "accuracy": 60.0
+  },
+  {
     "surface": "Hamburg",
     "total_predictions": 32,
     "correct": 19,
@@ -52,12 +58,6 @@
     "total_predictions": 39,
     "correct": 23,
     "accuracy": 58.97
-  },
-  {
-    "surface": "Stuttgart",
-    "total_predictions": 12,
-    "correct": 7,
-    "accuracy": 58.33
   },
   {
     "surface": "Barcelona",
