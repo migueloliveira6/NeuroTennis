@@ -6,16 +6,16 @@
     "accuracy": 76.0
   },
   {
+    "surface": "Stuttgart",
+    "total_predictions": 27,
+    "correct": 18,
+    "accuracy": 66.67
+  },
+  {
     "surface": "French Open",
     "total_predictions": 205,
     "correct": 135,
     "accuracy": 65.85
-  },
-  {
-    "surface": "Stuttgart",
-    "total_predictions": 23,
-    "correct": 15,
-    "accuracy": 65.22
   },
   {
     "surface": "Madrid",
@@ -54,12 +54,6 @@
     "accuracy": 58.97
   },
   {
-    "surface": "Hertogenbosch",
-    "total_predictions": 14,
-    "correct": 8,
-    "accuracy": 57.14
-  },
-  {
     "surface": "Barcelona",
     "total_predictions": 43,
     "correct": 24,
@@ -76,6 +70,12 @@
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
+  },
+  {
+    "surface": "Hertogenbosch",
+    "total_predictions": 19,
+    "correct": 10,
+    "accuracy": 52.63
   },
   {
     "surface": "Marrakech",
