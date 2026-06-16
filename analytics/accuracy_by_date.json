@@ -780,5 +780,20 @@
     "bet_profit_total": -0.813,
     "bet_accuracy": 20.0,
     "bet_roi": -69.19
+  },
+  {
+    "date": "2026-06-15",
+    "total_predictions": 8,
+    "correct": 6,
+    "wrong": 2,
+    "accuracy": 75.0,
+    "bet_bets": 2,
+    "bet_wins": 1,
+    "bet_losses": 1,
+    "bet_stake_total": 0.028,
+    "bet_return_total": 0.021,
+    "bet_profit_total": -0.007,
+    "bet_accuracy": 50.0,
+    "bet_roi": -25.0
   }
 ]

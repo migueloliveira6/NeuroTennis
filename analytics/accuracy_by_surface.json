@@ -1,21 +1,27 @@
 [
   {
-    "surface": "Halle",
-    "total_predictions": 10,
-    "correct": 8,
-    "accuracy": 80.0
-  },
-  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
     "accuracy": 76.0
   },
   {
+    "surface": "Halle",
+    "total_predictions": 15,
+    "correct": 11,
+    "accuracy": 73.33
+  },
+  {
     "surface": "Stuttgart",
     "total_predictions": 34,
     "correct": 24,
     "accuracy": 70.59
+  },
+  {
+    "surface": "Queen's Club",
+    "total_predictions": 13,
+    "correct": 9,
+    "accuracy": 69.23
   },
   {
     "surface": "French Open",
@@ -46,12 +52,6 @@
     "total_predictions": 69,
     "correct": 43,
     "accuracy": 62.32
-  },
-  {
-    "surface": "Queen's Club",
-    "total_predictions": 10,
-    "correct": 6,
-    "accuracy": 60.0
   },
   {
     "surface": "Hamburg",
