@@ -6,22 +6,10 @@
     "accuracy": 76.0
   },
   {
-    "surface": "Halle",
-    "total_predictions": 15,
-    "correct": 11,
-    "accuracy": 73.33
-  },
-  {
     "surface": "Stuttgart",
     "total_predictions": 34,
     "correct": 24,
     "accuracy": 70.59
-  },
-  {
-    "surface": "Queen's Club",
-    "total_predictions": 13,
-    "correct": 9,
-    "accuracy": 69.23
   },
   {
     "surface": "French Open",
@@ -40,6 +28,12 @@
     "total_predictions": 28,
     "correct": 18,
     "accuracy": 64.29
+  },
+  {
+    "surface": "Queen's Club",
+    "total_predictions": 25,
+    "correct": 16,
+    "accuracy": 64.0
   },
   {
     "surface": "Rome",
@@ -88,6 +82,12 @@
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
+  },
+  {
+    "surface": "Halle",
+    "total_predictions": 23,
+    "correct": 12,
+    "accuracy": 52.17
   },
   {
     "surface": "Marrakech",
