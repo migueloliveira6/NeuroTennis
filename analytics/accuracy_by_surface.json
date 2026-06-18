@@ -30,12 +30,6 @@
     "accuracy": 64.29
   },
   {
-    "surface": "Queen's Club",
-    "total_predictions": 25,
-    "correct": 16,
-    "accuracy": 64.0
-  },
-  {
     "surface": "Rome",
     "total_predictions": 118,
     "correct": 75,
@@ -46,6 +40,12 @@
     "total_predictions": 69,
     "correct": 43,
     "accuracy": 62.32
+  },
+  {
+    "surface": "Queen's Club",
+    "total_predictions": 29,
+    "correct": 18,
+    "accuracy": 62.07
   },
   {
     "surface": "Hamburg",
@@ -66,6 +66,12 @@
     "accuracy": 58.97
   },
   {
+    "surface": "Halle",
+    "total_predictions": 29,
+    "correct": 17,
+    "accuracy": 58.62
+  },
+  {
     "surface": "Barcelona",
     "total_predictions": 43,
     "correct": 24,
@@ -82,12 +88,6 @@
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
-  },
-  {
-    "surface": "Halle",
-    "total_predictions": 23,
-    "correct": 12,
-    "accuracy": 52.17
   },
   {
     "surface": "Marrakech",
