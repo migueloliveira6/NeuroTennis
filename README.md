@@ -427,6 +427,41 @@ Website: [https://migueloliveira6.github.io/NeuroTennis/](https://migueloliveira
 
 ⭐ **Se este projeto te foi útil, considera dar uma estrela!** ⭐
 
+## Clustering de Estilo de Jogo
+
+Foi adicionado um pipeline separado para clustering de jogadores ATP por temporada, usando a base SQLite existente em `datasets/tennis_data.db`.
+
+### O que faz
+
+- Carrega as partidas diretamente da tabela `matches`
+- Constrói observações no nível player-season
+- Calcula features de serviço, retorno, superfície e agressividade
+- Compara KMeans, GMM, clustering hierárquico e HDBSCAN
+- Exporta tabelas, métricas e gráficos para `outputs/`
+
+### Como executar
+
+```bash
+python main.py --db-path datasets/tennis_data.db --start-year 2024 --end-year 2024
+```
+
+### Saídas geradas
+
+- `outputs/player_season_clusters.csv`
+- `outputs/cluster_profiles.csv`
+- `outputs/clustering_metrics.csv`
+- `outputs/cluster_report.json`
+- `outputs/figures/`
+
+### Dependências extras
+
+Para gerar visualizações completas, instale também:
+
+- seaborn
+- plotly
+- umap-learn
+- hdbscan
+
 
 
 
