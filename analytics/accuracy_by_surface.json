@@ -1,9 +1,9 @@
 [
   {
-    "surface": "Mallorca",
-    "total_predictions": 21,
-    "correct": 16,
-    "accuracy": 76.19
+    "surface": "Eastbourne",
+    "total_predictions": 22,
+    "correct": 17,
+    "accuracy": 77.27
   },
   {
     "surface": "Indian Wells",
@@ -12,10 +12,10 @@
     "accuracy": 76.0
   },
   {
-    "surface": "Eastbourne",
-    "total_predictions": 19,
-    "correct": 14,
-    "accuracy": 73.68
+    "surface": "Mallorca",
+    "total_predictions": 25,
+    "correct": 18,
+    "accuracy": 72.0
   },
   {
     "surface": "Stuttgart",
@@ -24,16 +24,16 @@
     "accuracy": 70.59
   },
   {
+    "surface": "Wimbledon",
+    "total_predictions": 93,
+    "correct": 62,
+    "accuracy": 66.67
+  },
+  {
     "surface": "French Open",
     "total_predictions": 205,
     "correct": 135,
     "accuracy": 65.85
-  },
-  {
-    "surface": "Wimbledon",
-    "total_predictions": 79,
-    "correct": 52,
-    "accuracy": 65.82
   },
   {
     "surface": "Madrid",
