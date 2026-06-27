@@ -1,21 +1,21 @@
 [
   {
-    "surface": "Eastbourne",
-    "total_predictions": 22,
-    "correct": 17,
-    "accuracy": 77.27
-  },
-  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
     "accuracy": 76.0
   },
   {
-    "surface": "Mallorca",
-    "total_predictions": 25,
+    "surface": "Eastbourne",
+    "total_predictions": 24,
     "correct": 18,
-    "accuracy": 72.0
+    "accuracy": 75.0
+  },
+  {
+    "surface": "Mallorca",
+    "total_predictions": 27,
+    "correct": 20,
+    "accuracy": 74.07
   },
   {
     "surface": "Stuttgart",
