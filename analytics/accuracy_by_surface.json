@@ -13,9 +13,9 @@
   },
   {
     "surface": "Mallorca",
-    "total_predictions": 27,
-    "correct": 20,
-    "accuracy": 74.07
+    "total_predictions": 28,
+    "correct": 21,
+    "accuracy": 75.0
   },
   {
     "surface": "Stuttgart",
