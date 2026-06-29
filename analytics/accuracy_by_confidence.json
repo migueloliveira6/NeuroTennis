@@ -19,8 +19,8 @@
   },
   {
     "confidence_range": "50-59%",
-    "total_predictions": 304,
+    "total_predictions": 305,
     "correct": 166,
-    "accuracy": 54.61
+    "accuracy": 54.43
   }
 ]
