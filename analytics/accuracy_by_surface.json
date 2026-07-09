@@ -24,16 +24,16 @@
     "accuracy": 70.59
   },
   {
-    "surface": "Wimbledon",
-    "total_predictions": 203,
-    "correct": 134,
-    "accuracy": 66.01
-  },
-  {
     "surface": "French Open",
     "total_predictions": 205,
     "correct": 135,
     "accuracy": 65.85
+  },
+  {
+    "surface": "Wimbledon",
+    "total_predictions": 205,
+    "correct": 134,
+    "accuracy": 65.37
   },
   {
     "surface": "Madrid",

@@ -1080,5 +1080,20 @@
     "bet_profit_total": 0.0,
     "bet_accuracy": 0,
     "bet_roi": 0
+  },
+  {
+    "date": "2026-07-08",
+    "total_predictions": 2,
+    "correct": 0,
+    "wrong": 2,
+    "accuracy": 0.0,
+    "bet_bets": 1,
+    "bet_wins": 0,
+    "bet_losses": 1,
+    "bet_stake_total": 0.054,
+    "bet_return_total": 0.0,
+    "bet_profit_total": -0.054,
+    "bet_accuracy": 0.0,
+    "bet_roi": -100.0
   }
 ]
