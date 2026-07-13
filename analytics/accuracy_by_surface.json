@@ -13,8 +13,8 @@
   },
   {
     "surface": "Gstaad",
-    "total_predictions": 8,
-    "correct": 6,
+    "total_predictions": 12,
+    "correct": 9,
     "accuracy": 75.0
   },
   {
@@ -30,16 +30,16 @@
     "accuracy": 70.59
   },
   {
+    "surface": "Wimbledon",
+    "total_predictions": 208,
+    "correct": 137,
+    "accuracy": 65.87
+  },
+  {
     "surface": "French Open",
     "total_predictions": 205,
     "correct": 135,
     "accuracy": 65.85
-  },
-  {
-    "surface": "Wimbledon",
-    "total_predictions": 207,
-    "correct": 136,
-    "accuracy": 65.7
   },
   {
     "surface": "Madrid",
@@ -78,7 +78,7 @@
     "accuracy": 61.76
   },
   {
-    "surface": "Umag",
+    "surface": "Bastad",
     "total_predictions": 5,
     "correct": 3,
     "accuracy": 60.0
@@ -118,6 +118,12 @@
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
+  },
+  {
+    "surface": "Umag",
+    "total_predictions": 6,
+    "correct": 3,
+    "accuracy": 50.0
   },
   {
     "surface": "Marrakech",
