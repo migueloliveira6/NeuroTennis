@@ -24,9 +24,15 @@
     "accuracy": 70.59
   },
   {
-    "surface": "Bastad",
-    "total_predictions": 9,
-    "correct": 6,
+    "surface": "Gstaad",
+    "total_predictions": 23,
+    "correct": 16,
+    "accuracy": 69.57
+  },
+  {
+    "surface": "Umag",
+    "total_predictions": 15,
+    "correct": 10,
     "accuracy": 66.67
   },
   {
@@ -40,12 +46,6 @@
     "total_predictions": 205,
     "correct": 135,
     "accuracy": 65.85
-  },
-  {
-    "surface": "Gstaad",
-    "total_predictions": 17,
-    "correct": 11,
-    "accuracy": 64.71
   },
   {
     "surface": "Madrid",
@@ -84,10 +84,10 @@
     "accuracy": 61.76
   },
   {
-    "surface": "Umag",
-    "total_predictions": 10,
-    "correct": 6,
-    "accuracy": 60.0
+    "surface": "Bastad",
+    "total_predictions": 18,
+    "correct": 11,
+    "accuracy": 61.11
   },
   {
     "surface": "Hamburg",
