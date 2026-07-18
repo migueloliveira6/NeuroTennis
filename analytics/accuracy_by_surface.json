@@ -13,8 +13,8 @@
   },
   {
     "surface": "Gstaad",
-    "total_predictions": 28,
-    "correct": 21,
+    "total_predictions": 32,
+    "correct": 24,
     "accuracy": 75.0
   },
   {
@@ -31,9 +31,9 @@
   },
   {
     "surface": "Bastad",
-    "total_predictions": 24,
-    "correct": 16,
-    "accuracy": 66.67
+    "total_predictions": 26,
+    "correct": 18,
+    "accuracy": 69.23
   },
   {
     "surface": "Wimbledon",
@@ -60,12 +60,6 @@
     "accuracy": 64.29
   },
   {
-    "surface": "Umag",
-    "total_predictions": 22,
-    "correct": 14,
-    "accuracy": 63.64
-  },
-  {
     "surface": "Rome",
     "total_predictions": 118,
     "correct": 75,
@@ -88,6 +82,12 @@
     "total_predictions": 34,
     "correct": 21,
     "accuracy": 61.76
+  },
+  {
+    "surface": "Umag",
+    "total_predictions": 23,
+    "correct": 14,
+    "accuracy": 60.87
   },
   {
     "surface": "Hamburg",
