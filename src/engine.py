@@ -166,7 +166,7 @@ class NeuroTennis:
     BLACKLIST_TORNEIO = frozenset({
         "itf", "utr", "junior", "exhibition", "boodles tennis challenge", 
         "boodles tennis cup", "boodles tennis series", "series",
-        "pro", "match", "world university games", "challenger"
+        "pro", "match", "world university games", "challenger", "ultimate tennis"
     })
     
     BLACKLIST_NOMES = frozenset({
@@ -816,9 +816,9 @@ def enviar_estatisticas_telegram(estatisticas: Dict[str, Any], token: str, chat_
             linhas.append(f"Retorno total: {return_total:.3f}" if isinstance(return_total, (int, float)) else "Retorno total: N/A")
             linhas.append(f"Lucro/prejuízo: {profit_total:.3f}" if isinstance(profit_total, (int, float)) else "Lucro/prejuízo: N/A")
             if bet_accuracy is not None:
-                linhas.append(f"Acurácia das apostas: {bet_accuracy:.2%}")
+                linhas.append(f"Accuracy das apostas: {bet_accuracy:.2%}")
             else:
-                linhas.append("Acurácia das apostas: N/A")
+                linhas.append("Accuracy das apostas: N/A")
             if bet_roi is not None:
                 linhas.append(f"ROI das apostas: {bet_roi:.2%}")
             else:
