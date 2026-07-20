@@ -1,5 +1,11 @@
 [
   {
+    "surface": "Kitzbühel",
+    "total_predictions": 4,
+    "correct": 4,
+    "accuracy": 100.0
+  },
+  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
@@ -13,9 +19,9 @@
   },
   {
     "surface": "Gstaad",
-    "total_predictions": 32,
+    "total_predictions": 33,
     "correct": 24,
-    "accuracy": 75.0
+    "accuracy": 72.73
   },
   {
     "surface": "Eastbourne",
@@ -31,9 +37,9 @@
   },
   {
     "surface": "Bastad",
-    "total_predictions": 26,
+    "total_predictions": 27,
     "correct": 18,
-    "accuracy": 69.23
+    "accuracy": 66.67
   },
   {
     "surface": "Wimbledon",
@@ -130,5 +136,11 @@
     "total_predictions": 7,
     "correct": 2,
     "accuracy": 28.57
+  },
+  {
+    "surface": "Estoril",
+    "total_predictions": 4,
+    "correct": 0,
+    "accuracy": 0.0
   }
 ]
