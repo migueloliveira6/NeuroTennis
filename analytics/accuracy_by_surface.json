@@ -1,9 +1,9 @@
 [
   {
     "surface": "Kitzbühel",
-    "total_predictions": 4,
-    "correct": 4,
-    "accuracy": 100.0
+    "total_predictions": 9,
+    "correct": 7,
+    "accuracy": 77.78
   },
   {
     "surface": "Indian Wells",
@@ -132,15 +132,15 @@
     "accuracy": 53.52
   },
   {
+    "surface": "Estoril",
+    "total_predictions": 9,
+    "correct": 3,
+    "accuracy": 33.33
+  },
+  {
     "surface": "Marrakech",
     "total_predictions": 7,
     "correct": 2,
     "accuracy": 28.57
-  },
-  {
-    "surface": "Estoril",
-    "total_predictions": 4,
-    "correct": 0,
-    "accuracy": 0.0
   }
 ]
