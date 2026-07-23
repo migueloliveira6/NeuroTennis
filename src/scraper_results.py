@@ -89,7 +89,7 @@ def detect_surface_from_tournament(tourney_name: str) -> str:
     clay_keywords = ['french', 'roland garros', 'monte carlo', 'rome', 
                      'madrid', 'barcelona', 'hamburg', 'munich', 'estoril',
                      'geneva', 'lyon', 'bucharest', 'budapest', 'umag',
-                     'gstaad', 'bastad', 'kitzbuhel', 'casablanca', 'marrakech']
+                     'gstaad', 'bastad', 'kitzbühel', 'casablanca', 'marrakech']
     if any(kw in tourney_lower for kw in clay_keywords):
         return 'Clay'
 

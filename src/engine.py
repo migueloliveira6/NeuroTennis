@@ -413,7 +413,7 @@ class SuperficieDetector:
             "torneios": {
                 "french open", "roland garros", "monte carlo", "rome", "madrid",
                 "barcelona", "hamburg", "munich", "estoril", "geneva", "lyon",
-                "bucharest", "budapest", "umag", "gstaad", "bastad", "kitzbuhel",
+                "bucharest", "budapest", "umag", "gstaad", "bastad", "kitzbühel",
                 "casablanca", "marrakech", "houston", "charleston", "bogota", "buenos aires",
                 "santiago", "rio de janeiro"
             },
