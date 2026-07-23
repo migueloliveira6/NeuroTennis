@@ -1,11 +1,5 @@
 [
   {
-    "surface": "Kitzbühel",
-    "total_predictions": 9,
-    "correct": 7,
-    "accuracy": 77.78
-  },
-  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
@@ -34,6 +28,12 @@
     "total_predictions": 34,
     "correct": 24,
     "accuracy": 70.59
+  },
+  {
+    "surface": "Kitzbühel",
+    "total_predictions": 16,
+    "correct": 11,
+    "accuracy": 68.75
   },
   {
     "surface": "Bastad",
@@ -133,8 +133,8 @@
   },
   {
     "surface": "Estoril",
-    "total_predictions": 9,
-    "correct": 3,
+    "total_predictions": 12,
+    "correct": 4,
     "accuracy": 33.33
   },
   {
