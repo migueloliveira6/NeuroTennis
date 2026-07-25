@@ -13,9 +13,9 @@
   },
   {
     "surface": "Kitzbühel",
-    "total_predictions": 19,
-    "correct": 14,
-    "accuracy": 73.68
+    "total_predictions": 20,
+    "correct": 15,
+    "accuracy": 75.0
   },
   {
     "surface": "Gstaad",
@@ -133,9 +133,9 @@
   },
   {
     "surface": "Estoril",
-    "total_predictions": 16,
-    "correct": 8,
-    "accuracy": 50.0
+    "total_predictions": 19,
+    "correct": 10,
+    "accuracy": 52.63
   },
   {
     "surface": "Marrakech",
