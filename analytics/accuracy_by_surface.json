@@ -12,12 +12,6 @@
     "accuracy": 75.0
   },
   {
-    "surface": "Kitzbühel",
-    "total_predictions": 20,
-    "correct": 15,
-    "accuracy": 75.0
-  },
-  {
     "surface": "Gstaad",
     "total_predictions": 33,
     "correct": 24,
@@ -28,6 +22,12 @@
     "total_predictions": 25,
     "correct": 18,
     "accuracy": 72.0
+  },
+  {
+    "surface": "Kitzbühel",
+    "total_predictions": 21,
+    "correct": 15,
+    "accuracy": 71.43
   },
   {
     "surface": "Stuttgart",
@@ -133,9 +133,9 @@
   },
   {
     "surface": "Estoril",
-    "total_predictions": 19,
-    "correct": 10,
-    "accuracy": 52.63
+    "total_predictions": 21,
+    "correct": 11,
+    "accuracy": 52.38
   },
   {
     "surface": "Marrakech",
