@@ -133,9 +133,21 @@
   },
   {
     "surface": "Estoril",
-    "total_predictions": 21,
+    "total_predictions": 22,
     "correct": 11,
-    "accuracy": 52.38
+    "accuracy": 50.0
+  },
+  {
+    "surface": "Washington",
+    "total_predictions": 4,
+    "correct": 2,
+    "accuracy": 50.0
+  },
+  {
+    "surface": "Los Cabos",
+    "total_predictions": 3,
+    "correct": 1,
+    "accuracy": 33.33
   },
   {
     "surface": "Marrakech",
