@@ -96,6 +96,12 @@
     "accuracy": 60.87
   },
   {
+    "surface": "Los Cabos",
+    "total_predictions": 5,
+    "correct": 3,
+    "accuracy": 60.0
+  },
+  {
     "surface": "Hamburg",
     "total_predictions": 32,
     "correct": 19,
@@ -139,15 +145,9 @@
   },
   {
     "surface": "Washington",
-    "total_predictions": 4,
-    "correct": 2,
+    "total_predictions": 8,
+    "correct": 4,
     "accuracy": 50.0
-  },
-  {
-    "surface": "Los Cabos",
-    "total_predictions": 3,
-    "correct": 1,
-    "accuracy": 33.33
   },
   {
     "surface": "Marrakech",
