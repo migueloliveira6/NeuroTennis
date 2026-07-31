@@ -114,6 +114,12 @@
     "accuracy": 58.97
   },
   {
+    "surface": "Washington",
+    "total_predictions": 23,
+    "correct": 13,
+    "accuracy": 56.52
+  },
+  {
     "surface": "Barcelona",
     "total_predictions": 43,
     "correct": 24,
@@ -126,27 +132,21 @@
     "accuracy": 55.56
   },
   {
+    "surface": "Los Cabos",
+    "total_predictions": 22,
+    "correct": 12,
+    "accuracy": 54.55
+  },
+  {
     "surface": "Miami",
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
   },
   {
-    "surface": "Los Cabos",
-    "total_predictions": 14,
-    "correct": 7,
-    "accuracy": 50.0
-  },
-  {
     "surface": "Estoril",
     "total_predictions": 22,
     "correct": 11,
-    "accuracy": 50.0
-  },
-  {
-    "surface": "Washington",
-    "total_predictions": 18,
-    "correct": 9,
     "accuracy": 50.0
   },
   {
