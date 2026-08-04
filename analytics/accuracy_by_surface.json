@@ -115,9 +115,9 @@
   },
   {
     "surface": "Washington",
-    "total_predictions": 30,
-    "correct": 17,
-    "accuracy": 56.67
+    "total_predictions": 31,
+    "correct": 18,
+    "accuracy": 58.06
   },
   {
     "surface": "Barcelona",
@@ -154,5 +154,11 @@
     "total_predictions": 7,
     "correct": 2,
     "accuracy": 28.57
+  },
+  {
+    "surface": "Montreal",
+    "total_predictions": 5,
+    "correct": 1,
+    "accuracy": 20.0
   }
 ]
