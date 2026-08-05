@@ -66,6 +66,12 @@
     "accuracy": 64.29
   },
   {
+    "surface": "Montreal",
+    "total_predictions": 28,
+    "correct": 18,
+    "accuracy": 64.29
+  },
+  {
     "surface": "Rome",
     "total_predictions": 118,
     "correct": 75,
@@ -154,11 +160,5 @@
     "total_predictions": 7,
     "correct": 2,
     "accuracy": 28.57
-  },
-  {
-    "surface": "Montreal",
-    "total_predictions": 5,
-    "correct": 1,
-    "accuracy": 20.0
   }
 ]
