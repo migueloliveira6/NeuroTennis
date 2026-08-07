@@ -7,11 +7,11 @@
         "Confiança (%)":76.1,
         "ELO Diff":-186.7,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":2.89,
-        "Odd 2":1.41,
+        "Odd 1":2.67,
+        "Odd 2":1.48,
         "Superfície":"Hard",
-        "Valor Aposta":0.177,
-        "ROI Esperado (%)":7.2
+        "Valor Aposta":0.2619999945,
+        "ROI Esperado (%)":12.6000003815
     },
     {
         "Torneio":"Montreal",
@@ -21,11 +21,11 @@
         "Confiança (%)":69.2,
         "ELO Diff":-76.4,
         "H2H":"0-1 (0% para Casper Ruud)",
-        "Odd 1":2.13,
-        "Odd 2":1.71,
+        "Odd 1":2.15,
+        "Odd 2":1.7,
         "Superfície":"Hard",
-        "Valor Aposta":0.259,
-        "ROI Esperado (%)":18.4
+        "Valor Aposta":0.2529999912,
+        "ROI Esperado (%)":17.7000007629
     },
     {
         "Torneio":"Montreal",
@@ -35,11 +35,25 @@
         "Confiança (%)":64.1,
         "ELO Diff":19.3,
         "H2H":"0-1 (0% para Learner Tien)",
-        "Odd 1":2.45,
-        "Odd 2":1.55,
+        "Odd 1":2.41,
+        "Odd 2":1.56,
         "Superfície":"Hard",
-        "Valor Aposta":0.393,
-        "ROI Esperado (%)":57.0
+        "Valor Aposta":0.3860000074,
+        "ROI Esperado (%)":54.4000015259
+    },
+    {
+        "Torneio":"Montreal",
+        "Jogador 1":"Nuno Borges",
+        "Jogador 2":"Luciano Darderi",
+        "Vencedor Previsto":"Nuno Borges",
+        "Confiança (%)":56.7,
+        "ELO Diff":143.8,
+        "H2H":"3-1 (75% para Nuno Borges)",
+        "Odd 1":1.58,
+        "Odd 2":2.35,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0,
+        "ROI Esperado (%)":0.0
     },
     {
         "Torneio":"Montreal",
@@ -49,10 +63,24 @@
         "Confiança (%)":52.8,
         "ELO Diff":6.7,
         "H2H":"Igual (sem confrontos anteriores)",
-        "Odd 1":1.76,
-        "Odd 2":2.05,
+        "Odd 1":1.73,
+        "Odd 2":2.11,
         "Superfície":"Hard",
-        "Valor Aposta":0.078,
-        "ROI Esperado (%)":8.2
+        "Valor Aposta":0.1030000001,
+        "ROI Esperado (%)":11.3999996185
+    },
+    {
+        "Torneio":"Montreal",
+        "Jogador 1":"Arthur Rinderknech",
+        "Jogador 2":"Brandon Nakashima",
+        "Vencedor Previsto":"Brandon Nakashima",
+        "Confiança (%)":51.0,
+        "ELO Diff":-9.9,
+        "H2H":"1-1 (50% para Arthur Rinderknech)",
+        "Odd 1":2.82,
+        "Odd 2":1.42,
+        "Superfície":"Hard",
+        "Valor Aposta":0.0,
+        "ROI Esperado (%)":0.0
     }
 ]
