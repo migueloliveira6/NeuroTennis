@@ -78,12 +78,6 @@
     "accuracy": 62.86
   },
   {
-    "surface": "Montreal",
-    "total_predictions": 43,
-    "correct": 27,
-    "accuracy": 62.79
-  },
-  {
     "surface": "Monte Carlo",
     "total_predictions": 69,
     "correct": 43,
@@ -94,6 +88,12 @@
     "total_predictions": 34,
     "correct": 21,
     "accuracy": 61.76
+  },
+  {
+    "surface": "Montreal",
+    "total_predictions": 46,
+    "correct": 28,
+    "accuracy": 60.87
   },
   {
     "surface": "Umag",
