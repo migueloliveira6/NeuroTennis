@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -28,12 +29,8 @@ def load_matches_from_sqlite(
 ) -> pd.DataFrame:
     """Load match data directly from the project's SQLite database."""
 
-    try:
-        from ...src.db import get_connection
-    except Exception:
-        from db import get_connection
-
-    conn = get_connection(str(db_path) if db_path is not None else None)
+    database_path = Path(db_path) if db_path is not None else Path("datasets/tennis_data.db")
+    conn = sqlite3.connect(database_path)
     try:
         matches = pd.read_sql_query("SELECT * FROM matches", conn, parse_dates=["tourney_date"])
     finally:
@@ -57,12 +54,8 @@ def load_matches_from_sqlite(
 def get_latest_season_from_sqlite(db_path: str | Path | None = None) -> int:
     """Return the latest season available in the SQLite matches table."""
 
-    try:
-        from ...src.db import get_connection
-    except Exception:
-        from db import get_connection
-
-    conn = get_connection(str(db_path) if db_path is not None else None)
+    database_path = Path(db_path) if db_path is not None else Path("datasets/tennis_data.db")
+    conn = sqlite3.connect(database_path)
     try:
         result = pd.read_sql_query("SELECT MAX(strftime('%Y', tourney_date)) AS max_year FROM matches", conn)
     finally:

@@ -1,39 +1,77 @@
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+import sys
 
 import pandas as pd
 
-from .clustering import (
-    attach_cluster_labels,
-    build_cluster_profile,
-    choose_best_cluster_row,
-    evaluate_hdbscan_family,
-    evaluate_k_family,
-    fit_hdbscan,
-    fit_gmm,
-    fit_hierarchical,
-    fit_kmeans,
-)
-from .config import ClusteringConfig, ProjectConfig
-from .data_loader import load_matches_from_sqlite, load_optional_charting_project, merge_optional_charting, save_dataframe
-from .feature_engineering import build_feature_tables
-from .preprocessing import prepare_feature_matrix
-from .utils import ensure_directory, save_json
-from .visualization import (
-    embed_2d,
-    plot_cluster_distribution,
-    plot_cluster_radar,
-    plot_correlation_heatmap,
-    plot_feature_profiles,
-    plot_histograms,
-    plot_missing_values,
-    plot_pca_embedding,
-    plot_umap_embedding,
-    plotly_embedding,
-)
+try:
+    from .clustering import (
+        attach_cluster_labels,
+        build_cluster_profile,
+        choose_best_cluster_row,
+        evaluate_hdbscan_family,
+        evaluate_k_family,
+        fit_hdbscan,
+        fit_gmm,
+        fit_hierarchical,
+        fit_kmeans,
+        merge_similar_clusters,
+    )
+    from .config import ClusteringConfig, ProjectConfig
+    from .data_loader import load_matches_from_sqlite, load_optional_charting_project, merge_optional_charting, save_dataframe
+    from .feature_engineering import build_feature_tables
+    from .preprocessing import prepare_feature_matrix
+    from .utils import ensure_directory, save_json
+    from .visualization import (
+        embed_2d,
+        plot_cluster_distribution,
+        plot_cluster_radar,
+        plot_correlation_heatmap,
+        plot_feature_profiles,
+        plot_histograms,
+        plot_missing_values,
+        plot_pca_embedding,
+        plot_umap_embedding,
+        plotly_embedding,
+    )
+except ImportError:  # pragma: no cover - enables direct execution via `python pipeline.py`
+    _PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+    if str(_PACKAGE_ROOT) not in sys.path:
+        sys.path.insert(0, str(_PACKAGE_ROOT))
+
+    from style_clustering.clustering import (
+        attach_cluster_labels,
+        build_cluster_profile,
+        choose_best_cluster_row,
+        evaluate_hdbscan_family,
+        evaluate_k_family,
+        fit_hdbscan,
+        fit_gmm,
+        fit_hierarchical,
+        fit_kmeans,
+        merge_similar_clusters,
+    )
+    from style_clustering.config import ClusteringConfig, ProjectConfig
+    from style_clustering.data_loader import load_matches_from_sqlite, load_optional_charting_project, merge_optional_charting, save_dataframe
+    from style_clustering.feature_engineering import build_feature_tables
+    from style_clustering.preprocessing import prepare_feature_matrix
+    from style_clustering.utils import ensure_directory, save_json
+    from style_clustering.visualization import (
+        embed_2d,
+        plot_cluster_distribution,
+        plot_cluster_radar,
+        plot_correlation_heatmap,
+        plot_feature_profiles,
+        plot_histograms,
+        plot_missing_values,
+        plot_pca_embedding,
+        plot_umap_embedding,
+        plotly_embedding,
+    )
 
 
 @dataclass(slots=True)
@@ -53,6 +91,13 @@ class PipelineOutputs:
 
 
 def _feature_columns_for_analysis(frame: pd.DataFrame) -> list[str]:
+    """Feature columns used to build the clustering matrix (and therefore
+    everything derived from cluster centroids, including infer_style_label).
+
+    Deliberately excludes SKILL_CONTEXT_COLUMNS (win_rate, dominance_ratio,
+    average_player_rank, average_opponent_rank) -- see module-level comment
+    on that list for why.
+    """
     preferred = [
         "ace_rate",
         "double_fault_rate",
@@ -65,19 +110,25 @@ def _feature_columns_for_analysis(frame: pd.DataFrame) -> list[str]:
         "return_games_won_pct",
         "tiebreak_frequency",
         "average_match_length",
-        "dominance_ratio",
-        "win_rate",
         "hard_win_rate",
         "clay_win_rate",
         "grass_win_rate",
         "service_aggression_score",
         "return_aggression_score",
+        "serve_return_balance",
         "winner_to_error_ratio",
         "surface_diversity",
-        "average_player_rank",
-        "average_opponent_rank",
     ]
     return [column for column in preferred if column in frame.columns]
+
+
+# Overall skill/quality signals, not playing-style signals. Excluded from the
+# clustering matrix and therefore from cluster centroids and
+# infer_style_label's inputs -- but still attached to cluster_profile after
+# the fact (see run_pipeline) purely as descriptive context, e.g. "this style
+# cluster skews toward lower-ranked players", without letting that context
+# drive which cluster a player ends up in.
+SKILL_CONTEXT_COLUMNS = ["win_rate", "dominance_ratio", "average_player_rank", "average_opponent_rank"]
 
 
 def _generate_artifacts(
@@ -186,14 +237,35 @@ def run_pipeline(project: ProjectConfig, clustering: ClusteringConfig | None = N
     metrics = pd.concat([frame for frame in [k_metrics, hdbscan_metrics] if not frame.empty], ignore_index=True)
     if metrics.empty:
         raise ValueError("Could not evaluate any clustering configuration")
-    best_row = choose_best_cluster_row(metrics)
+    best_row = choose_best_cluster_row(
+        metrics,
+        preferred_k_min=clustering.preferred_k_min,
+        k_diversity_bonus=clustering.k_diversity_bonus,
+        low_k_penalty=clustering.low_k_penalty,
+    )
     method = str(best_row["method"])
     parameter_value = int(best_row["k"])
 
     fit = _best_method_to_fit(method, parameter_value, matrix, clustering.random_state)
     labels = fit.labels
     cluster_frame = attach_cluster_labels(prepared_frame, labels)
+    cluster_frame = merge_similar_clusters(
+        cluster_frame,
+        feature_columns,
+        similarity_threshold=clustering.cluster_merge_similarity_threshold,
+        label_column="cluster",
+    )
     cluster_profile = build_cluster_profile(cluster_frame, feature_columns, label_column="cluster")
+    skill_context_columns = [column for column in SKILL_CONTEXT_COLUMNS if column in cluster_frame.columns]
+    if skill_context_columns:
+        skill_context = (
+            cluster_frame.groupby("cluster", dropna=False)[skill_context_columns]
+            .mean(numeric_only=True)
+            .rename(columns={column: f"context_{column}" for column in skill_context_columns})
+            .reset_index()
+        )
+        cluster_profile = cluster_profile.merge(skill_context, on="cluster", how="left")
+    cluster_frame = cluster_frame.drop(columns=["style_label"], errors="ignore")
     cluster_frame = cluster_frame.merge(cluster_profile[["cluster", "style_label"]], on="cluster", how="left")
 
     outputs_dir = ensure_directory(project.output_dir)
@@ -224,3 +296,55 @@ def run_pipeline(project: ProjectConfig, clustering: ClusteringConfig | None = N
         best_method=method,
         best_parameters=fit.parameters,
     )
+
+
+def _build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run the ATP style clustering pipeline")
+    parser.add_argument("--db-path", type=Path, default=Path("datasets/tennis_data.db"), help="Path to the SQLite database")
+    parser.add_argument("--output-dir", type=Path, default=Path("outputs"), help="Directory where clustering outputs will be written")
+    parser.add_argument("--start-year", type=int, default=2014, help="First season to include")
+    parser.add_argument("--end-year", type=int, default=None, help="Last season to include")
+    parser.add_argument("--include-qualifying", action=argparse.BooleanOptionalAction, default=True, help="Include qualifying matches when loading raw data")
+    parser.add_argument("--use-season-zscore", action=argparse.BooleanOptionalAction, default=True, help="Apply within-season z-score normalization")
+    parser.add_argument("--missing-threshold", type=float, default=0.35, help="Maximum missing-value ratio allowed per feature")
+    parser.add_argument("--correlation-threshold", type=float, default=0.92, help="Maximum allowed absolute correlation between features")
+    parser.add_argument("--k-min", type=int, default=3, help="Minimum k evaluated for k-family methods")
+    parser.add_argument("--k-max", type=int, default=10, help="Maximum k evaluated for k-family methods")
+    parser.add_argument("--preferred-k-min", type=int, default=4, help="Minimum k preferred by model selection")
+    parser.add_argument("--k-diversity-bonus", type=float, default=0.06, help="Bonus weight for higher-k solutions")
+    parser.add_argument("--low-k-penalty", type=float, default=0.08, help="Penalty per cluster below preferred-k-min")
+    parser.add_argument("--random-state", type=int, default=42, help="Random seed used by clustering methods")
+    return parser
+
+
+def main() -> PipelineOutputs:
+    args = _build_arg_parser().parse_args()
+    project = ProjectConfig(
+        db_path=args.db_path,
+        output_dir=args.output_dir,
+        include_qualifying=args.include_qualifying,
+        start_year=args.start_year,
+        end_year=args.end_year,
+        use_season_zscore=args.use_season_zscore,
+        missing_threshold=args.missing_threshold,
+        correlation_threshold=args.correlation_threshold,
+        random_state=args.random_state,
+    )
+    clustering = ClusteringConfig(
+        k_min=args.k_min,
+        k_max=args.k_max,
+        preferred_k_min=args.preferred_k_min,
+        k_diversity_bonus=args.k_diversity_bonus,
+        low_k_penalty=args.low_k_penalty,
+        random_state=args.random_state,
+    )
+    outputs = run_pipeline(project, clustering)
+    print(
+        f"Completed clustering pipeline: method={outputs.best_method}, "
+        f"parameters={outputs.best_parameters}, output_dir={project.output_dir}"
+    )
+    return outputs
+
+
+if __name__ == "__main__":
+    main()

@@ -139,6 +139,19 @@ def plot_cluster_distribution(frame: pd.DataFrame, label_column: str = "cluster"
     return fig
 
 
+def plot_elbow_method(elbow_metrics: pd.DataFrame, path: str | Path | None = None) -> plt.Figure:
+    sns = _seaborn()
+    fig, ax = plt.subplots(figsize=(8, 5))
+    sns.lineplot(data=elbow_metrics, x="k", y="inertia", marker="o", ax=ax)
+    ax.set_title("Elbow Method for Cluster Count")
+    ax.set_xlabel("Number of clusters (k)")
+    ax.set_ylabel("Inertia")
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    save_matplotlib_figure(fig, path)
+    return fig
+
+
 def plot_cluster_radar(cluster_profile: pd.Series, feature_columns: list[str], path: str | Path | None = None):
     """Create a radar chart for a cluster profile using Plotly when available."""
 

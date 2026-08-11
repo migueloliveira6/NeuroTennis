@@ -91,5 +91,5 @@ def prepare_feature_matrix(
     matrix_imputed = imputer.fit_transform(cleaned[valid_features])
     matrix_scaled = scaler.fit_transform(matrix_imputed)
     prepared = cleaned.copy()
-    prepared[valid_features] = matrix_imputed
+    prepared[valid_features] = matrix_scaled
     return PreprocessingResult(frame=prepared, feature_columns=valid_features, scaler=scaler, imputer=imputer, matrix=matrix_scaled)

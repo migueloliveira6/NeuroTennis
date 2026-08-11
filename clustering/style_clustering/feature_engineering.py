@@ -153,7 +153,23 @@ def build_player_season_table(player_match: pd.DataFrame) -> pd.DataFrame:
     if player_match.empty:
         return pd.DataFrame()
 
-    key_cols = ["player_id", "player_name", "player_name_clean", "season"]
+    # Group by normalized identity (player_name_clean) + season only. Using the
+    # raw player_name (or a possibly-missing/inconsistent player_id) as part of
+    # the grouping key used to fragment a single player's season into several
+    # rows whenever their name was spelled/capitalized/accented differently
+    # across matches, or player_id was blank on some rows — each fragment then
+    # carried an unrepresentative slice of that player's season stats into the
+    # clustering step. player_id and a display player_name are derived below
+    # instead of being part of the key.
+    key_cols = ["player_name_clean", "season"]
+    identity = (
+        player_match.groupby(key_cols, dropna=False)
+        .agg(
+            player_id=("player_id", lambda s: s.dropna().mode().iat[0] if not s.dropna().mode().empty else pd.NA),
+            player_name=("player_name", lambda s: s.dropna().mode().iat[0] if not s.dropna().mode().empty else pd.NA),
+        )
+        .reset_index()
+    )
     numeric_columns = [
         "won",
         "minutes",
@@ -187,6 +203,7 @@ def build_player_season_table(player_match: pd.DataFrame) -> pd.DataFrame:
     ]
     available_numeric = [column for column in numeric_columns if column in player_match.columns]
     grouped = player_match.groupby(key_cols, dropna=False)[available_numeric].sum(min_count=1).reset_index()
+    grouped = grouped.merge(identity, on=key_cols, how="left")
 
     avg_minutes = player_match.groupby(key_cols, dropna=False)["minutes"].mean().reset_index(name="average_match_length")
     grouped = grouped.merge(avg_minutes, on=key_cols, how="left")
@@ -208,7 +225,10 @@ def build_player_season_table(player_match: pd.DataFrame) -> pd.DataFrame:
     grouped["first_serve_win_pct"] = safe_series_divide(grouped["first_serve_points_won"], grouped["first_serves_in"])
     second_serve_opportunities = grouped["service_points"] - grouped["first_serves_in"]
     grouped["second_serve_win_pct"] = safe_series_divide(grouped["second_serve_points_won"], second_serve_opportunities)
-    grouped["service_hold_rate"] = 1.0 - safe_series_divide(grouped["break_points_converted"], grouped["service_games"])
+    grouped["service_hold_rate"] = 1.0 - safe_series_divide(
+        grouped["break_points_faced"] - grouped["break_points_saved"],
+        grouped["service_games"],
+    )
     grouped["return_points_won_pct"] = safe_series_divide(grouped["return_points_won"], grouped["return_points_total"])
     grouped["break_points_conversion_pct"] = safe_series_divide(grouped["break_points_converted"], grouped["break_points_opportunities"])
     grouped["return_games_won_pct"] = safe_series_divide(grouped["break_points_converted"], grouped["opponent_service_games"])
@@ -228,6 +248,15 @@ def build_player_season_table(player_match: pd.DataFrame) -> pd.DataFrame:
         + grouped["break_points_conversion_pct"].fillna(0)
         + 0.5 * grouped["return_games_won_pct"].fillna(0)
     )
+    # Raw serve/return imbalance, computed BEFORE z-scoring so season_zscore
+    # (in preprocessing.py) normalizes this DIFFERENCE against its own
+    # population distribution, rather than infer_style_label subtracting two
+    # already-independently-z-scored columns (service_aggression_score minus
+    # return_aggression_score), which doesn't guarantee comparable scales and
+    # tends to skew positive for nearly everyone -- serve points are
+    # structurally easier to win than return points in tennis, so that raw
+    # gap reflects the sport, not necessarily a genuine style asymmetry.
+    grouped["serve_return_balance"] = grouped["service_aggression_score"] - grouped["return_aggression_score"]
     grouped["average_match_length"] = grouped["average_match_length"].fillna(grouped["minutes"] / grouped["matches"].replace(0, np.nan))
 
     if {"hard_matches", "clay_matches", "grass_matches"}.issubset(grouped.columns):

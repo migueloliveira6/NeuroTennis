@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import unicodedata
 from pathlib import Path
@@ -21,7 +22,7 @@ def ensure_directory(path: str | Path) -> Path:
 def normalize_player_name(value: Any) -> str | None:
     """Normalize player names to improve joins and clustering aggregation."""
 
-    if value is None or (isinstance(value, float) and np.isnan(value)):
+    if pd.isna(value):
         return None
     text = unicodedata.normalize("NFKD", str(value))
     text = text.encode("ascii", "ignore").decode("ascii")
@@ -53,9 +54,25 @@ def safe_scalar_divide(numerator: float | int | None, denominator: float | int |
 def save_json(payload: dict[str, Any], path: str | Path) -> None:
     """Persist a dictionary as formatted JSON."""
 
+    def _sanitize(value: Any) -> Any:
+        if isinstance(value, float):
+            if math.isnan(value) or math.isinf(value):
+                return None
+            return value
+        if isinstance(value, dict):
+            return {str(key): _sanitize(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [_sanitize(item) for item in value]
+        if hasattr(value, "item"):
+            try:
+                return _sanitize(value.item())
+            except Exception:
+                return str(value)
+        return value
+
     output_path = Path(path)
     ensure_directory(output_path.parent)
-    output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    output_path.write_text(json.dumps(_sanitize(payload), indent=2, ensure_ascii=False, allow_nan=False), encoding="utf-8")
 
 
 def top_n_dict(series: pd.Series, n: int = 5) -> dict[str, float]:
