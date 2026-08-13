@@ -72,6 +72,12 @@
     "accuracy": 63.56
   },
   {
+    "surface": "Montreal",
+    "total_predictions": 52,
+    "correct": 33,
+    "accuracy": 63.46
+  },
+  {
     "surface": "Halle",
     "total_predictions": 35,
     "correct": 22,
@@ -82,12 +88,6 @@
     "total_predictions": 69,
     "correct": 43,
     "accuracy": 62.32
-  },
-  {
-    "surface": "Montreal",
-    "total_predictions": 50,
-    "correct": 31,
-    "accuracy": 62.0
   },
   {
     "surface": "Queen's Club",
@@ -147,6 +147,12 @@
     "surface": "Estoril",
     "total_predictions": 22,
     "correct": 11,
+    "accuracy": 50.0
+  },
+  {
+    "surface": "Cincinnati",
+    "total_predictions": 10,
+    "correct": 5,
     "accuracy": 50.0
   },
   {
