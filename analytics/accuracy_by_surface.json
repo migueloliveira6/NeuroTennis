@@ -73,9 +73,9 @@
   },
   {
     "surface": "Montreal",
-    "total_predictions": 52,
-    "correct": 33,
-    "accuracy": 63.46
+    "total_predictions": 54,
+    "correct": 34,
+    "accuracy": 62.96
   },
   {
     "surface": "Halle",
@@ -151,8 +151,8 @@
   },
   {
     "surface": "Cincinnati",
-    "total_predictions": 10,
-    "correct": 5,
+    "total_predictions": 28,
+    "correct": 14,
     "accuracy": 50.0
   },
   {
