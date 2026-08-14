@@ -339,8 +339,13 @@ ALL_COURT_MIN_AVG = 0.1  # average across present surfaces must clear this -- ru
 # Kept for reference / as an optional alternative labeling strategy. Not
 # called by build_cluster_profile by default -- infer_style_label (the fixed
 # archetype taxonomy, below) is used instead.
-def infer_style_label(centroid: pd.Series) -> str:
-    """Assign an interpretable label to a cluster profile using heuristic rules."""
+def style_label_scores(centroid: pd.Series) -> dict[str, float]:
+    """Return every archetype's raw score for this cluster centroid (only the
+    archetypes that pass their eligibility gates are included -- see
+    infer_style_label for what each gate checks). Useful for diagnosing why a
+    particular archetype never wins: check whether it's missing from this
+    dict entirely (didn't clear its eligibility gate) or present with a score
+    close to the winner (narrowly lost, worth retuning thresholds for)."""
 
     service_aggression = float(centroid.get("service_aggression_score", 0))
     return_aggression = float(centroid.get("return_aggression_score", 0))
@@ -376,7 +381,7 @@ def infer_style_label(centroid: pd.Series) -> str:
     # catastrophic return got called "Serve Bot" because its service was
     # merely less bad, not because it was actually strong.
     if overall_aggression < WEAK_PROFILE_THRESHOLD:
-        return "Developing / Limited Output"
+        return {}
 
     # Only surfaces the centroid actually has data for. hard_win_rate is
     # assumed always present; clay/grass may be entirely missing from the
@@ -467,6 +472,17 @@ def infer_style_label(centroid: pd.Series) -> str:
             - 0.25 * tiebreak_frequency
         )
 
+    return scores
+
+
+def infer_style_label(centroid: pd.Series) -> str:
+    """Assign an interpretable label to a cluster profile using heuristic
+    rules. Thin wrapper around style_label_scores -- see that function to
+    inspect runner-up archetypes instead of just the winner."""
+
+    scores = style_label_scores(centroid)
+    if not scores:
+        return "Developing / Limited Output"
     return max(scores, key=scores.get)
 
 
@@ -491,6 +507,8 @@ def build_cluster_profile(frame: pd.DataFrame, feature_columns: list[str], label
             )
         else:
             representative_players = subset[["player_name", "season"]].head(5).to_dict(orient="records")
+        cluster_style_scores = style_label_scores(centroid)
+        cluster_style_label = max(cluster_style_scores, key=cluster_style_scores.get) if cluster_style_scores else "Developing / Limited Output"
         rows.append(
             {
                 "cluster": int(cluster_id),
@@ -499,7 +517,11 @@ def build_cluster_profile(frame: pd.DataFrame, feature_columns: list[str], label
                 "top_negative_features": ", ".join(top_negative.index.tolist()),
                 "mean_features": centroid.to_dict(),
                 "representatives": representative_players,
-                "style_label": infer_style_label(centroid),
+                "style_label": cluster_style_label,
+                "style_scores": {
+                    name: round(score, 4)
+                    for name, score in sorted(cluster_style_scores.items(), key=lambda item: item[1], reverse=True)
+                },
             }
         )
     return pd.DataFrame(rows).sort_values("cluster").reset_index(drop=True)
