@@ -66,16 +66,16 @@
     "accuracy": 64.29
   },
   {
+    "surface": "Montreal",
+    "total_predictions": 55,
+    "correct": 35,
+    "accuracy": 63.64
+  },
+  {
     "surface": "Rome",
     "total_predictions": 118,
     "correct": 75,
     "accuracy": 63.56
-  },
-  {
-    "surface": "Montreal",
-    "total_predictions": 54,
-    "correct": 34,
-    "accuracy": 62.96
   },
   {
     "surface": "Halle",
@@ -144,15 +144,15 @@
     "accuracy": 53.52
   },
   {
+    "surface": "Cincinnati",
+    "total_predictions": 46,
+    "correct": 24,
+    "accuracy": 52.17
+  },
+  {
     "surface": "Estoril",
     "total_predictions": 22,
     "correct": 11,
-    "accuracy": 50.0
-  },
-  {
-    "surface": "Cincinnati",
-    "total_predictions": 28,
-    "correct": 14,
     "accuracy": 50.0
   },
   {
