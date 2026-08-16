@@ -120,6 +120,12 @@
     "accuracy": 58.97
   },
   {
+    "surface": "Cincinnati",
+    "total_predictions": 58,
+    "correct": 34,
+    "accuracy": 58.62
+  },
+  {
     "surface": "Washington",
     "total_predictions": 31,
     "correct": 18,
@@ -142,12 +148,6 @@
     "total_predictions": 71,
     "correct": 38,
     "accuracy": 53.52
-  },
-  {
-    "surface": "Cincinnati",
-    "total_predictions": 46,
-    "correct": 24,
-    "accuracy": 52.17
   },
   {
     "surface": "Estoril",
