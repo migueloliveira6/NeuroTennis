@@ -90,12 +90,6 @@
     "accuracy": 62.32
   },
   {
-    "surface": "Cincinnati",
-    "total_predictions": 89,
-    "correct": 55,
-    "accuracy": 61.8
-  },
-  {
     "surface": "Queen's Club",
     "total_predictions": 34,
     "correct": 21,
@@ -118,6 +112,12 @@
     "total_predictions": 27,
     "correct": 16,
     "accuracy": 59.26
+  },
+  {
+    "surface": "Cincinnati",
+    "total_predictions": 93,
+    "correct": 55,
+    "accuracy": 59.14
   },
   {
     "surface": "Munich",
