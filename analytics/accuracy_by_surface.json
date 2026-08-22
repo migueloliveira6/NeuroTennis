@@ -102,12 +102,6 @@
     "accuracy": 60.87
   },
   {
-    "surface": "Cincinnati",
-    "total_predictions": 97,
-    "correct": 58,
-    "accuracy": 59.79
-  },
-  {
     "surface": "Hamburg",
     "total_predictions": 32,
     "correct": 19,
@@ -118,6 +112,12 @@
     "total_predictions": 27,
     "correct": 16,
     "accuracy": 59.26
+  },
+  {
+    "surface": "Cincinnati",
+    "total_predictions": 98,
+    "correct": 58,
+    "accuracy": 59.18
   },
   {
     "surface": "Munich",
