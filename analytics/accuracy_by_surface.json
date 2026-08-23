@@ -115,9 +115,9 @@
   },
   {
     "surface": "Cincinnati",
-    "total_predictions": 98,
-    "correct": 58,
-    "accuracy": 59.18
+    "total_predictions": 100,
+    "correct": 59,
+    "accuracy": 59.0
   },
   {
     "surface": "Munich",
