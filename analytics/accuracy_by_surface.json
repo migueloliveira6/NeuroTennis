@@ -102,6 +102,12 @@
     "accuracy": 60.87
   },
   {
+    "surface": "Cincinnati",
+    "total_predictions": 101,
+    "correct": 60,
+    "accuracy": 59.41
+  },
+  {
     "surface": "Hamburg",
     "total_predictions": 32,
     "correct": 19,
@@ -112,12 +118,6 @@
     "total_predictions": 27,
     "correct": 16,
     "accuracy": 59.26
-  },
-  {
-    "surface": "Cincinnati",
-    "total_predictions": 100,
-    "correct": 59,
-    "accuracy": 59.0
   },
   {
     "surface": "Munich",
@@ -153,6 +153,12 @@
     "surface": "Estoril",
     "total_predictions": 22,
     "correct": 11,
+    "accuracy": 50.0
+  },
+  {
+    "surface": "Winston Salem",
+    "total_predictions": 8,
+    "correct": 4,
     "accuracy": 50.0
   },
   {
