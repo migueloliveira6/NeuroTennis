@@ -1,5 +1,11 @@
 [
   {
+    "surface": "US Open",
+    "total_predictions": 20,
+    "correct": 16,
+    "accuracy": 80.0
+  },
+  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
@@ -150,15 +156,15 @@
     "accuracy": 53.52
   },
   {
+    "surface": "Winston Salem",
+    "total_predictions": 15,
+    "correct": 8,
+    "accuracy": 53.33
+  },
+  {
     "surface": "Estoril",
     "total_predictions": 22,
     "correct": 11,
-    "accuracy": 50.0
-  },
-  {
-    "surface": "Winston Salem",
-    "total_predictions": 8,
-    "correct": 4,
     "accuracy": 50.0
   },
   {
