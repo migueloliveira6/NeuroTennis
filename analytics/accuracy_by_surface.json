@@ -96,16 +96,16 @@
     "accuracy": 62.32
   },
   {
-    "surface": "Winston Salem",
-    "total_predictions": 21,
-    "correct": 13,
-    "accuracy": 61.9
-  },
-  {
     "surface": "Queen's Club",
     "total_predictions": 34,
     "correct": 21,
     "accuracy": 61.76
+  },
+  {
+    "surface": "Winston Salem",
+    "total_predictions": 23,
+    "correct": 14,
+    "accuracy": 60.87
   },
   {
     "surface": "Umag",
