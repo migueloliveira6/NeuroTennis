@@ -90,6 +90,12 @@
     "accuracy": 62.86
   },
   {
+    "surface": "Winston Salem",
+    "total_predictions": 24,
+    "correct": 15,
+    "accuracy": 62.5
+  },
+  {
     "surface": "Monte Carlo",
     "total_predictions": 69,
     "correct": 43,
@@ -100,12 +106,6 @@
     "total_predictions": 34,
     "correct": 21,
     "accuracy": 61.76
-  },
-  {
-    "surface": "Winston Salem",
-    "total_predictions": 23,
-    "correct": 14,
-    "accuracy": 60.87
   },
   {
     "surface": "Umag",
