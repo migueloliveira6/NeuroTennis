@@ -1,26 +1,26 @@
 [
   {
     "confidence_range": "80-100%",
-    "total_predictions": 321,
-    "correct": 252,
-    "accuracy": 78.5
+    "total_predictions": 323,
+    "correct": 254,
+    "accuracy": 78.64
   },
   {
     "confidence_range": "70-79%",
-    "total_predictions": 388,
-    "correct": 256,
+    "total_predictions": 391,
+    "correct": 258,
     "accuracy": 65.98
   },
   {
     "confidence_range": "60-69%",
-    "total_predictions": 448,
-    "correct": 273,
-    "accuracy": 60.94
+    "total_predictions": 453,
+    "correct": 277,
+    "accuracy": 61.15
   },
   {
     "confidence_range": "50-59%",
-    "total_predictions": 460,
-    "correct": 255,
-    "accuracy": 55.43
+    "total_predictions": 464,
+    "correct": 256,
+    "accuracy": 55.17
   }
 ]

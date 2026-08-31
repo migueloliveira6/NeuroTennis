@@ -1,9 +1,9 @@
 [
   {
     "surface": "US Open",
-    "total_predictions": 46,
-    "correct": 37,
-    "accuracy": 80.43
+    "total_predictions": 60,
+    "correct": 46,
+    "accuracy": 76.67
   },
   {
     "surface": "Indian Wells",
