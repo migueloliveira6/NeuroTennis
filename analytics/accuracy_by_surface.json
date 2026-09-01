@@ -1,11 +1,5 @@
 [
   {
-    "surface": "US Open",
-    "total_predictions": 60,
-    "correct": 46,
-    "accuracy": 76.67
-  },
-  {
     "surface": "Indian Wells",
     "total_predictions": 75,
     "correct": 57,
@@ -16,6 +10,12 @@
     "total_predictions": 28,
     "correct": 21,
     "accuracy": 75.0
+  },
+  {
+    "surface": "US Open",
+    "total_predictions": 72,
+    "correct": 53,
+    "accuracy": 73.61
   },
   {
     "surface": "Gstaad",
