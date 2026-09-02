@@ -155,9 +155,10 @@
     "comparacao_previsoes_2026-08-28.csv",
     "comparacao_previsoes_2026-08-29.csv",
     "comparacao_previsoes_2026-08-30.csv",
-    "comparacao_previsoes_2026-08-31.csv"
+    "comparacao_previsoes_2026-08-31.csv",
+    "comparacao_previsoes_2026-09-01.csv"
   ],
-  "last_processed_file": "comparacao_previsoes_2026-08-31.csv",
-  "last_processed_date": "2026-08-31",
-  "last_updated": "2026-09-01 01:21:15"
+  "last_processed_file": "comparacao_previsoes_2026-09-01.csv",
+  "last_processed_date": "2026-09-01",
+  "last_updated": "2026-09-02 00:20:35"
 }
