@@ -1,8 +1,10 @@
 name: Daily Tennis Predictions
 
 on:
+  repository_dispatch:
+    types: [run-daily-predictions]
   schedule:
-    - cron: '20 22 * * *'  # Executa às 22h15 UTC diariamente
+    - cron: '50 22 * * *'  # mantém como fallback
 
 permissions:
   contents: write
