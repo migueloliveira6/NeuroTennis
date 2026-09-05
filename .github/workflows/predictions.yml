@@ -3,8 +3,6 @@ name: Daily Tennis Predictions
 on:
   repository_dispatch:
     types: [run-daily-predictions]
-  schedule:
-    - cron: '50 22 * * *'  # mantém como fallback
 
 permissions:
   contents: write
