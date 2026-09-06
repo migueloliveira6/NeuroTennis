@@ -12,12 +12,6 @@
     "accuracy": 75.0
   },
   {
-    "surface": "US Open",
-    "total_predictions": 98,
-    "correct": 72,
-    "accuracy": 73.47
-  },
-  {
     "surface": "Gstaad",
     "total_predictions": 33,
     "correct": 24,
@@ -34,6 +28,12 @@
     "total_predictions": 21,
     "correct": 15,
     "accuracy": 71.43
+  },
+  {
+    "surface": "US Open",
+    "total_predictions": 107,
+    "correct": 76,
+    "accuracy": 71.03
   },
   {
     "surface": "Stuttgart",
